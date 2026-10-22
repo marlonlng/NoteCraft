@@ -1,0 +1,180 @@
+name: NoteCraft
+options:
+  bundleIdPrefix: com.marlonlange
+  deploymentTarget:
+    macOS: "26.0"
+  developmentLanguage: de
+  createIntermediateGroups: true
+  groupSortPosition: top
+  generateEmptyDirectories: false
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    MACOSX_DEPLOYMENT_TARGET: "26.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: NO
+    GCC_TREAT_WARNINGS_AS_ERRORS: NO
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+    DEVELOPMENT_TEAM: V4FQEC4GTQ
+  configs:
+    Debug:
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGN_STYLE: Manual
+      DEVELOPMENT_TEAM: ""
+    Release:
+      CODE_SIGN_IDENTITY: "Apple Development"
+      CODE_SIGN_STYLE: Automatic
+targets:
+  NoteCraftKit:
+    type: framework
+    platform: macOS
+    sources:
+      - path: NoteCraftKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraftKit
+        PRODUCT_NAME: NoteCraftKit
+        GENERATE_INFOPLIST_FILE: YES
+        SKIP_INSTALL: YES
+        DEFINES_MODULE: YES
+        INSTALL_PATH: "@rpath"
+        LD_RUNPATH_SEARCH_PATHS: ["$(inherited)", "@executable_path/../Frameworks", "@loader_path/Frameworks"]
+        APPLICATION_EXTENSION_API_ONLY: YES
+        ENABLE_MODULE_VERIFIER: YES
+  NoteCraft:
+    type: application
+    platform: macOS
+    sources:
+      - path: NoteCraft
+    dependencies:
+      - target: NoteCraftKit
+        embed: true
+    info:
+      path: NoteCraft/Info.plist
+      properties:
+        CFBundleDisplayName: NoteCraft
+        CFBundleName: NoteCraft
+        CFBundleDevelopmentRegion: de
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSApplicationCategoryType: public.app-category.developer-tools
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSHumanReadableCopyright: "© 2026 Marlon Lange"
+        NSPrincipalClass: NSApplication
+        NSSupportsAutomaticTermination: false
+        NSSupportsSuddenTermination: false
+        ITSAppUsesNonExemptEncryption: false
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Textdokument
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Alternate
+            LSItemContentTypes:
+              - public.plain-text
+              - public.text
+              - public.source-code
+              - public.script
+              - public.shell-script
+              - public.json
+              - public.xml
+              - public.html
+              - public.comma-separated-values-text
+              - public.yaml
+              - net.daringfireball.markdown
+            NSDocumentClass: $(PRODUCT_MODULE_NAME).TextDocument
+          - CFBundleTypeName: Datei
+            CFBundleTypeRole: Editor
+            LSHandlerRank: None
+            LSItemContentTypes:
+              - public.data
+            NSDocumentClass: $(PRODUCT_MODULE_NAME).TextDocument
+    entitlements:
+      path: NoteCraft/NoteCraft.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-write: true
+        com.apple.security.files.bookmarks.app-scope: true
+        com.apple.security.print: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraft
+        PRODUCT_NAME: NoteCraft
+        ENABLE_HARDENED_RUNTIME: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        COMBINE_HIDPI_IMAGES: YES
+        LD_RUNPATH_SEARCH_PATHS: ["$(inherited)", "@executable_path/../Frameworks"]
+        ENABLE_APP_SANDBOX: YES
+        ENABLE_USER_SELECTED_FILES: readwrite
+  NoteCraftKitTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: NoteCraftKitTests
+    dependencies:
+      - target: NoteCraftKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraftKitTests
+        GENERATE_INFOPLIST_FILE: YES
+  NoteCraftTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: NoteCraftTests
+    dependencies:
+      - target: NoteCraft
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraftTests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/NoteCraft.app/Contents/MacOS/NoteCraft"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+  NoteCraftUITests:
+    type: bundle.ui-testing
+    platform: macOS
+    sources:
+      - path: NoteCraftUITests
+    dependencies:
+      - target: NoteCraft
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraftUITests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: NoteCraft
+schemes:
+  NoteCraft:
+    build:
+      targets:
+        NoteCraft: all
+        NoteCraftKit: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - NoteCraft
+        - NoteCraftKit
+      targets:
+        - NoteCraftKitTests
+        - NoteCraftTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+  NoteCraftUITests:
+    build:
+      targets:
+        NoteCraft: all
+        NoteCraftUITests: [test]
+    test:
+      config: Debug
+      targets:
+        - NoteCraftUITests
