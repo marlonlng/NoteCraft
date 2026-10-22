@@ -37,6 +37,7 @@
 		5A0D0A9DD6C50BE231A51FC4 /* SyntaxHighlightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5D371F724DDDE4F220B674 /* SyntaxHighlightController.swift */; };
 		5EE01A2807F0CB92C3B12693 /* TextDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4163442CC9E520D68DB8F8 /* TextDocument.swift */; };
 		5F38E4744323E1E9B631C2DE /* JSONFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34034900289DB7D185FFC6C /* JSONFormatter.swift */; };
+		606C24E3903E82554919AE59 /* SessionRestoreUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC446651E4EC42B591575F38 /* SessionRestoreUITests.swift */; };
 		61108DD318A6F3C74A18C5F4 /* FindBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6627B4D097D5AC6DC98BEBB /* FindBarView.swift */; };
 		615B2C3C3731F1BC25687386 /* DisplayNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F21AEA2A681E5647A0ABBCE /* DisplayNames.swift */; };
 		6246F4A1E838FE6EE2E7D7B9 /* Indentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2AD01C040D98AC00B55299 /* Indentation.swift */; };
@@ -218,6 +219,7 @@
 		E6627B4D097D5AC6DC98BEBB /* FindBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindBarView.swift; sourceTree = "<group>"; };
 		E6F8E8E60B89728D8AD303FC /* EditorLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorLayoutManager.swift; sourceTree = "<group>"; };
 		EABE8E16BA46B122C3BA28DC /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
+		EC446651E4EC42B591575F38 /* SessionRestoreUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRestoreUITests.swift; sourceTree = "<group>"; };
 		ED030F5BAD6304DC5ED98FFB /* LineIndexTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineIndexTests.swift; sourceTree = "<group>"; };
 		F11AB82679EDE3AA0BA58584 /* EditorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
 		F21D3B8F18163B437C9F365E /* FindPasteboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasteboard.swift; sourceTree = "<group>"; };
@@ -327,6 +329,7 @@
 			children = (
 				ADCF3B6780320E7377F4CF13 /* AppStoreScreenshotTests.swift */,
 				3ED916224CCBBB0B2E81165E /* NoteCraftUITests.swift */,
+				EC446651E4EC42B591575F38 /* SessionRestoreUITests.swift */,
 			);
 			path = NoteCraftUITests;
 			sourceTree = "<group>";
@@ -757,6 +760,7 @@
 			files = (
 				4427EEC2EF47A28C82990F75 /* AppStoreScreenshotTests.swift in Sources */,
 				313B11D38C983F4CA00AB505 /* NoteCraftUITests.swift in Sources */,
+				606C24E3903E82554919AE59 /* SessionRestoreUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
