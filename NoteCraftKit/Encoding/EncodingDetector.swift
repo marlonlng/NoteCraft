@@ -78,25 +78,31 @@ public struct EncodingDetector: Sendable {
         return nil
     }
 
-    /// Recognizes UTF-16 text without byte order mark from the distribution of zero bytes.
+    /// Recognizes UTF-16 text without byte order mark: many code units must be printable characters with a zero high byte.
     public func utf16EncodingWithoutByteOrderMark(_ data: Data) -> TextEncoding? {
         let sample = [UInt8](data.prefix(4096))
-        guard sample.count >= 4 else { return nil }
-        var evenZeros = 0
-        var oddZeros = 0
-        for (index, byte) in sample.enumerated() where byte == 0 {
-            if index.isMultiple(of: 2) {
-                evenZeros += 1
-            } else {
-                oddZeros += 1
+        let pairs = sample.count / 2
+        guard pairs >= 2 else { return nil }
+        func isPrintable(_ byte: UInt8) -> Bool {
+            (0x09...0x0D).contains(byte) || (0x20...0x7E).contains(byte) || byte >= 0xA0
+        }
+        var littleEndianHits = 0
+        var bigEndianHits = 0
+        for pair in 0..<pairs {
+            let first = sample[pair * 2]
+            let second = sample[pair * 2 + 1]
+            if second == 0, isPrintable(first) {
+                littleEndianHits += 1
+            }
+            if first == 0, isPrintable(second) {
+                bigEndianHits += 1
             }
         }
-        let pairs = sample.count / 2
-        let threshold = max(1, pairs * 4 / 10)
-        if oddZeros >= threshold, evenZeros == 0 {
+        let threshold = max(2, pairs * 4 / 10)
+        if littleEndianHits >= threshold, bigEndianHits == 0 {
             return .utf16LittleEndian
         }
-        if evenZeros >= threshold, oddZeros == 0 {
+        if bigEndianHits >= threshold, littleEndianHits == 0 {
             return .utf16BigEndian
         }
         return nil

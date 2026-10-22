@@ -17,7 +17,7 @@ final class EditorViewController: NSViewController {
 
     let document: TextDocument
     let settingsStore: SettingsStore
-    let findBarModel = FindBarModel()
+    let findBarModel: FindBarModel
     let statusBarModel = StatusBarModel()
     private(set) var textView: EditorTextView!
     private(set) var scrollView: NSScrollView!
@@ -39,9 +39,10 @@ final class EditorViewController: NSViewController {
         }
     }
 
-    init(document: TextDocument, settingsStore: SettingsStore = .shared) {
+    init(document: TextDocument, settingsStore: SettingsStore = .shared, findPasteboard: FindPasteboard = FindPasteboard()) {
         self.document = document
         self.settingsStore = settingsStore
+        findBarModel = FindBarModel(findPasteboard: findPasteboard)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -130,7 +131,6 @@ final class EditorViewController: NSViewController {
         document.editor = self
         rebuildLineIndex()
         applySettings()
-        observeAttributes()
         observeNotifications()
         if let pending = document.pendingSelection {
             document.pendingSelection = nil
@@ -173,19 +173,6 @@ final class EditorViewController: NSViewController {
                 self?.applyAppearance()
             }
         })
-    }
-
-    private func observeAttributes() {
-        withObservationTracking {
-            _ = document.attributes.language
-            _ = document.attributes.indentation
-            _ = document.attributes.isLargeFile
-        } onChange: { [weak self] in
-            Task { @MainActor in
-                self?.applyDocumentAttributes()
-                self?.observeAttributes()
-            }
-        }
     }
 
     /// Applies editor settings such as font, wrapping and visibility toggles to this editor.
@@ -365,6 +352,10 @@ extension EditorViewController: DocumentEditor {
         }
         storedSelectionBeforeReload = nil
         findBarModel.refresh()
+    }
+
+    func documentAttributesDidChange() {
+        applyDocumentAttributes()
     }
 
     func select(_ range: NSRange) {

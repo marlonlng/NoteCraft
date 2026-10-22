@@ -80,9 +80,14 @@ extension TextDocument {
     }
 
     @objc func copyFilePath(_ sender: Any?) {
+        copyFilePath(to: .general)
+    }
+
+    /// Writes the path of the file to `pasteboard`.
+    func copyFilePath(to pasteboard: NSPasteboard) {
         guard let fileURL else { return }
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(fileURL.path, forType: .string)
+        pasteboard.clearContents()
+        pasteboard.setString(fileURL.path, forType: .string)
     }
 
     func presentErrorAsSheet(_ error: Error) {

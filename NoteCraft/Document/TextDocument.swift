@@ -92,6 +92,7 @@ final class TextDocument: NSDocument {
         editor?.documentWillReplaceContents()
         textStorage.replaceCharacters(in: NSRange(location: 0, length: textStorage.length), with: normalized)
         editor?.documentDidReplaceContents()
+        editor?.documentAttributesDidChange()
     }
 
     nonisolated override var fileURL: URL? {
@@ -107,6 +108,7 @@ final class TextDocument: NSDocument {
     private func fileURLDidChange() {
         if !attributes.isLanguageOverridden, let fileURL {
             attributes.language = Language.detect(fileName: fileURL.lastPathComponent, content: textStorage.string)
+            editor?.documentAttributesDidChange()
         }
         for case let controller as EditorWindowController in windowControllers {
             controller.updateSubtitle()
@@ -236,16 +238,18 @@ final class TextDocument: NSDocument {
             attributes.isLanguageOverridden = false
             attributes.language = Language.detect(fileName: fileURL?.lastPathComponent, content: textStorage.string)
         }
+        editor?.documentAttributesDidChange()
         invalidateRestorableState()
     }
 
     func setIndentation(_ indentation: Indentation) {
         attributes.indentation = indentation
+        editor?.documentAttributesDidChange()
     }
 
     /// Replaces the indentation with the one detected in the text, or the default from the settings.
     func detectIndentation() {
-        attributes.indentation = Indentation.detect(in: textStorage.string) ?? settings.indentation
+        setIndentation(Indentation.detect(in: textStorage.string) ?? settings.indentation)
     }
 
     // MARK: External changes
@@ -265,8 +269,7 @@ final class TextDocument: NSDocument {
             attributes.externalChange = .deleted
             return
         }
-        let values = try? fileURL.resourceValues(forKeys: [.contentModificationDateKey])
-        guard let diskDate = values?.contentModificationDate else { return }
+        guard let diskDate = Self.modificationDate(of: fileURL) else { return }
         if let known = fileModificationDate, diskDate <= known {
             return
         }
@@ -291,8 +294,8 @@ final class TextDocument: NSDocument {
 
     /// Keeps the text in the editor and accepts the file on disk as the new baseline.
     func keepCurrentVersion() {
-        if let fileURL, let values = try? fileURL.resourceValues(forKeys: [.contentModificationDateKey]) {
-            fileModificationDate = values.contentModificationDate
+        if let fileURL {
+            fileModificationDate = Self.modificationDate(of: fileURL)
         }
         attributes.externalChange = nil
     }
@@ -353,6 +356,11 @@ final class TextDocument: NSDocument {
     }
 
     // MARK: Helpers
+
+    /// Reads the modification date from disk, bypassing the resource value cache of `URL`.
+    static func modificationDate(of url: URL) -> Date? {
+        (try? FileManager.default.attributesOfItem(atPath: url.path))?[.modificationDate] as? Date
+    }
 
     private nonisolated static func onMainActor<T: Sendable>(_ body: @MainActor () throws -> T) throws -> T {
         if Thread.isMainThread {

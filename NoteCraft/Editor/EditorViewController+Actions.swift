@@ -34,7 +34,7 @@ extension EditorViewController: NSMenuItemValidation {
     }
 
     private func ensureSearchText() {
-        if findBarModel.searchText.isEmpty, let shared = FindPasteboard().string {
+        if findBarModel.searchText.isEmpty, let shared = findBarModel.sharedSearchText {
             findBarModel.searchText = shared
         }
     }
@@ -93,7 +93,7 @@ extension EditorViewController: NSMenuItemValidation {
         case #selector(toggleCurrentLineHighlight(_:)):
             menuItem.state = settings.highlightsCurrentLine ? .on : .off
         case #selector(findNextMatch(_:)), #selector(findPreviousMatch(_:)):
-            return !findBarModel.searchText.isEmpty || FindPasteboard().string?.isEmpty == false
+            return !findBarModel.searchText.isEmpty || findBarModel.sharedSearchText?.isEmpty == false
         case #selector(useSelectionForFind(_:)), #selector(useSelectionForReplace(_:)):
             return textView.selectedRange().length > 0
         case #selector(zoomIn(_:)):

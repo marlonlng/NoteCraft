@@ -92,8 +92,8 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     let splitController: EditorSplitViewController
     private var palettePanel: CommandPalettePanel?
 
-    init(document: TextDocument, workspace: WorkspaceModel = .shared) {
-        editorViewController = EditorViewController(document: document, settingsStore: document.settingsStore)
+    init(document: TextDocument, workspace: WorkspaceModel = .shared, findPasteboard: FindPasteboard = FindPasteboard()) {
+        editorViewController = EditorViewController(document: document, settingsStore: document.settingsStore, findPasteboard: findPasteboard)
         splitController = EditorSplitViewController(editor: editorViewController, workspace: workspace)
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 980, height: 700),

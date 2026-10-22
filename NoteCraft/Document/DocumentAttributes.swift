@@ -32,6 +32,7 @@ protocol DocumentEditor: AnyObject {
     var selectedRange: NSRange { get }
     func documentWillReplaceContents()
     func documentDidReplaceContents()
+    func documentAttributesDidChange()
     func select(_ range: NSRange)
     func replaceAllText(with text: String, actionName: String)
 }

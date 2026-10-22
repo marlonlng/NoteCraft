@@ -71,6 +71,11 @@ final class FindBarModel {
         self.findPasteboard = findPasteboard
     }
 
+    /// The search string other apps placed on the system find pasteboard.
+    var sharedSearchText: String? {
+        findPasteboard.string
+    }
+
     var query: SearchQuery {
         SearchQuery(
             text: searchText,

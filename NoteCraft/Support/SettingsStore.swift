@@ -15,10 +15,16 @@ final class SettingsStore {
 
     @ObservationIgnored private let defaults: UserDefaults
 
+    private var storedSettings: EditorSettings
+
+    /// The current settings; assigning clamps values, persists them and notifies all editors.
     var settings: EditorSettings {
-        didSet {
-            guard settings != oldValue else { return }
-            settings.clamp()
+        get { storedSettings }
+        set {
+            var clamped = newValue
+            clamped.clamp()
+            guard clamped != storedSettings else { return }
+            storedSettings = clamped
             persist()
             NotificationCenter.default.post(name: .editorSettingsDidChange, object: self)
         }
@@ -28,9 +34,9 @@ final class SettingsStore {
         self.defaults = defaults
         if let data = defaults.data(forKey: Self.settingsKey),
            let decoded = try? JSONDecoder().decode(EditorSettings.self, from: data) {
-            settings = decoded
+            storedSettings = decoded
         } else {
-            settings = EditorSettings()
+            storedSettings = EditorSettings()
         }
         applySessionRestoration()
     }
@@ -48,6 +54,6 @@ final class SettingsStore {
     }
 
     private func applySessionRestoration() {
-        defaults.set(settings.restoresSession, forKey: Self.quitAlwaysKeepsWindowsKey)
+        defaults.set(storedSettings.restoresSession, forKey: Self.quitAlwaysKeepsWindowsKey)
     }
 }
