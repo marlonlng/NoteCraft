@@ -178,3 +178,15 @@ schemes:
       config: Debug
       targets:
         - NoteCraftUITests
+  NoteCraftKit:
+    build:
+      targets:
+        NoteCraftKit: all
+        NoteCraftKitTests: [test]
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - NoteCraftKit
+      targets:
+        - NoteCraftKitTests
