@@ -10,7 +10,7 @@ A fast, native plain-text and source-code editor for macOS, inspired by the stre
 - **Encodings under control:** detection (BOM, UTF-8, UTF-16 heuristic, declared charsets), *Erneut öffnen mit* / *Konvertieren in*, lossy-save validation naming character, line and column.
 - **Line endings:** LF, CRLF and CR detection, conversion and a mixed-line-ending indicator.
 - **Search:** find bar with live match count, regular expressions with inline validation and cheat sheet, replace with `$1` templates, file search across a folder with glob patterns.
-- **Editing:** syntax highlighting for 33 languages, line numbers, current-line and bracket highlighting, invisible characters, multi-cursor and column editing, select next/all occurrences, auto-indent, auto-closing pairs, comment toggling, line operations and text transformations (case, Base64, URL, HTML, order-preserving JSON).
+- **Editing:** syntax highlighting for 32 languages, line numbers, current-line and bracket highlighting, invisible characters, multi-cursor and column editing, select next/all occurrences, auto-indent, auto-closing pairs, comment toggling, line operations and text transformations (case, Base64, URL, HTML, order-preserving JSON).
 - **Mac-native:** document-based AppKit app with native tabs, Liquid Glass toolbar and sidebar, command palette (⇧⌘A), Open Quickly (⇧⌘O), Settings window, Help with shortcuts, light/dark/high-contrast themes.
 
 ## Requirements
