@@ -91,22 +91,16 @@ final class AppStoreScreenshotTests: XCTestCase {
         let settings = app.windows["Farbschema"]
         XCTAssertTrue(settings.waitForExistence(timeout: 3))
         capture(settings, name: "05-Farbschema")
-        app.terminate()
-        XCTAssertTrue(app.wait(for: .notRunning, timeout: 10))
-        XCTAssertTrue(app.wait(for: .notRunning, timeout: 10))
+        settings.typeKey("w", modifierFlags: .command)
 
         let markdownURL = folder.appendingPathComponent("Projektnotizen.md")
         try Self.markdown.write(to: markdownURL, atomically: true, encoding: .utf8)
-        let lightApp = XCUIApplication()
-        lightApp.launchArguments += ["-ApplePersistenceIgnoreState", "YES", "-NSQuitAlwaysKeepsWindows", "NO", "-NSRequiresAquaSystemAppearance", "YES", "-ShowsSidebar", "NO"]
-        lightApp.launch()
-        XCTAssertTrue(lightApp.windows.firstMatch.waitForExistence(timeout: 10))
-        lightApp.open(markdownURL)
-        let markdownWindow = lightApp.windows["Projektnotizen.md"]
+        app.open(markdownURL)
+        let markdownWindow = app.windows["Projektnotizen.md"]
         XCTAssertTrue(markdownWindow.waitForExistence(timeout: 10))
-        markdownWindow.textViews["Texteditor"].click()
-        markdownWindow.textViews["Texteditor"].typeKey(.upArrow, modifierFlags: .command)
+        Thread.sleep(forTimeInterval: 1)
         capture(markdownWindow, name: "04-Markdown")
-        lightApp.terminate()
+
+        app.terminate()
     }
 }
