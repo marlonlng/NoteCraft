@@ -134,8 +134,14 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
         window?.subtitle = (url.deletingLastPathComponent().path as NSString).abbreviatingWithTildeInPath
     }
 
+    /// Opens a new untitled document as a tab of this window, regardless of the system tab preference.
     override func newWindowForTab(_ sender: Any?) {
-        NSDocumentController.shared.newDocument(sender)
+        guard let window,
+              let document = try? NSDocumentController.shared.openUntitledDocumentAndDisplay(false) else { return }
+        document.makeWindowControllers()
+        guard let newWindow = document.windowControllers.first?.window else { return }
+        window.addTabbedWindow(newWindow, ordered: .above)
+        newWindow.makeKeyAndOrderFront(sender)
     }
 
     // MARK: Actions

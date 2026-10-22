@@ -106,7 +106,9 @@ struct FindBarView: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
         .onChange(of: model.focusRequest, initial: true) {
-            focusedField = .search
+            Task { @MainActor in
+                focusedField = .search
+            }
         }
         .onExitCommand {
             model.hide()

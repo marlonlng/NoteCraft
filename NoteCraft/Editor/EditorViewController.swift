@@ -27,6 +27,7 @@ final class EditorViewController: NSViewController {
     private(set) var zoomScale: CGFloat = 1
     private(set) var theme: Theme = .paper
     private var statusBarHost: NSView!
+    private(set) var findBarHost: NSView!
     private var findRefreshTask: Task<Void, Never>?
     private var storedSelectionBeforeReload: NSRange?
     private var observers: [NSObjectProtocol] = []
@@ -96,6 +97,7 @@ final class EditorViewController: NSViewController {
             actions: self
         ))
         statusBarHost = statusHost
+        self.findBarHost = findBarHost
         bannerHost.sizingOptions = [.intrinsicContentSize]
         findBarHost.sizingOptions = [.intrinsicContentSize]
         statusHost.sizingOptions = [.intrinsicContentSize]

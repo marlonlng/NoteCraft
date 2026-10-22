@@ -98,6 +98,10 @@ final class LineNumberRulerView: NSRulerView {
         return lineHeight + font.descender
     }
 
+    override func draw(_ dirtyRect: NSRect) {
+        drawHashMarksAndLabels(in: dirtyRect)
+    }
+
     override func drawHashMarksAndLabels(in rect: NSRect) {
         backgroundColor.setFill()
         bounds.fill()

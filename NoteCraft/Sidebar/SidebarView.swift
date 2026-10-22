@@ -24,6 +24,7 @@ struct SidebarView: View {
                 FileSearchView(model: workspace.fileSearch, workspace: workspace)
             }
         }
+        .accessibilityElement(children: .contain)
         .accessibilityLabel(L10n.Accessibility.sidebar)
     }
 }

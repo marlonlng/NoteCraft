@@ -26,7 +26,7 @@ final class FindBarModel {
     var searchText = "" {
         didSet {
             if searchText != oldValue {
-                refresh()
+                queryDidChange()
             }
         }
     }
@@ -34,15 +34,15 @@ final class FindBarModel {
     var replacementText = ""
 
     var isCaseSensitive = false {
-        didSet { refresh() }
+        didSet { queryDidChange() }
     }
 
     var matchesWholeWord = false {
-        didSet { refresh() }
+        didSet { queryDidChange() }
     }
 
     var usesRegularExpression = false {
-        didSet { refresh() }
+        didSet { queryDidChange() }
     }
 
     var searchesInSelection = false {
@@ -54,7 +54,7 @@ final class FindBarModel {
             } else {
                 scope = nil
             }
-            refresh()
+            queryDidChange()
         }
     }
 
@@ -120,9 +120,13 @@ final class FindBarModel {
         target?.focusEditor()
     }
 
+    private func queryDidChange() {
+        statusMessage = nil
+        refresh()
+    }
+
     /// Recomputes all matches for the current query and highlights them.
     func refresh() {
-        statusMessage = nil
         guard let target else { return }
         guard isVisible, !searchText.isEmpty else {
             matches = []

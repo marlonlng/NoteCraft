@@ -8,10 +8,17 @@ extension EditorViewController: NSMenuItemValidation {
             findBarModel.useSelectionForFind()
         }
         findBarModel.show(replacing: false)
+        focusFindBar()
     }
 
     @objc func showFindAndReplaceBar(_ sender: Any?) {
         findBarModel.show(replacing: true)
+        focusFindBar()
+    }
+
+    private func focusFindBar() {
+        findBarHost.layoutSubtreeIfNeeded()
+        view.window?.makeFirstResponder(findBarHost)
     }
 
     @objc func findNextMatch(_ sender: Any?) {
@@ -31,6 +38,7 @@ extension EditorViewController: NSMenuItemValidation {
     @objc func useSelectionForReplace(_ sender: Any?) {
         findBarModel.useSelectionForReplace()
         findBarModel.show(replacing: true)
+        focusFindBar()
     }
 
     private func ensureSearchText() {
