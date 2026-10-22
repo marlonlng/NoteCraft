@@ -10,10 +10,6 @@ public struct SyntaxToken: Equatable, Sendable {
     }
 }
 
-/// Tokenizes text with all rules of a language in a single regular expression pass.
-///
-/// Rules are combined into one alternation, so earlier rules win at the same position and
-/// constructs such as comments and strings hide keywords inside them.
 public final class SyntaxHighlighter: @unchecked Sendable {
     public let language: Language
     private let regularExpression: NSRegularExpression?

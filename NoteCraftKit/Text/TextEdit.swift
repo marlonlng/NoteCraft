@@ -1,6 +1,5 @@
 import Foundation
 
-/// A single replacement in a text together with the selection to show afterwards.
 public struct TextEdit: Equatable, Sendable {
     public let range: NSRange
     public let replacement: String

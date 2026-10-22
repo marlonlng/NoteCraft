@@ -27,8 +27,8 @@ final class EditorSplitViewController: NSSplitViewController {
         sidebarItem.minimumThickness = 200
         sidebarItem.maximumThickness = 420
         sidebarItem.canCollapse = true
-        let preference = UserDefaults.standard.object(forKey: Self.sidebarVisibilityKey) as? Bool
-        sidebarItem.isCollapsed = !(preference ?? (workspace.folderURL != nil))
+        let storedVisibility = UserDefaults.standard.object(forKey: Self.sidebarVisibilityKey) as? Bool
+        sidebarItem.isCollapsed = !(storedVisibility ?? (workspace.folderURL != nil))
         super.init(nibName: nil, bundle: nil)
         let contentItem = NSSplitViewItem(viewController: editor)
         contentItem.minimumThickness = 320
@@ -144,9 +144,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
         newWindow.makeKeyAndOrderFront(sender)
     }
 
-    // MARK: Actions
-
-    @objc func showFindInFiles(_ sender: Any?) {
+    @objc func showFileSearch(_ sender: Any?) {
         splitController.showSidebar(section: .search)
         let fileSearch = splitController.workspace.fileSearch
         let selection = editorViewController.textView.selectedRange()
@@ -190,8 +188,6 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
         palettePanel = panel
         panel.present(over: window)
     }
-
-    // MARK: Toolbar
 
     private func configureToolbar() {
         let toolbar = NSToolbar(identifier: Self.toolbarIdentifier)

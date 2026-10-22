@@ -27,7 +27,6 @@ public enum TextTransformation: String, CaseIterable, Sendable {
     case formatJSON
     case minifyJSON
 
-    /// Whether the transformation works on whole lines and needs the selection extended to line boundaries.
     public var operatesOnLines: Bool {
         switch self {
         case .sortLinesAscending, .sortLinesDescending, .sortLinesByLength, .reverseLines, .shuffleLines,

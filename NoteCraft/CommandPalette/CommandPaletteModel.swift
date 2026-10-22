@@ -73,7 +73,6 @@ final class CommandPaletteModel {
         mode == .commands ? L10n.Palette.commandsPlaceholder : L10n.Palette.filesPlaceholder
     }
 
-    /// The items matching the query, best match first.
     var results: [PaletteItem] {
         let ranked = FuzzyMatcher.rank(items, query: query) { item in
             mode == .files ? (item.subtitle ?? item.title) : item.title + " " + (item.subtitle ?? "")
@@ -87,7 +86,6 @@ final class CommandPaletteModel {
         selectedIndex = min(max(selectedIndex + delta, 0), count - 1)
     }
 
-    /// The highlighted item, if any.
     var selectedItem: PaletteItem? {
         let results = results
         return results.indices.contains(selectedIndex) ? results[selectedIndex] : nil

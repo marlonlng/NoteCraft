@@ -36,7 +36,7 @@ struct HelpView: View {
             ShortcutEntry(keys: "⌘G", title: L10n.Menu.findNext),
             ShortcutEntry(keys: "⇧⌘G", title: L10n.Menu.findPrevious),
             ShortcutEntry(keys: "⌘E", title: L10n.Menu.useSelectionForFind),
-            ShortcutEntry(keys: "⇧⌘F", title: L10n.Menu.findInFiles),
+            ShortcutEntry(keys: "⇧⌘F", title: L10n.Menu.fileSearch),
             ShortcutEntry(keys: "⌘L", title: L10n.Menu.goToLine)
         ]),
         (L10n.Help.viewSection, [

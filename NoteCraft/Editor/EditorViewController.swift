@@ -154,8 +154,6 @@ final class EditorViewController: NSViewController {
         }
     }
 
-    // MARK: Settings and appearance
-
     private func observeNotifications() {
         observers.append(NotificationCenter.default.addObserver(
             forName: .editorSettingsDidChange,
@@ -223,7 +221,6 @@ final class EditorViewController: NSViewController {
         textView.needsDisplay = true
     }
 
-    /// The attributes for all text: font, color and paragraph style with tab stops.
     var baseTextAttributes: [NSAttributedString.Key: Any] {
         let font = settings.editorFont(scale: zoomScale)
         let paragraph = NSMutableParagraphStyle()
@@ -246,8 +243,6 @@ final class EditorViewController: NSViewController {
             (textView.layoutManager as? EditorLayoutManager)?.invisiblesFont = font
         }
     }
-
-    // MARK: Line index and status
 
     private func rebuildLineIndex() {
         lineIndex = LineIndex(text: document.textStorage.string as NSString)
@@ -305,8 +300,6 @@ final class EditorViewController: NSViewController {
     }
 }
 
-// MARK: - Text storage and text view delegates
-
 extension EditorViewController: NSTextStorageDelegate, NSTextViewDelegate {
     nonisolated func textStorage(
         _ textStorage: NSTextStorage,
@@ -331,8 +324,6 @@ extension EditorViewController: NSTextStorageDelegate, NSTextViewDelegate {
         document.invalidateRestorableState()
     }
 }
-
-// MARK: - Document editor
 
 extension EditorViewController: DocumentEditor {
     var selectedRange: NSRange {
@@ -376,8 +367,6 @@ extension EditorViewController: DocumentEditor {
     }
 }
 
-// MARK: - Search target
-
 extension EditorViewController: SearchTarget {
     var searchableText: NSString {
         textView.nsString
@@ -418,8 +407,6 @@ extension EditorViewController: SearchTarget {
         view.window?.makeFirstResponder(textView)
     }
 }
-
-// MARK: - SwiftUI containers
 
 private struct BannerContainer: View {
     let attributes: DocumentAttributes

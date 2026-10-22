@@ -8,7 +8,6 @@ struct FindPasteboard {
         self.pasteboard = pasteboard
     }
 
-    /// The search string shared with other apps through the system find pasteboard.
     var string: String? {
         get { pasteboard.string(forType: .string) }
         nonmutating set {

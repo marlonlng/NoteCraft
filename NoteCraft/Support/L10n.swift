@@ -61,7 +61,7 @@ enum L10n {
         static let useSelectionForFind = String(localized: "Auswahl für Suche verwenden")
         static let useSelectionForReplace = String(localized: "Auswahl für Ersetzen verwenden")
         static let jumpToSelection = String(localized: "Zur Auswahl springen")
-        static let findInFiles = String(localized: "In Dateien suchen …")
+        static let fileSearch = String(localized: "In Dateien suchen …")
         static let selection = String(localized: "Auswahl")
         static let selectNextOccurrence = String(localized: "Nächstes Vorkommen auswählen")
         static let selectAllOccurrences = String(localized: "Alle Vorkommen auswählen")

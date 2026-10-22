@@ -5,7 +5,6 @@ public enum LineEnding: String, CaseIterable, Codable, Sendable {
     case crlf
     case cr
 
-    /// The literal character sequence written to disk for this line ending.
     public var sequence: String {
         switch self {
         case .lf: "\n"
@@ -65,7 +64,6 @@ public struct LineEndingDetection: Equatable, Sendable {
         self.counts = counts
     }
 
-    /// The most frequent line ending, or `nil` when the text contains no line ending.
     public var dominant: LineEnding? {
         let ranked = LineEnding.allCases
             .map { ($0, counts[$0, default: 0]) }
@@ -74,7 +72,6 @@ public struct LineEndingDetection: Equatable, Sendable {
         return ranked.first?.0
     }
 
-    /// Whether the text mixes more than one kind of line ending.
     public var isMixed: Bool {
         counts.values.filter { $0 > 0 }.count > 1
     }

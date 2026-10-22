@@ -17,7 +17,6 @@ final class SettingsStore {
 
     private var storedSettings: EditorSettings
 
-    /// The current settings; assigning clamps values, persists them and notifies all editors.
     var settings: EditorSettings {
         get { storedSettings }
         set {

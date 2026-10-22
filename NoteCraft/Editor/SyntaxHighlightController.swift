@@ -75,7 +75,6 @@ final class SyntaxHighlightController {
         await task?.value
     }
 
-    /// The token colors currently applied, for inspection.
     var appliedTokens: [SyntaxToken] {
         tokens
     }

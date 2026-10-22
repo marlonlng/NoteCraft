@@ -108,8 +108,6 @@ final class EditorTextView: NSTextView {
         string as NSString
     }
 
-    // MARK: Editing primitives
-
     /// Replaces `range` with `replacement` as one undoable step and optionally selects `selectedRange`.
     @discardableResult
     func applyEdit(range: NSRange, replacement: String, selectedRange: NSRange?, actionName: String?) -> Bool {
@@ -165,7 +163,6 @@ final class EditorTextView: NSTextView {
         needsDisplay = true
     }
 
-    /// The ranges edited together, or `nil` when there is a single selection.
     var editingRanges: [NSRange]? {
         if insertionLocations.count > 1 {
             return insertionLocations.map { NSRange(location: $0, length: 0) }
@@ -184,8 +181,6 @@ final class EditorTextView: NSTextView {
             updateBracketHighlight()
         }
     }
-
-    // MARK: Typing
 
     override func insertText(_ string: Any, replacementRange: NSRange) {
         let text = (string as? NSAttributedString)?.string ?? (string as? String) ?? ""
@@ -329,8 +324,6 @@ final class EditorTextView: NSTextView {
         return Character(nsString.substring(with: nsString.rangeOfComposedCharacterSequence(at: index)))
     }
 
-    // MARK: Pasteboard and drops
-
     override func readSelection(from pboard: NSPasteboard, type: NSPasteboard.PasteboardType) -> Bool {
         guard type == .string, let raw = pboard.string(forType: .string) else {
             return super.readSelection(from: pboard, type: type)
@@ -357,8 +350,6 @@ final class EditorTextView: NSTextView {
         }
         return super.performDragOperation(sender)
     }
-
-    // MARK: Drawing
 
     override func drawBackground(in rect: NSRect) {
         super.drawBackground(in: rect)

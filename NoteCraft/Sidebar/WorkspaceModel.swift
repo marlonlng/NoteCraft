@@ -13,20 +13,19 @@ enum SidebarSection: String, CaseIterable, Identifiable {
 final class FileNode: Identifiable, Hashable {
     let url: URL
     let name: String
-    let isDirectory: Bool
+    let isFolder: Bool
     private var cachedChildren: [FileNode]?
 
     nonisolated var id: URL { url }
 
-    init(url: URL, isDirectory: Bool) {
+    init(url: URL, isFolder: Bool) {
         self.url = url
-        self.isDirectory = isDirectory
+        self.isFolder = isFolder
         name = url.lastPathComponent
     }
 
-    /// The child nodes of a folder, loaded on first access; `nil` for files.
     var children: [FileNode]? {
-        guard isDirectory else { return nil }
+        guard isFolder else { return nil }
         if let cachedChildren {
             return cachedChildren
         }
@@ -45,15 +44,15 @@ final class FileNode: Identifiable, Hashable {
         ) else { return [] }
         return urls.compactMap { url -> FileNode? in
             let values = try? url.resourceValues(forKeys: Set(keys))
-            let isDirectory = values?.isDirectory == true && values?.isPackage != true
-            if isDirectory, FileSearcher.skippedFolderNames.contains(url.lastPathComponent) {
+            let isFolder = values?.isDirectory == true && values?.isPackage != true
+            if isFolder, FileSearcher.skippedFolderNames.contains(url.lastPathComponent) {
                 return nil
             }
-            return FileNode(url: url, isDirectory: isDirectory)
+            return FileNode(url: url, isFolder: isFolder)
         }
         .sorted { lhs, rhs in
-            if lhs.isDirectory != rhs.isDirectory {
-                return lhs.isDirectory
+            if lhs.isFolder != rhs.isFolder {
+                return lhs.isFolder
             }
             return lhs.name.localizedStandardCompare(rhs.name) == .orderedAscending
         }
@@ -131,7 +130,6 @@ final class WorkspaceModel {
         rootNodes = folderURL.map(FileNode.children(of:)) ?? []
     }
 
-    /// All files of the folder for quick opening and filtering, limited to `quickOpenLimit`.
     var allFiles: [(url: URL, relativePath: String)] {
         if let cachedFiles {
             return cachedFiles
@@ -143,7 +141,6 @@ final class WorkspaceModel {
         return files
     }
 
-    /// Files whose relative path matches the sidebar filter, best match first.
     var filteredFiles: [(url: URL, relativePath: String)] {
         FuzzyMatcher.rank(allFiles, query: filterText) { $0.relativePath }.prefix(500).map(\.item)
     }

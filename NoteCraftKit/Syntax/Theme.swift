@@ -33,13 +33,11 @@ public struct HexColor: Equatable, Hashable, Sendable {
         }
     }
 
-    /// The color as `#RRGGBB`, or `#RRGGBBAA` when not opaque.
     public var hexString: String {
         let components = [red, green, blue] + (alpha < 1 ? [alpha] : [])
         return "#" + components.map { String(format: "%02X", Int(($0 * 255).rounded())) }.joined()
     }
 
-    /// The relative luminance as defined by WCAG 2.
     public var relativeLuminance: Double {
         func linearize(_ component: Double) -> Double {
             component <= 0.03928 ? component / 12.92 : pow((component + 0.055) / 1.055, 2.4)

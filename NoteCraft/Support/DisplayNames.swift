@@ -2,7 +2,6 @@ import Foundation
 import NoteCraftKit
 
 extension TextEncoding {
-    /// The full German name shown in menus and pickers.
     var displayName: String {
         switch self {
         case .utf8: String(localized: "Unicode (UTF-8)")
@@ -27,7 +26,6 @@ extension TextEncoding {
         }
     }
 
-    /// The compact name shown in the status bar.
     var shortName: String {
         switch self {
         case .utf8: "UTF-8"
@@ -52,7 +50,6 @@ extension TextEncoding {
         }
     }
 
-    /// Encodings grouped for menus: Unicode first, then regional encodings.
     static var menuGroups: [[TextEncoding]] {
         [
             [.utf8, .utf8WithBOM, .utf16LittleEndian, .utf16BigEndian],
@@ -64,7 +61,6 @@ extension TextEncoding {
 }
 
 extension LineEnding {
-    /// The full German name shown in menus and pickers.
     var displayName: String {
         switch self {
         case .lf: String(localized: "LF – macOS und Linux")
@@ -73,7 +69,6 @@ extension LineEnding {
         }
     }
 
-    /// The compact name shown in the status bar.
     var shortName: String {
         switch self {
         case .lf: "LF"
@@ -84,14 +79,12 @@ extension LineEnding {
 }
 
 extension Language {
-    /// The name shown in menus; plain text gets a German name.
     var displayName: String {
         id == Language.plainText.id ? String(localized: "Normaler Text") : name
     }
 }
 
 extension Theme {
-    /// The German name of a built-in theme.
     var displayName: String {
         switch id {
         case Theme.paper.id: String(localized: "Papier")

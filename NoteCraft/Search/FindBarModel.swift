@@ -71,7 +71,6 @@ final class FindBarModel {
         self.findPasteboard = findPasteboard
     }
 
-    /// The search string other apps placed on the system find pasteboard.
     var sharedSearchText: String? {
         findPasteboard.string
     }
@@ -85,7 +84,6 @@ final class FindBarModel {
         )
     }
 
-    /// The text shown next to the search field, e.g. `3 von 12`.
     var matchStatus: String {
         guard !searchText.isEmpty, validationMessage == nil else { return "" }
         guard !matches.isEmpty else { return L10n.Find.noMatches }

@@ -77,7 +77,6 @@ public struct EditorSettings: Equatable, Codable, Sendable {
         largeFileThreshold = max(100_000, largeFileThreshold)
     }
 
-    /// The default indentation for new documents.
     public var indentation: Indentation {
         Indentation(usesTabs: indentsWithTabs, width: tabWidth)
     }

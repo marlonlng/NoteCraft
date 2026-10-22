@@ -22,10 +22,10 @@ struct WorkspaceModelTests {
         defer { try? FileManager.default.removeItem(at: folder) }
         let nodes = FileNode.children(of: folder)
         #expect(nodes.map(\.name) == ["Sources", "b.txt", "README.md"])
-        #expect(nodes[0].isDirectory)
+        #expect(nodes[0].isFolder)
         #expect(nodes[0].children?.map(\.name) == ["App.swift"])
         #expect(nodes[0].children?.first?.children == nil)
-        #expect(nodes[1] == FileNode(url: nodes[1].url, isDirectory: false))
+        #expect(nodes[1] == FileNode(url: nodes[1].url, isFolder: false))
         #expect(Set(nodes).count == 3)
     }
 

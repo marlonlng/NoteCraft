@@ -39,7 +39,6 @@ extension EditorSettings {
 }
 
 enum MonospacedFonts {
-    /// Names of installed fixed-pitch font families, sorted for display.
     static var familyNames: [String] {
         let manager = NSFontManager.shared
         let names = manager.availableFontFamilies.filter { family in

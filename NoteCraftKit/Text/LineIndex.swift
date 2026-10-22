@@ -10,7 +10,6 @@ public struct TextPosition: Equatable, Sendable {
     }
 }
 
-/// Maps UTF-16 offsets to line numbers for text that uses LF line endings.
 public struct LineIndex: Equatable, Sendable {
     public private(set) var lineStarts: [Int]
     public private(set) var length: Int

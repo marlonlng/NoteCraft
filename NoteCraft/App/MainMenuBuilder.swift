@@ -26,8 +26,6 @@ struct MainMenuBuilder {
         return mainMenu
     }
 
-    // MARK: Menus
-
     private func makeAppMenu(servicesMenu: NSMenu) -> NSMenu {
         let menu = NSMenu(title: L10n.App.name)
         menu.addItem(item(L10n.App.about, #selector(AppDelegate.showAboutPanel(_:)), target: appDelegate))
@@ -130,7 +128,7 @@ struct MainMenuBuilder {
         findMenu.addItem(item(L10n.Menu.useSelectionForReplace, #selector(EditorViewController.useSelectionForReplace(_:)), key: "e", modifiers: [.command, .shift]))
         findMenu.addItem(item(L10n.Menu.jumpToSelection, #selector(NSTextView.centerSelectionInVisibleArea(_:)), key: "j"))
         findMenu.addItem(.separator())
-        findMenu.addItem(item(L10n.Menu.findInFiles, #selector(EditorWindowController.showFindInFiles(_:)), key: "f", modifiers: [.command, .shift]))
+        findMenu.addItem(item(L10n.Menu.fileSearch, #selector(EditorWindowController.showFileSearch(_:)), key: "f", modifiers: [.command, .shift]))
         menu.addItem(submenuItem(L10n.Menu.find, findMenu))
 
         let selectionMenu = NSMenu(title: L10n.Menu.selection)
@@ -266,8 +264,6 @@ struct MainMenuBuilder {
         menu.addItem(item(L10n.Menu.keyboardShortcuts, #selector(AppDelegate.showHelp(_:)), target: appDelegate))
         return menu
     }
-
-    // MARK: Helpers
 
     private func item(
         _ title: String,

@@ -731,7 +731,6 @@ public enum LanguageCatalog {
         ]
     )
 
-    /// All languages in menu order, starting with plain text.
     public static let all: [Language] = [
         .plainText, batch, c, cpp, csharp, css, diff, dockerfile, go, html, ini, java, javaScript, json, kotlin, lua,
         makefile, markdown, objectiveC, perl, php, powerShell, python, ruby, rust, scss, shell, sql, swift, toml,

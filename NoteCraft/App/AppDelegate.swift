@@ -12,7 +12,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
     }
 
-    /// Whether the app runs as the host of unit tests.
     var isRunningTests: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
@@ -36,8 +35,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         true
     }
-
-    // MARK: Actions
 
     @objc func showAboutPanel(_ sender: Any?) {
         let credits = NSAttributedString(
@@ -66,8 +63,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func newWindowForTab(_ sender: Any?) {
         NSDocumentController.shared.newDocument(sender)
     }
-
-    // MARK: Share menu
 
     func menuNeedsUpdate(_ menu: NSMenu) {
         guard let index = menu.items.firstIndex(where: { $0.identifier == MainMenuBuilder.shareItemIdentifier }) else { return }

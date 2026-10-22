@@ -9,7 +9,6 @@ public struct Indentation: Equatable, Codable, Sendable {
         self.width = max(1, width)
     }
 
-    /// The characters inserted for one indentation level.
     public var unit: String {
         usesTabs ? "\t" : String(repeating: " ", count: width)
     }

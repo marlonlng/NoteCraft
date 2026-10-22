@@ -33,7 +33,6 @@ final class FileSearchModel {
         results.reduce(0) { $0 + $1.matches.count }
     }
 
-    /// The summary below the search options, e.g. `12 Treffer in 3 Dateien`.
     var summary: String? {
         guard hasSearched else { return nil }
         if isSearching, results.isEmpty {

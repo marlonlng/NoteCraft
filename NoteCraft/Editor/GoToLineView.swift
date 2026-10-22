@@ -11,7 +11,6 @@ final class GoToLineModel {
         self.lineCount = lineCount
     }
 
-    /// The parsed one-based line and column, or `nil` when the input is invalid.
     var target: (line: Int, column: Int)? {
         let parts = input
             .trimmingCharacters(in: .whitespaces)
@@ -23,7 +22,6 @@ final class GoToLineModel {
         return (line, column)
     }
 
-    /// The German validation message for the current input, or `nil` when it is empty or valid.
     var validationMessage: String? {
         let trimmed = input.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty, target == nil else { return nil }

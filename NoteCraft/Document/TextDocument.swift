@@ -40,8 +40,6 @@ final class TextDocument: NSDocument {
         addWindowController(EditorWindowController(document: self))
     }
 
-    // MARK: Reading and writing
-
     nonisolated override func read(from url: URL, ofType typeName: String) throws {
         let data = try Data(contentsOf: url)
         let fileName = url.lastPathComponent
@@ -115,8 +113,6 @@ final class TextDocument: NSDocument {
         }
     }
 
-    // MARK: Saving
-
     override func save(
         to url: URL,
         ofType typeName: String,
@@ -175,8 +171,6 @@ final class TextDocument: NSDocument {
             attributes.language.fileExtensions.first ?? "txt"
         }
     }
-
-    // MARK: Encoding, line endings, language, indentation
 
     /// Uses `encoding` for the next save after checking that every character can be represented.
     ///
@@ -252,8 +246,6 @@ final class TextDocument: NSDocument {
         setIndentation(Indentation.detect(in: textStorage.string) ?? settings.indentation)
     }
 
-    // MARK: External changes
-
     nonisolated override func presentedItemDidChange() {
         super.presentedItemDidChange()
         let reference = WeakReference(self)
@@ -300,8 +292,6 @@ final class TextDocument: NSDocument {
         attributes.externalChange = nil
     }
 
-    // MARK: Restoration
-
     override func encodeRestorableState(with coder: NSCoder) {
         super.encodeRestorableState(with: coder)
         if let editor {
@@ -328,8 +318,6 @@ final class TextDocument: NSDocument {
         }
     }
 
-    // MARK: Printing
-
     override func printOperation(withSettings printSettings: [NSPrintInfo.AttributeKey: Any]) throws -> NSPrintOperation {
         let info = printInfo.copy() as? NSPrintInfo ?? NSPrintInfo.shared
         info.dictionary().addEntries(from: printSettings)
@@ -354,8 +342,6 @@ final class TextDocument: NSDocument {
         operation.showsProgressPanel = true
         return operation
     }
-
-    // MARK: Helpers
 
     /// Reads the modification date from disk, bypassing the resource value cache of `URL`.
     static func modificationDate(of url: URL) -> Date? {

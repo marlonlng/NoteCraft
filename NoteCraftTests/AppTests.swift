@@ -229,11 +229,11 @@ struct WindowTests {
         UserDefaults.standard.set(wasVisible, forKey: EditorSplitViewController.sidebarVisibilityKey)
     }
 
-    @Test func prefillsFindInFilesFromSelection() throws {
+    @Test func prefillsFileSearchFromSelection() throws {
         let fixture = try TestSupport.makeEditor("needle in haystack")
         defer { fixture.close() }
         fixture.textView.setSelectedRange(NSRange(location: 0, length: 6))
-        fixture.windowController.showFindInFiles(nil)
+        fixture.windowController.showFileSearch(nil)
         #expect(fixture.workspace.fileSearch.queryText == "needle")
         #expect(fixture.workspace.fileSearch.focusRequest == 1)
         #expect(fixture.workspace.selectedSection == .search)

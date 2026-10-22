@@ -15,7 +15,6 @@ public struct ReplaceAllResult: Equatable, Sendable {
     }
 }
 
-/// Finds and replaces matches of a `SearchQuery` in text.
 public struct TextSearcher: @unchecked Sendable {
     public let query: SearchQuery
     private let regularExpression: NSRegularExpression

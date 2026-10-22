@@ -1,6 +1,5 @@
 import Foundation
 
-/// Re-indents or minifies JSON while keeping the original key order and number notation.
 public struct JSONFormatter: Sendable {
     public let indentation: String
 

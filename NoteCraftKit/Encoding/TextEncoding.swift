@@ -21,7 +21,6 @@ public enum TextEncoding: String, CaseIterable, Codable, Sendable {
     case big5
     case eucKR
 
-    /// The IANA charset name used in declarations such as `<meta charset>`.
     public var ianaName: String {
         switch self {
         case .utf8, .utf8WithBOM: "utf-8"
@@ -45,7 +44,6 @@ public enum TextEncoding: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    /// The Foundation encoding used to convert between bytes and strings.
     public var stringEncoding: String.Encoding {
         switch self {
         case .utf8, .utf8WithBOM: .utf8
@@ -69,7 +67,6 @@ public enum TextEncoding: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    /// The byte order mark written in front of the encoded text, if any.
     public var byteOrderMark: [UInt8] {
         switch self {
         case .utf8WithBOM: [0xEF, 0xBB, 0xBF]
@@ -79,7 +76,6 @@ public enum TextEncoding: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    /// Whether every Unicode character can be represented in this encoding.
     public var isUnicode: Bool {
         switch self {
         case .utf8, .utf8WithBOM, .utf16LittleEndian, .utf16BigEndian: true
