@@ -85,6 +85,44 @@ public struct Indentation: Equatable, Codable, Sendable {
         return (insertion, (insertion as NSString).length)
     }
 
+    /// Replaces every tab with spaces up to the next tab stop of `width` columns.
+    public static func expandTabs(in text: String, width: Int) -> String {
+        let width = max(1, width)
+        var result = ""
+        result.reserveCapacity(text.count)
+        var column = 0
+        for character in text {
+            switch character {
+            case "\t":
+                let count = width - column % width
+                result += String(repeating: " ", count: count)
+                column += count
+            case "\n":
+                result.append(character)
+                column = 0
+            default:
+                result.append(character)
+                column += 1
+            }
+        }
+        return result
+    }
+
+    /// Replaces leading runs of `width` spaces with tabs; spaces inside lines are kept.
+    public static func collapseLeadingSpaces(in text: String, width: Int) -> String {
+        let width = max(1, width)
+        return text.components(separatedBy: "\n").map { line in
+            let leading = line.prefix { $0 == " " || $0 == "\t" }
+            var columns = 0
+            for character in leading {
+                columns = character == "\t" ? columns + width - columns % width : columns + 1
+            }
+            let tabs = String(repeating: "\t", count: columns / width)
+            let spaces = String(repeating: " ", count: columns % width)
+            return tabs + spaces + line.dropFirst(leading.count)
+        }.joined(separator: "\n")
+    }
+
     private static func previousSignificantCharacter(before location: Int, in text: NSString) -> unichar? {
         var index = location - 1
         let lineStart = text.lineRange(for: NSRange(location: location, length: 0)).location
