@@ -30,6 +30,7 @@
 		3DA2A54662A37103522B997D /* ThemeColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CCAEDA427AFB4632158B50 /* ThemeColors.swift */; };
 		3E082B0882AA98BE803883BC /* TextDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D251295D195A823A517407 /* TextDocumentTests.swift */; };
 		42D804358224248C19B86965 /* FindBarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C727E1C96686D04081E6C61D /* FindBarModel.swift */; };
+		4427EEC2EF47A28C82990F75 /* AppStoreScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3B6780320E7377F4CF13 /* AppStoreScreenshotTests.swift */; };
 		4CCF484CE076F0DE906849C1 /* EditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573A6EBA9707FAF0B8EC6062 /* EditorTextView.swift */; };
 		50006468E9C4E56E9F0F883C /* EditorSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F7CD9427981AF9822C44E /* EditorSettingsTests.swift */; };
 		595896395473CEF8D46C617B /* FileSearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF529670A6D7BA374312EFDD /* FileSearcher.swift */; };
@@ -195,6 +196,7 @@
 		A2BB875BD107609CBA7B5604 /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
 		A37CCCBADA686F8956C71F63 /* DocumentAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentAttributes.swift; sourceTree = "<group>"; };
 		AC6D34E0AFA56AD3661BE74C /* FileSearcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSearcherTests.swift; sourceTree = "<group>"; };
+		ADCF3B6780320E7377F4CF13 /* AppStoreScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreScreenshotTests.swift; sourceTree = "<group>"; };
 		B123324B6AD25525FA5945F8 /* LineOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineOperations.swift; sourceTree = "<group>"; };
 		B19C47200792B8B2A2DEB14A /* EncodingDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodingDetector.swift; sourceTree = "<group>"; };
 		B2B2E4859D2443DD2C6F345F /* SearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
@@ -323,6 +325,7 @@
 		5F7BF03C7996212496E48465 /* NoteCraftUITests */ = {
 			isa = PBXGroup;
 			children = (
+				ADCF3B6780320E7377F4CF13 /* AppStoreScreenshotTests.swift */,
 				3ED916224CCBBB0B2E81165E /* NoteCraftUITests.swift */,
 			);
 			path = NoteCraftUITests;
@@ -752,6 +755,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4427EEC2EF47A28C82990F75 /* AppStoreScreenshotTests.swift in Sources */,
 				313B11D38C983F4CA00AB505 /* NoteCraftUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -875,6 +879,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
