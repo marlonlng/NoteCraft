@@ -94,6 +94,12 @@ struct FuzzyMatcherTests {
         #expect(camel.score > plain.score)
     }
 
+    @Test func leavesOutScatteredMatchesWhenRanking() {
+        let items = ["Aufsteigend sortieren", "Westeuropäisch (Mac OS Roman) Ablage › Kodierung › Konvertieren in"]
+        #expect(FuzzyMatcher.match("sortier", in: items[1]) != nil)
+        #expect(FuzzyMatcher.rank(items, query: "sortier") { $0 }.map(\.item) == ["Aufsteigend sortieren"])
+    }
+
     @Test func ranksItemsByScoreKeepingOrderForTies() {
         let ranked = FuzzyMatcher.rank(["Kopieren", "Ersetzen", "In Dateien suchen", "Suchen"], query: "such") { $0 }
         #expect(ranked.map(\.item) == ["Suchen", "In Dateien suchen"])

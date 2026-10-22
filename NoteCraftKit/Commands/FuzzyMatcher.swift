@@ -32,9 +32,12 @@ public enum FuzzyMatcher {
     }
 
     /// Returns the candidates that match `query`, best match first.
+    ///
+    /// Matches scoring less than one point per query character are scattered across the candidate and left out.
     public static func rank<Item>(_ items: [Item], query: String, text: (Item) -> String) -> [(item: Item, match: FuzzyMatch)] {
-        items.compactMap { item -> (Item, FuzzyMatch)? in
-            guard let match = match(query, in: text(item)) else { return nil }
+        let minimumScore = query.filter { !$0.isWhitespace }.count
+        return items.compactMap { item -> (Item, FuzzyMatch)? in
+            guard let match = match(query, in: text(item)), match.score >= minimumScore else { return nil }
             return (item, match)
         }
         .enumerated()
@@ -54,7 +57,7 @@ public enum FuzzyMatcher {
                 score += 1
                 if let previous = offsets.last {
                     let gap = offset - previous - 1
-                    score += gap == 0 ? 6 : -min(gap, 3)
+                    score += gap == 0 ? 6 : -min(gap, 8)
                 }
                 if offset == 0 || !(original[offset - 1].isLetter || original[offset - 1].isNumber) {
                     score += 5
