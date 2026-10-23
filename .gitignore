@@ -8,3 +8,4 @@ xcuserdata/
 *.moved-aside
 .swiftpm/
 .build/
+Config/Local.xcconfig

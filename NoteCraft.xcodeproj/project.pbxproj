@@ -146,6 +146,7 @@
 /* Begin PBXFileReference section */
 		00CCAEDA427AFB4632158B50 /* ThemeColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColors.swift; sourceTree = "<group>"; };
 		02656554C6AD49A39C67CDDC /* TextSearcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSearcher.swift; sourceTree = "<group>"; };
+		07B5B32F328BBA4ED3D3D276 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		08674D7D3DA5344EE2B93E2F /* FuzzyMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuzzyMatcher.swift; sourceTree = "<group>"; };
 		0C7ABB6FCF5006AD2ADD233C /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		13BA8B9CEDC3313277173D95 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
@@ -408,6 +409,7 @@
 		A9B1C14E968552305FF1D27D = {
 			isa = PBXGroup;
 			children = (
+				B0431EDC3CF5137E295B92B2 /* Config */,
 				9EA4318C506E2DB7ACAE7E24 /* NoteCraft */,
 				6AD61FF61D107F7AB0AA7D35 /* NoteCraftKit */,
 				66767A86E6EF09E18878628A /* NoteCraftKitTests */,
@@ -415,6 +417,14 @@
 				5F7BF03C7996212496E48465 /* NoteCraftUITests */,
 				C4349EAD45EFB3F427B26487 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		B0431EDC3CF5137E295B92B2 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				07B5B32F328BBA4ED3D3D276 /* Base.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		B4D24E3CDC8E095F1F980EC1 /* CommandPalette */ = {
@@ -616,8 +626,21 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					24DD78E5797D74D2F124AE09 = {
+						DevelopmentTeam = "";
+					};
+					432F61E7C7276151B8695075 = {
+						DevelopmentTeam = "";
+					};
+					909E96DA1614F853F1365A43 = {
+						DevelopmentTeam = "";
+					};
 					A60E630F27D8B4ACDCFE9250 = {
+						DevelopmentTeam = "";
 						TestTargetID = 432F61E7C7276151B8695075;
+					};
+					E16E19B7E7A510741CB0B4A5 = {
+						DevelopmentTeam = "";
 					};
 				};
 			};
@@ -801,7 +824,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraftKitTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftKitTests";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -825,7 +848,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraftKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftKit";
 				PRODUCT_NAME = NoteCraftKit;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -844,13 +867,14 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraftKitTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftKitTests";
 				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		645F8C08AD91245324A8DA2F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07B5B32F328BBA4ED3D3D276 /* Base.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -889,7 +913,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = V4FQEC4GTQ;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -929,7 +952,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraftTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftTests";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NoteCraft.app/Contents/MacOS/NoteCraft";
 			};
@@ -950,7 +973,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraft;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraft";
 				PRODUCT_NAME = NoteCraft;
 				SDKROOT = macosx;
 			};
@@ -967,7 +990,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraftTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftTests";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NoteCraft.app/Contents/MacOS/NoteCraft";
 			};
@@ -984,7 +1007,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraftUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftUITests";
 				SDKROOT = macosx;
 				TEST_TARGET_NAME = NoteCraft;
 			};
@@ -1005,7 +1028,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraft;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraft";
 				PRODUCT_NAME = NoteCraft;
 				SDKROOT = macosx;
 			};
@@ -1013,6 +1036,7 @@
 		};
 		E918CF705C3D51EEEB682ED9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07B5B32F328BBA4ED3D3D276 /* Base.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1097,7 +1121,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraftUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftUITests";
 				SDKROOT = macosx;
 				TEST_TARGET_NAME = NoteCraft;
 			};
@@ -1122,7 +1146,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marlonlange.NoteCraftKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftKit";
 				PRODUCT_NAME = NoteCraftKit;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;

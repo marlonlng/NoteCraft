@@ -1,12 +1,14 @@
 name: NoteCraft
 options:
-  bundleIdPrefix: com.marlonlange
   deploymentTarget:
     macOS: "26.0"
   developmentLanguage: de
   createIntermediateGroups: true
   groupSortPosition: top
   generateEmptyDirectories: false
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
 settings:
   base:
     SWIFT_VERSION: "6.0"
@@ -20,7 +22,6 @@ settings:
     DEAD_CODE_STRIPPING: YES
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     SWIFT_EMIT_LOC_STRINGS: YES
-    DEVELOPMENT_TEAM: V4FQEC4GTQ
   configs:
     Debug:
       CODE_SIGN_IDENTITY: "-"
@@ -38,7 +39,7 @@ targets:
       - path: NoteCraftKit
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraftKit
+        PRODUCT_BUNDLE_IDENTIFIER: $(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftKit
         PRODUCT_NAME: NoteCraftKit
         GENERATE_INFOPLIST_FILE: YES
         SKIP_INSTALL: YES
@@ -102,7 +103,7 @@ targets:
         com.apple.security.print: true
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraft
+        PRODUCT_BUNDLE_IDENTIFIER: $(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraft
         PRODUCT_NAME: NoteCraft
         ENABLE_HARDENED_RUNTIME: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -120,7 +121,7 @@ targets:
       - target: NoteCraftKit
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraftKitTests
+        PRODUCT_BUNDLE_IDENTIFIER: $(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftKitTests
         GENERATE_INFOPLIST_FILE: YES
   NoteCraftTests:
     type: bundle.unit-test
@@ -131,7 +132,7 @@ targets:
       - target: NoteCraft
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraftTests
+        PRODUCT_BUNDLE_IDENTIFIER: $(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftTests
         GENERATE_INFOPLIST_FILE: YES
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/NoteCraft.app/Contents/MacOS/NoteCraft"
         BUNDLE_LOADER: "$(TEST_HOST)"
@@ -144,7 +145,7 @@ targets:
       - target: NoteCraft
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.marlonlange.NoteCraftUITests
+        PRODUCT_BUNDLE_IDENTIFIER: $(NOTECRAFT_BUNDLE_ID_PREFIX).NoteCraftUITests
         GENERATE_INFOPLIST_FILE: YES
         TEST_TARGET_NAME: NoteCraft
 schemes:

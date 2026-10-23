@@ -1,0 +1,4 @@
+NOTECRAFT_BUNDLE_ID_PREFIX = com.marlonlange
+DEVELOPMENT_TEAM =
+
+#include? "Local.xcconfig"
