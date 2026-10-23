@@ -10,7 +10,7 @@ A fast, native plain-text and source-code editor for macOS. NoteCraft takes the 
 - **Search:** find bar with live match count, regular expressions with inline validation and a cheat sheet, replace with `$1` templates, and Find in Files across a folder with glob patterns.
 - **Editing:** syntax highlighting for 32 languages, line numbers, current-line and bracket highlighting, invisible characters, multiple cursors and column selection, select next/all occurrences, auto-indent, auto-closing pairs, comment toggling, line operations and text transformations (case, Base64, URL, HTML, order-preserving JSON).
 - **Mac-native:** document-based AppKit app with native tabs, Liquid Glass toolbar and sidebar, command palette (⇧⌘A), Open Quickly (⇧⌘O), a Settings window, built-in help and light, dark and high-contrast themes.
-- **Private:** no accounts, no tracking, no network access. NoteCraft runs in the App Sandbox and only opens files and folders you choose.
+- **Private:** no accounts, no tracking, no network access. NoteCraft runs in the App Sandbox and only opens files and folders you choose. See the [privacy policy](PRIVACY.md).
 
 ## Requirements
 
@@ -66,7 +66,7 @@ The raw screenshots come from the `AppStoreScreenshotTests` UI test. The caption
 
 ## Contributing
 
-Bug reports, translations and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) first and report security issues as described in [SECURITY.md](SECURITY.md).
+Bug reports, questions, translations and pull requests are welcome in the [issues](https://github.com/marlonlng/NoteCraft/issues). Please read [CONTRIBUTING.md](CONTRIBUTING.md) first and report security issues as described in [SECURITY.md](SECURITY.md).
 
 ## License
 
