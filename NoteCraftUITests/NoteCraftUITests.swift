@@ -36,7 +36,7 @@ final class NoteCraftUITests: XCTestCase {
 
     func testTypingUpdatesStatusBar() {
         newDocument(with: "Hello\nWorld")
-        XCTAssertTrue(app.buttons["Line 2, Column 5"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.buttons["Line 2, Column 6"].waitForExistence(timeout: 3))
         XCTAssertTrue(app.staticTexts["UTF-8"].exists || app.buttons["UTF-8"].exists || app.menuButtons["UTF-8"].exists)
         attachScreenshot("Editor")
     }
