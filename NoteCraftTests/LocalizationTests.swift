@@ -24,6 +24,12 @@ struct LocalizationTests {
         #expect(L10n.Menu.file == "File")
     }
 
+    @Test func shipsLocalizationFolderForEveryLanguage() {
+        for localization in ["en", "de"] {
+            #expect(Bundle.main.url(forResource: "InfoPlist", withExtension: "strings", subdirectory: nil, localization: localization) != nil, "\(localization)")
+        }
+    }
+
     @Test func translatesInterfaceToGerman() throws {
         let german = try table("Localizable", localization: "de")
         let samples = [
