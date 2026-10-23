@@ -6,8 +6,8 @@ final class SessionRestoreUITests: XCTestCase {
         hierarchy.name = "\(name) – Hierarchy"
         hierarchy.lifetime = .keepAlways
         add(hierarchy)
-        let screenshot = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
-        screenshot.name = "\(name) – Window"
+        let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        screenshot.name = "\(name) – Screen"
         screenshot.lifetime = .keepAlways
         add(screenshot)
     }
