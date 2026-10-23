@@ -1,5 +1,11 @@
 import Foundation
 
+public enum MarkdownScrollSync: String, CaseIterable, Codable, Sendable {
+    case both
+    case previewFollowsEditor
+    case independent
+}
+
 public struct EditorSettings: Equatable, Codable, Sendable {
     public static let fontSizeRange: ClosedRange<Double> = 8...72
     public static let tabWidthRange: ClosedRange<Int> = 1...16
@@ -30,6 +36,9 @@ public struct EditorSettings: Equatable, Codable, Sendable {
     public var trimsTrailingWhitespaceOnSave: Bool = false
     public var ensuresTrailingNewlineOnSave: Bool = false
     public var largeFileThreshold: Int = 5_000_000
+    public var opensMarkdownPreview: Bool = true
+    public var markdownScrollSync: MarkdownScrollSync = .both
+    public var loadsExternalContent: Bool = false
 
     public init() {}
 
@@ -66,6 +75,9 @@ public struct EditorSettings: Equatable, Codable, Sendable {
         ensuresTrailingNewlineOnSave = try container.decodeIfPresent(Bool.self, forKey: .ensuresTrailingNewlineOnSave)
             ?? defaults.ensuresTrailingNewlineOnSave
         largeFileThreshold = try container.decodeIfPresent(Int.self, forKey: .largeFileThreshold) ?? defaults.largeFileThreshold
+        opensMarkdownPreview = try container.decodeIfPresent(Bool.self, forKey: .opensMarkdownPreview) ?? defaults.opensMarkdownPreview
+        markdownScrollSync = (try? container.decodeIfPresent(MarkdownScrollSync.self, forKey: .markdownScrollSync)) ?? defaults.markdownScrollSync
+        loadsExternalContent = try container.decodeIfPresent(Bool.self, forKey: .loadsExternalContent) ?? defaults.loadsExternalContent
         clamp()
     }
 

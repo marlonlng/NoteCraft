@@ -1,6 +1,7 @@
 import AppKit
 import NoteCraftKit
 import SwiftUI
+import WebKit
 @testable import NoteCraft
 
 @MainActor
@@ -80,6 +81,90 @@ enum TestSupport {
     /// Runs the main run loop briefly so that scheduled main-actor work can execute.
     static func spinRunLoop(_ seconds: TimeInterval = 0.05) {
         RunLoop.main.run(until: Date().addingTimeInterval(seconds))
+    }
+
+    /// Suspends until `condition` holds or `timeout` passes, letting the main queue run; returns whether it holds.
+    @discardableResult
+    static func wait(timeout: TimeInterval = 10, until condition: () -> Bool) async -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+        while !condition() {
+            guard Date() < deadline else { return false }
+            try? await Task.sleep(for: .milliseconds(20))
+        }
+        return true
+    }
+
+    /// Evaluates `script` in `webView` and returns its result.
+    static func evaluate(_ script: String, in webView: WKWebView) async -> Any? {
+        let box = ResultBox()
+        webView.evaluateJavaScript(script) { value, _ in
+            let result = value
+            MainActor.assumeIsolated {
+                box.value = result
+                box.isDone = true
+            }
+        }
+        await wait { box.isDone }
+        return box.value
+    }
+
+    /// The PNG data of a small opaque image.
+    static func makePNG(width: Int = 2, height: Int = 2) -> Data {
+        let image = NSBitmapImageRep(
+            bitmapDataPlanes: nil, pixelsWide: width, pixelsHigh: height, bitsPerSample: 8, samplesPerPixel: 4,
+            hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
+        )
+        return image?.representation(using: .png, properties: [:]) ?? Data()
+    }
+}
+
+@MainActor
+final class ResultBox {
+    var value: Any?
+    var isDone = false
+}
+
+@MainActor
+final class RecordingWorkspace: NSWorkspace {
+    var opened: [URL] = []
+
+    override func open(_ url: URL) -> Bool {
+        opened.append(url)
+        return true
+    }
+}
+
+@MainActor
+final class RecordingPreviewDelegate: MarkdownPreviewDelegate {
+    var scrolledLines: [Double] = []
+    var requestedLines: [Int] = []
+    var toggledLines: [Int] = []
+    var links: [String] = []
+    var externalContentRequests = 0
+    var folderRequests: [URL] = []
+
+    func preview(_ preview: MarkdownPreviewController, didScrollToLine line: Double) {
+        scrolledLines.append(line)
+    }
+
+    func preview(_ preview: MarkdownPreviewController, didRequestLine line: Int) {
+        requestedLines.append(line)
+    }
+
+    func preview(_ preview: MarkdownPreviewController, didToggleTaskAtLine line: Int) {
+        toggledLines.append(line)
+    }
+
+    func preview(_ preview: MarkdownPreviewController, didActivateLink address: String) {
+        links.append(address)
+    }
+
+    func previewDidRequestExternalContent(_ preview: MarkdownPreviewController) {
+        externalContentRequests += 1
+    }
+
+    func preview(_ preview: MarkdownPreviewController, didRequestAccessTo folderURL: URL) {
+        folderRequests.append(folderURL)
     }
 }
 

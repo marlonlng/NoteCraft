@@ -45,10 +45,18 @@ struct HelpView: View {
             ShortcutEntry(keys: "⌘+", title: L10n.Menu.zoomIn),
             ShortcutEntry(keys: "⌘−", title: L10n.Menu.zoomOut),
             ShortcutEntry(keys: "⌘0", title: L10n.Menu.actualSize)
+        ]),
+        (L10n.Help.markdownSection, [
+            ShortcutEntry(keys: "⌥⌘P", title: L10n.Menu.showPreview),
+            ShortcutEntry(keys: "⌘B", title: L10n.Menu.bold),
+            ShortcutEntry(keys: "⌘I", title: L10n.Menu.italic),
+            ShortcutEntry(keys: "⌘K", title: L10n.Menu.link),
+            ShortcutEntry(keys: "⌥⌘1–6", title: L10n.Menu.heading),
+            ShortcutEntry(keys: "⇧⌘L", title: L10n.Menu.toggleTask)
         ])
     ]
 
-    static let tips = [L10n.Help.tipSession, L10n.Help.tipColumns, L10n.Help.tipEncoding, L10n.Help.tipVersions]
+    static let tips = [L10n.Help.tipSession, L10n.Help.tipColumns, L10n.Help.tipEncoding, L10n.Help.tipVersions, L10n.Help.tipMarkdown]
 
     var body: some View {
         ScrollView {

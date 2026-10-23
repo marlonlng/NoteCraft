@@ -151,6 +151,42 @@ struct ThemePreview: View {
     }
 }
 
+struct MarkdownSettingsView: View {
+    @Bindable var store: SettingsStore
+    var onResetPermissions: () -> Void = {
+        FolderAccessStore.shared.reset()
+        ExternalContentStore.shared.reset()
+    }
+
+    var body: some View {
+        Form {
+            Section(L10n.Settings.previewSection) {
+                Toggle(L10n.Settings.opensMarkdownPreview, isOn: $store.settings.opensMarkdownPreview)
+                Picker(L10n.Settings.scrollSync, selection: $store.settings.markdownScrollSync) {
+                    ForEach(MarkdownScrollSync.allCases, id: \.self) { mode in
+                        Text(mode.displayName).tag(mode)
+                    }
+                }
+            }
+            Section(L10n.Settings.externalContentSection) {
+                Toggle(isOn: $store.settings.loadsExternalContent) {
+                    Text(L10n.Settings.loadsExternalContent)
+                    Text(L10n.Settings.loadsExternalContentHelp)
+                }
+                LabeledContent {
+                    Button(L10n.Settings.resetPermissions, action: onResetPermissions)
+                } label: {
+                    Text(L10n.Settings.resetPermissions)
+                    Text(L10n.Settings.resetPermissionsHelp)
+                }
+            }
+        }
+        .formStyle(.grouped)
+        .frame(width: 520)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
 struct FilesSettingsView: View {
     @Bindable var store: SettingsStore
 

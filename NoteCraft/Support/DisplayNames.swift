@@ -78,6 +78,16 @@ extension LineEnding {
     }
 }
 
+extension MarkdownScrollSync {
+    var displayName: String {
+        switch self {
+        case .both: String(localized: "Both directions")
+        case .previewFollowsEditor: String(localized: "Preview follows editor")
+        case .independent: String(localized: "Independent")
+        }
+    }
+}
+
 extension Language {
     var displayName: String {
         id == Language.plainText.id ? String(localized: "Plain Text") : name

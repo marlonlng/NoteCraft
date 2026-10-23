@@ -11,6 +11,16 @@
         }
       }
     },
+    "%@: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        }
+      }
+    },
     "%lld MB" : {
       "localizations" : {
         "de" : {
@@ -151,6 +161,16 @@
         }
       }
     },
+    "Acknowledgements" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lizenzhinweise"
+          }
+        }
+      }
+    },
     "Actual Size" : {
       "localizations" : {
         "de" : {
@@ -161,12 +181,62 @@
         }
       }
     },
+    "Add Column" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spalte hinzufügen"
+          }
+        }
+      }
+    },
+    "Add Row" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile hinzufügen"
+          }
+        }
+      }
+    },
     "All windows are restored – including documents that were never saved. Quitting doesn’t ask for confirmation." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle Fenster werden wiederhergestellt – auch Dokumente, die noch nie gesichert wurden. Beim Beenden wird nicht nachgefragt."
+          }
+        }
+      }
+    },
+    "Allow Access" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugriff erlauben"
+          }
+        }
+      }
+    },
+    "Allow Access to Folder…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugriff auf Ordner erlauben …"
+          }
+        }
+      }
+    },
+    "Always load external content" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Inhalte immer laden"
           }
         }
       }
@@ -217,6 +287,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Base64 kodieren"
+          }
+        }
+      }
+    },
+    "Body Text" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fließtext"
+          }
+        }
+      }
+    },
+    "Bold" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fett"
+          }
+        }
+      }
+    },
+    "Both directions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beidseitig"
           }
         }
       }
@@ -431,6 +531,16 @@
         }
       }
     },
+    "Choose the folder with the images so that NoteCraft can show them in the preview." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle den Ordner mit den Bildern, damit NoteCraft sie in der Vorschau anzeigen kann."
+          }
+        }
+      }
+    },
     "Clear Menu" : {
       "localizations" : {
         "de" : {
@@ -477,6 +587,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Klammern und Anführungszeichen automatisch schließen"
+          }
+        }
+      }
+    },
+    "Column %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spalte %lld"
           }
         }
       }
@@ -567,6 +687,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pfad kopieren"
+          }
+        }
+      }
+    },
+    "Copy as Formatted Text" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als formatierten Text kopieren"
           }
         }
       }
@@ -901,6 +1031,36 @@
         }
       }
     },
+    "Export as HTML…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als HTML exportieren …"
+          }
+        }
+      }
+    },
+    "External Content" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Inhalte"
+          }
+        }
+      }
+    },
+    "External content is blocked." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Inhalte wurden blockiert."
+          }
+        }
+      }
+    },
     "Fallback encoding" : {
       "localizations" : {
         "de" : {
@@ -1071,12 +1231,52 @@
         }
       }
     },
+    "Forgets the documents with allowed external content and the folders you allowed for images." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergisst die Dokumente, für die du externe Inhalte freigegeben hast, und die Ordner, die du für Bilder erlaubt hast."
+          }
+        }
+      }
+    },
+    "Format" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format"
+          }
+        }
+      }
+    },
     "Format JSON" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "JSON formatieren"
+          }
+        }
+      }
+    },
+    "Format Table" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabelle formatieren"
+          }
+        }
+      }
+    },
+    "Formatting" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formatierung"
           }
         }
       }
@@ -1151,6 +1351,26 @@
         }
       }
     },
+    "Heading" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überschrift"
+          }
+        }
+      }
+    },
+    "Heading %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überschrift %lld"
+          }
+        }
+      }
+    },
     "Hello NoteCraft" : {
       "localizations" : {
         "de" : {
@@ -1207,6 +1427,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Andere ausblenden"
+          }
+        }
+      }
+    },
+    "Hide Preview" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschau ausblenden"
           }
         }
       }
@@ -1291,6 +1521,26 @@
         }
       }
     },
+    "Images from the internet load only when you allow it. NoteCraft makes no other connections to the internet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder aus dem Internet werden nur geladen, wenn du es erlaubst. Andere Verbindungen ins Internet stellt NoteCraft nicht her."
+          }
+        }
+      }
+    },
+    "In Markdown documents, ⌥⌘P shows the preview. While it is open, “Print” prints the rendered document." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Markdown-Dokumenten blendet ⌥⌘P die Vorschau ein. Ist sie offen, druckt „Drucken“ das gerenderte Dokument."
+          }
+        }
+      }
+    },
     "In Selection" : {
       "localizations" : {
         "de" : {
@@ -1361,6 +1611,56 @@
         }
       }
     },
+    "Independent" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unabhängig"
+          }
+        }
+      }
+    },
+    "Inline Code" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inline-Code"
+          }
+        }
+      }
+    },
+    "Insert Image" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild einfügen"
+          }
+        }
+      }
+    },
+    "Insert Table" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabelle einfügen"
+          }
+        }
+      }
+    },
+    "Insert or Update Table of Contents" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inhaltsverzeichnis einfügen oder aktualisieren"
+          }
+        }
+      }
+    },
     "Invalid JSON in line %lld, column %lld." : {
       "localizations" : {
         "de" : {
@@ -1397,6 +1697,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sie scheint Binärdaten zu enthalten, zum Beispiel ein Bild oder ein Programm."
+          }
+        }
+      }
+    },
+    "Italic" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kursiv"
           }
         }
       }
@@ -1627,6 +1937,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zeilen"
+          }
+        }
+      }
+    },
+    "Link" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link"
+          }
+        }
+      }
+    },
+    "Link…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link …"
+          }
+        }
+      }
+    },
+    "Load External Content" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Inhalte laden"
+          }
+        }
+      }
+    },
+    "Markdown" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown"
           }
         }
       }
@@ -1921,6 +2271,16 @@
         }
       }
     },
+    "Open preview for Markdown automatically" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschau für Markdown automatisch öffnen"
+          }
+        }
+      }
+    },
     "Opening" : {
       "localizations" : {
         "de" : {
@@ -1981,6 +2341,26 @@
         }
       }
     },
+    "Preview" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschau"
+          }
+        }
+      }
+    },
+    "Preview follows editor" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschau folgt dem Editor"
+          }
+        }
+      }
+    },
     "Previous Match" : {
       "localizations" : {
         "de" : {
@@ -2007,6 +2387,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "NoteCraft beenden"
+          }
+        }
+      }
+    },
+    "Quote" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zitat"
           }
         }
       }
@@ -2191,6 +2581,16 @@
         }
       }
     },
+    "Reset Remembered Permissions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemerkte Freigaben zurücksetzen"
+          }
+        }
+      }
+    },
     "Restore session at next launch" : {
       "localizations" : {
         "de" : {
@@ -2267,6 +2667,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sichern"
+          }
+        }
+      }
+    },
+    "Scroll sync" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scroll-Synchronisierung"
           }
         }
       }
@@ -2461,6 +2871,16 @@
         }
       }
     },
+    "Show Preview" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschau einblenden"
+          }
+        }
+      }
+    },
     "Show Sidebar" : {
       "localizations" : {
         "de" : {
@@ -2581,6 +3001,16 @@
         }
       }
     },
+    "Some images can’t be shown without access to their folder." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einige Bilder können ohne Zugriff auf ihren Ordner nicht angezeigt werden."
+          }
+        }
+      }
+    },
     "Sort Ascending" : {
       "localizations" : {
         "de" : {
@@ -2681,6 +3111,16 @@
         }
       }
     },
+    "Strikethrough" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durchgestrichen"
+          }
+        }
+      }
+    },
     "System Font (SF Mono)" : {
       "localizations" : {
         "de" : {
@@ -2711,6 +3151,26 @@
         }
       }
     },
+    "Table" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabelle"
+          }
+        }
+      }
+    },
+    "Table of Contents" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inhaltsverzeichnis"
+          }
+        }
+      }
+    },
     "Tabs" : {
       "localizations" : {
         "de" : {
@@ -2727,6 +3187,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tabulatoren: %lld"
+          }
+        }
+      }
+    },
+    "Task" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgabe"
           }
         }
       }
@@ -2877,6 +3347,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kommentar ein/aus"
+          }
+        }
+      }
+    },
+    "Toggle Task" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgabe umschalten"
           }
         }
       }

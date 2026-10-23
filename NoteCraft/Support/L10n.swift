@@ -121,6 +121,47 @@ enum L10n {
         static let helpItem = String(localized: "NoteCraft Help")
         static let keyboardShortcuts = String(localized: "Keyboard Shortcuts")
         static let regexCheatSheet = String(localized: "Regular Expression Cheat Sheet")
+        static let acknowledgements = String(localized: "Acknowledgements")
+
+        static let format = String(localized: "Format")
+        static let bold = String(localized: "Bold")
+        static let italic = String(localized: "Italic")
+        static let strikethrough = String(localized: "Strikethrough")
+        static let inlineCode = String(localized: "Inline Code")
+        static let link = String(localized: "Link…")
+        static let heading = String(localized: "Heading")
+        static let bodyText = String(localized: "Body Text")
+        static let quote = String(localized: "Quote")
+        static let toggleTask = String(localized: "Toggle Task")
+        static let table = String(localized: "Table")
+        static let insertTable = String(localized: "Insert Table")
+        static let formatTable = String(localized: "Format Table")
+        static let addTableRow = String(localized: "Add Row")
+        static let addTableColumn = String(localized: "Add Column")
+        static let tableOfContents = String(localized: "Insert or Update Table of Contents")
+        static let showPreview = String(localized: "Show Preview")
+        static let hidePreview = String(localized: "Hide Preview")
+        static let exportHTML = String(localized: "Export as HTML…")
+        static let copyFormatted = String(localized: "Copy as Formatted Text")
+
+        static func headingLevel(_ level: Int) -> String {
+            String(localized: "Heading \(level)")
+        }
+    }
+
+    enum Markdown {
+        static func column(_ number: Int) -> String {
+            String(localized: "Column \(number)")
+        }
+    }
+
+    enum Preview {
+        static let externalContentBlocked = String(localized: "External content is blocked.")
+        static let loadExternalContent = String(localized: "Load External Content")
+        static let folderAccessNeeded = String(localized: "Some images can’t be shown without access to their folder.")
+        static let allowFolderAccess = String(localized: "Allow Access to Folder…")
+        static let folderAccessMessage = String(localized: "Choose the folder with the images so that NoteCraft can show them in the preview.")
+        static let allowAccessPrompt = String(localized: "Allow Access")
     }
 
     enum Transformation {
@@ -304,6 +345,7 @@ enum L10n {
         static let editor = String(localized: "Editor")
         static let themes = String(localized: "Themes")
         static let files = String(localized: "Files")
+        static let markdown = String(localized: "Markdown")
 
         static let windowsSection = String(localized: "Windows")
         static let opensDocumentsInTabs = String(localized: "Open documents in tabs")
@@ -349,6 +391,15 @@ enum L10n {
         static let savingSection = String(localized: "Saving")
         static let trimsTrailingWhitespace = String(localized: "Trim trailing whitespace")
         static let ensuresTrailingNewline = String(localized: "End with a line ending")
+
+        static let previewSection = String(localized: "Preview")
+        static let opensMarkdownPreview = String(localized: "Open preview for Markdown automatically")
+        static let scrollSync = String(localized: "Scroll sync")
+        static let externalContentSection = String(localized: "External Content")
+        static let loadsExternalContent = String(localized: "Always load external content")
+        static let loadsExternalContentHelp = String(localized: "Images from the internet load only when you allow it. NoteCraft makes no other connections to the internet.")
+        static let resetPermissions = String(localized: "Reset Remembered Permissions")
+        static let resetPermissionsHelp = String(localized: "Forgets the documents with allowed external content and the folders you allowed for images.")
 
         static func megabytes(_ value: Int) -> String {
             String(localized: "\(value) MB")
@@ -404,6 +455,8 @@ enum L10n {
         static let tipColumns = String(localized: "Hold down Option and drag to make a rectangular selection. Then type to edit all lines at once.")
         static let tipEncoding = String(localized: "Click encoding, line ending or indentation in the status bar to change it.")
         static let tipVersions = String(localized: "Use “File › Revert To › Browse All Versions” to bring back earlier versions.")
+        static let markdownSection = String(localized: "Markdown")
+        static let tipMarkdown = String(localized: "In Markdown documents, ⌥⌘P shows the preview. While it is open, “Print” prints the rendered document.")
     }
 
     enum Accessibility {
@@ -416,6 +469,7 @@ enum L10n {
         static let toolbarFind = String(localized: "Find")
         static let toolbarPalette = String(localized: "Commands")
         static let toolbarShare = String(localized: "Share")
+        static let preview = String(localized: "Preview")
     }
 
     enum Undo {
@@ -427,6 +481,12 @@ enum L10n {
         static let lineEnding = String(localized: "Change Line Ending")
         static let typing = String(localized: "Typing")
         static let paste = String(localized: "Paste")
+        static let formatting = String(localized: "Formatting")
+        static let link = String(localized: "Link")
+        static let task = String(localized: "Task")
+        static let table = String(localized: "Table")
+        static let tableOfContents = String(localized: "Table of Contents")
+        static let insertImage = String(localized: "Insert Image")
     }
 
     enum ThemePreview {

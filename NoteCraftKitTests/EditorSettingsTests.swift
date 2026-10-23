@@ -9,6 +9,9 @@ struct EditorSettingsTests {
         settings.defaultEncoding = .utf16LittleEndian
         settings.defaultLineEnding = .crlf
         settings.darkThemeID = Theme.midnight.id
+        settings.opensMarkdownPreview = false
+        settings.markdownScrollSync = .independent
+        settings.loadsExternalContent = true
         let data = try JSONEncoder().encode(settings)
         #expect(try JSONDecoder().decode(EditorSettings.self, from: data) == settings)
     }
@@ -20,13 +23,17 @@ struct EditorSettingsTests {
         #expect(settings.tabWidth == 2)
         #expect(settings.showsLineNumbers)
         #expect(settings.defaultEncoding == .utf8)
+        #expect(settings.opensMarkdownPreview)
+        #expect(settings.markdownScrollSync == .both)
+        #expect(!settings.loadsExternalContent)
     }
 
     @Test func ignoresUnknownEnumValues() throws {
-        let data = Data(#"{"defaultEncoding": "ebcdic", "defaultLineEnding": "nel"}"#.utf8)
+        let data = Data(#"{"defaultEncoding": "ebcdic", "defaultLineEnding": "nel", "markdownScrollSync": "sideways"}"#.utf8)
         let settings = try JSONDecoder().decode(EditorSettings.self, from: data)
         #expect(settings.defaultEncoding == .utf8)
         #expect(settings.defaultLineEnding == .lf)
+        #expect(settings.markdownScrollSync == .both)
     }
 
     @Test func clampsValuesToSupportedRanges() throws {

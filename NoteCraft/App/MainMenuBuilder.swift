@@ -17,6 +17,7 @@ struct MainMenuBuilder {
         mainMenu.addItem(submenuItem(L10n.Menu.file, makeFileMenu()))
         mainMenu.addItem(submenuItem(L10n.Menu.edit, makeEditMenu()))
         mainMenu.addItem(submenuItem(L10n.Menu.text, makeTextMenu()))
+        mainMenu.addItem(submenuItem(L10n.Menu.format, makeFormatMenu()))
         mainMenu.addItem(submenuItem(L10n.Menu.view, makeViewMenu()))
         mainMenu.addItem(submenuItem(L10n.Menu.window, windowMenu))
         mainMenu.addItem(submenuItem(L10n.Menu.help, helpMenu))
@@ -74,6 +75,8 @@ struct MainMenuBuilder {
         menu.addItem(item(L10n.Menu.revealInFinder, #selector(TextDocument.revealInFinder(_:))))
         menu.addItem(item(L10n.Menu.copyPath, #selector(TextDocument.copyFilePath(_:)), key: "c", modifiers: [.command, .shift, .option]))
         menu.addItem(.separator())
+        menu.addItem(item(L10n.Menu.exportHTML, #selector(EditorViewController.exportAsHTML(_:))))
+        menu.addItem(.separator())
         menu.addItem(item(L10n.Menu.pageSetup, #selector(NSDocument.runPageLayout(_:)), key: "p", modifiers: [.command, .shift]))
         menu.addItem(item(L10n.Menu.print, #selector(NSDocument.printDocument(_:)), key: "p"))
         return menu
@@ -114,6 +117,7 @@ struct MainMenuBuilder {
         menu.addItem(.separator())
         menu.addItem(item(L10n.Menu.cut, #selector(NSText.cut(_:)), key: "x"))
         menu.addItem(item(L10n.Menu.copy, #selector(NSText.copy(_:)), key: "c"))
+        menu.addItem(item(L10n.Menu.copyFormatted, #selector(EditorViewController.copyAsFormattedText(_:))))
         menu.addItem(item(L10n.Menu.paste, #selector(NSText.paste(_:)), key: "v"))
         menu.addItem(item(L10n.Menu.delete, #selector(NSText.delete(_:))))
         menu.addItem(item(L10n.Menu.selectAll, #selector(NSText.selectAll(_:)), key: "a"))
@@ -185,6 +189,34 @@ struct MainMenuBuilder {
         return menu
     }
 
+    private func makeFormatMenu() -> NSMenu {
+        let menu = NSMenu(title: L10n.Menu.format)
+        menu.addItem(item(L10n.Menu.bold, #selector(EditorTextView.formatBold(_:)), key: "b"))
+        menu.addItem(item(L10n.Menu.italic, #selector(EditorTextView.formatItalic(_:)), key: "i"))
+        menu.addItem(item(L10n.Menu.strikethrough, #selector(EditorTextView.formatStrikethrough(_:))))
+        menu.addItem(item(L10n.Menu.inlineCode, #selector(EditorTextView.formatInlineCode(_:))))
+        menu.addItem(item(L10n.Menu.link, #selector(EditorTextView.insertMarkdownLink(_:)), key: "k"))
+        menu.addItem(.separator())
+        let headingMenu = NSMenu(title: L10n.Menu.heading)
+        headingMenu.addItem(item(L10n.Menu.bodyText, #selector(EditorTextView.formatHeading(_:)), key: "0", modifiers: [.command, .option], tag: 0))
+        for level in 1...6 {
+            headingMenu.addItem(item(L10n.Menu.headingLevel(level), #selector(EditorTextView.formatHeading(_:)), key: "\(level)", modifiers: [.command, .option], tag: level))
+        }
+        menu.addItem(submenuItem(L10n.Menu.heading, headingMenu))
+        menu.addItem(item(L10n.Menu.quote, #selector(EditorTextView.formatQuote(_:))))
+        menu.addItem(item(L10n.Menu.toggleTask, #selector(EditorTextView.toggleTask(_:)), key: "l", modifiers: [.command, .shift]))
+        menu.addItem(.separator())
+        let tableMenu = NSMenu(title: L10n.Menu.table)
+        tableMenu.addItem(item(L10n.Menu.insertTable, #selector(EditorTextView.insertMarkdownTable(_:))))
+        tableMenu.addItem(item(L10n.Menu.formatTable, #selector(EditorTextView.formatMarkdownTable(_:))))
+        tableMenu.addItem(.separator())
+        tableMenu.addItem(item(L10n.Menu.addTableRow, #selector(EditorTextView.addMarkdownTableRow(_:))))
+        tableMenu.addItem(item(L10n.Menu.addTableColumn, #selector(EditorTextView.addMarkdownTableColumn(_:))))
+        menu.addItem(submenuItem(L10n.Menu.table, tableMenu))
+        menu.addItem(item(L10n.Menu.tableOfContents, #selector(EditorTextView.updateTableOfContents(_:))))
+        return menu
+    }
+
     private func transformationMenu(_ title: String, groups: [[TextTransformation]]) -> NSMenu {
         let menu = NSMenu(title: title)
         for (index, group) in groups.enumerated() {
@@ -229,6 +261,7 @@ struct MainMenuBuilder {
         let menu = NSMenu(title: L10n.Menu.view)
         menu.addItem(item(L10n.Menu.showSidebar, #selector(NSSplitViewController.toggleSidebar(_:)), key: "s", modifiers: [.command, .control]))
         menu.addItem(item(L10n.Menu.hideStatusBar, #selector(EditorViewController.toggleStatusBar(_:))))
+        menu.addItem(item(L10n.Menu.showPreview, #selector(EditorViewController.togglePreview(_:)), key: "p", modifiers: [.command, .option]))
         menu.addItem(item(L10n.Menu.showTabBar, #selector(NSWindow.toggleTabBar(_:))))
         menu.addItem(item(L10n.Menu.showAllTabs, #selector(NSWindow.toggleTabOverview(_:))))
         menu.addItem(item(L10n.Menu.showToolbar, #selector(NSWindow.toggleToolbarShown(_:)), key: "t", modifiers: [.command, .option]))
@@ -262,6 +295,8 @@ struct MainMenuBuilder {
         let menu = NSMenu(title: L10n.Menu.help)
         menu.addItem(item(L10n.Menu.helpItem, #selector(AppDelegate.showHelp(_:)), key: "?", target: appDelegate))
         menu.addItem(item(L10n.Menu.keyboardShortcuts, #selector(AppDelegate.showHelp(_:)), target: appDelegate))
+        menu.addItem(.separator())
+        menu.addItem(item(L10n.Menu.acknowledgements, #selector(AppDelegate.showAcknowledgements(_:)), target: appDelegate))
         return menu
     }
 

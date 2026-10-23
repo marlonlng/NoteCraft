@@ -7,6 +7,8 @@ final class EditorTextView: NSTextView {
     var autoIndents = true
     var closesBrackets = true
     var highlightsMatchingBrackets = true
+    var isMarkdown = false
+    var documentFolderURL: URL?
     var onCancel: (() -> Bool)?
     var onOpenFiles: (([URL]) -> Void)?
 
@@ -219,6 +221,10 @@ final class EditorTextView: NSTextView {
     }
 
     override func insertNewline(_ sender: Any?) {
+        if isMarkdown, editingRanges == nil, let edit = MarkdownEditing.continueList(in: nsString, selection: selectedRange()) {
+            applyEdit(range: edit.range, replacement: edit.replacement, selectedRange: edit.selectedRange, actionName: L10n.Undo.typing)
+            return
+        }
         guard autoIndents, editingRanges == nil else {
             if let ranges = editingRanges {
                 replace(ranges, with: Array(repeating: "\n", count: ranges.count))
@@ -240,6 +246,10 @@ final class EditorTextView: NSTextView {
         }
         let selection = selectedRange()
         if selection.length > 0, nsString.substring(with: selection).contains("\n") {
+            shiftRight(sender)
+            return
+        }
+        if isMarkdown, selection.length == 0, MarkdownEditing.isListItem(at: selection.location, in: nsString) {
             shiftRight(sender)
             return
         }
@@ -337,12 +347,20 @@ final class EditorTextView: NSTextView {
         }
         let range = rangeForUserTextChange
         guard range.location != NSNotFound else { return false }
+        if isMarkdown, let edit = MarkdownEditing.link(pasting: text, in: nsString, selection: range) {
+            return applyEdit(range: edit.range, replacement: edit.replacement, selectedRange: edit.selectedRange, actionName: L10n.Undo.paste)
+        }
         let caret = NSRange(location: range.location + (text as NSString).length, length: 0)
         return applyEdit(range: range, replacement: text, selectedRange: caret, actionName: L10n.Undo.paste)
     }
 
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
         let options: [NSPasteboard.ReadingOptionKey: Any] = [.urlReadingFileURLsOnly: true]
+        if let urls = sender.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: options) as? [URL],
+           isMarkdown, !urls.isEmpty, urls.allSatisfy(Self.isImageFile) {
+            let location = characterIndexForInsertion(at: convert(sender.draggingLocation, from: nil))
+            return insertImages(urls, at: location)
+        }
         if let urls = sender.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: options) as? [URL],
            !urls.isEmpty, let onOpenFiles {
             onOpenFiles(urls)

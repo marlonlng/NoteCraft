@@ -1,4 +1,4 @@
-import Foundation
+import AppKit
 import NoteCraftKit
 import Observation
 
@@ -19,6 +19,7 @@ final class DocumentAttributes {
     var indentation: Indentation
     var isLargeFile = false
     var externalChange: ExternalChange?
+    var allowsExternalContent = false
 
     init(settings: EditorSettings) {
         encoding = settings.defaultEncoding
@@ -35,4 +36,5 @@ protocol DocumentEditor: AnyObject {
     func documentAttributesDidChange()
     func select(_ range: NSRange)
     func replaceAllText(with text: String, actionName: String)
+    func markdownPrintOperation(printInfo: NSPrintInfo) -> NSPrintOperation?
 }

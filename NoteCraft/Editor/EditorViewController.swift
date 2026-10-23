@@ -21,6 +21,14 @@ final class EditorViewController: NSViewController {
     let statusBarModel = StatusBarModel()
     private(set) var textView: EditorTextView!
     private(set) var scrollView: NSScrollView!
+    private(set) var contentSplitView: NSSplitView!
+    var previewController: MarkdownPreviewController?
+    var externalContentStore = ExternalContentStore.shared
+    var folderAccessStore = FolderAccessStore.shared
+    var hasDecidedPreviewVisibility = false
+    var previewUpdateTask: Task<Void, Never>?
+    var ignoresEditorScrollUntil = Date.distantPast
+    var ignoresPreviewScrollUntil = Date.distantPast
     private(set) var rulerView: LineNumberRulerView!
     private(set) var highlightController: SyntaxHighlightController!
     private(set) var lineIndex = LineIndex(text: "")
@@ -108,7 +116,15 @@ final class EditorViewController: NSViewController {
             host.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
 
-        let stack = NSStackView(views: [bannerHost, findBarHost, scrollView, statusHost])
+        let splitView = NSSplitView()
+        splitView.isVertical = true
+        splitView.dividerStyle = .thin
+        splitView.delegate = self
+        splitView.addSubview(scrollView)
+        contentSplitView = splitView
+        scrollView.contentView.postsBoundsChangedNotifications = true
+
+        let stack = NSStackView(views: [bannerHost, findBarHost, splitView, statusHost])
         stack.orientation = .vertical
         stack.alignment = .leading
         stack.distribution = .fill
@@ -118,7 +134,7 @@ final class EditorViewController: NSViewController {
             subview.translatesAutoresizingMaskIntoConstraints = false
             subview.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
         }
-        scrollView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        splitView.setContentHuggingPriority(.defaultLow, for: .vertical)
         container.addSubview(stack)
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: container.safeAreaLayoutGuide.topAnchor),
@@ -164,6 +180,15 @@ final class EditorViewController: NSViewController {
                 self?.applySettings()
             }
         })
+        observers.append(NotificationCenter.default.addObserver(
+            forName: NSView.boundsDidChangeNotification,
+            object: scrollView.contentView,
+            queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.editorDidScroll()
+            }
+        })
         observers.append(NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification,
             object: nil,
@@ -197,7 +222,10 @@ final class EditorViewController: NSViewController {
         textView.commentSyntax = attributes.language.commentSyntax
         highlightController.isEnabled = !attributes.isLargeFile
         highlightController.language = attributes.language
+        textView.isMarkdown = isMarkdownDocument
+        textView.documentFolderURL = document.fileURL?.deletingLastPathComponent()
         applyTextAttributes()
+        updatePreviewAvailability()
     }
 
     /// Applies the theme matching the current appearance.
@@ -219,6 +247,7 @@ final class EditorViewController: NSViewController {
         highlightMatches(Array(findBarModel.matches.prefix(FindBarModel.highlightLimit)))
         rulerView.needsDisplay = true
         textView.needsDisplay = true
+        refreshPreview()
     }
 
     var baseTextAttributes: [NSAttributedString.Key: Any] {
@@ -313,6 +342,7 @@ extension EditorViewController: NSTextStorageDelegate, NSTextViewDelegate {
             rulerView?.lineIndex = lineIndex
             highlightController?.textDidChange()
             scheduleFindRefresh()
+            schedulePreviewUpdate()
             updateStatus()
         }
     }
@@ -345,6 +375,7 @@ extension EditorViewController: DocumentEditor {
         }
         storedSelectionBeforeReload = nil
         findBarModel.refresh()
+        refreshPreview()
     }
 
     func documentAttributesDidChange() {
@@ -364,6 +395,13 @@ extension EditorViewController: DocumentEditor {
         let fullRange = NSRange(location: 0, length: document.textStorage.length)
         textView.applyEdit(range: fullRange, replacement: text, selectedRange: nil, actionName: actionName)
         select(NSRange(location: selection.location, length: 0))
+    }
+
+    func markdownPrintOperation(printInfo: NSPrintInfo) -> NSPrintOperation? {
+        guard isMarkdownDocument, isPreviewVisible, let previewController, previewController.isLoaded else { return nil }
+        let operation = previewController.webView.printOperation(with: printInfo)
+        operation.view?.frame = previewController.webView.bounds
+        return operation
     }
 }
 

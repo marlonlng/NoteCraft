@@ -97,6 +97,9 @@ extension EditorTextView {
     }
 
     override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        if let isValid = validateMarkdownMenuItem(menuItem) {
+            return isValid
+        }
         switch menuItem.action {
         case #selector(shiftRight(_:)), #selector(shiftLeft(_:)), #selector(duplicateLine(_:)), #selector(moveLineUp(_:)),
              #selector(moveLineDown(_:)), #selector(deleteLine(_:)), #selector(performTextTransformation(_:)),

@@ -34,6 +34,8 @@ struct MarkdownTableTests {
         #expect(apply(edit, to: text) == "Intro\n| a   | bb  |\n| --- | --- |\n| ccc | d   |\nOutro")
         #expect(edit?.selectedRange == NSRange(location: 43, length: 0))
         #expect(MarkdownTableEditing.format(in: text as NSString, selection: NSRange(location: 2, length: 0)) == nil)
+        #expect(MarkdownTableEditing.containsTable(at: 25, in: text as NSString))
+        #expect(!MarkdownTableEditing.containsTable(at: 30, in: text as NSString))
         #expect(MarkdownTableEditing.format(in: "| a |\n| b |" as NSString, selection: NSRange(location: 1, length: 0)) == nil)
     }
 

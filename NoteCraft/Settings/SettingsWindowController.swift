@@ -23,7 +23,8 @@ final class SettingsWindowController: NSWindowController {
             (L10n.Settings.general, "gearshape", Self.host(GeneralSettingsView(store: store))),
             (L10n.Settings.editor, "character.cursor.ibeam", Self.host(EditorSettingsView(store: store))),
             (L10n.Settings.themes, "paintpalette", Self.host(ThemeSettingsView(store: store))),
-            (L10n.Settings.files, "doc.text", Self.host(FilesSettingsView(store: store)))
+            (L10n.Settings.files, "doc.text", Self.host(FilesSettingsView(store: store))),
+            (L10n.Settings.markdown, "doc.richtext", Self.host(MarkdownSettingsView(store: store)))
         ]
         for (title, symbol, controller) in panes {
             controller.title = title

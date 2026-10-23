@@ -13,7 +13,7 @@ struct MainMenuBuilderTests {
     }
 
     @Test func followsStandardMenuOrder() {
-        #expect(menu.items.map(\.title) == ["NoteCraft", "File", "Edit", "Text", "View", "Window", "Help"])
+        #expect(menu.items.map(\.title) == ["NoteCraft", "File", "Edit", "Text", "Format", "View", "Window", "Help"])
         #expect(submenu("Window")?.items.first?.action == #selector(NSWindow.performMiniaturize(_:)))
         #expect(submenu("Help")?.items.first?.keyEquivalent == "?")
     }
@@ -37,6 +37,40 @@ struct MainMenuBuilderTests {
         #expect(shortcut(#selector(EditorWindowController.showCommandPalette(_:)))?.0 == "a")
         #expect(shortcut(#selector(EditorViewController.goToLine(_:)))?.0 == "l")
         #expect(shortcut(#selector(NSSplitViewController.toggleSidebar(_:)))?.1 == [.command, .control])
+        #expect(shortcut(#selector(EditorTextView.formatBold(_:)))?.0 == "b")
+        #expect(shortcut(#selector(EditorTextView.insertMarkdownLink(_:)))?.0 == "k")
+        #expect(shortcut(#selector(EditorViewController.togglePreview(_:)))?.1 == [.command, .option])
+    }
+
+    @Test func assignsEveryShortcutOnlyOnce() {
+        var seen: [String: String] = [:]
+        var duplicates: [String] = []
+        var stack = [menu]
+        while let current = stack.popLast() {
+            for item in current.items {
+                if let submenu = item.submenu {
+                    stack.append(submenu)
+                } else if !item.keyEquivalent.isEmpty, !item.isAlternate {
+                    let key = "\(item.keyEquivalentModifierMask.rawValue)-\(item.keyEquivalent)"
+                    if let other = seen[key] {
+                        duplicates.append("\(other) / \(item.title)")
+                    }
+                    seen[key] = item.title
+                }
+            }
+        }
+        #expect(duplicates.isEmpty, "\(duplicates)")
+    }
+
+    @Test func offersMarkdownCommands() throws {
+        let format = try #require(submenu("Format"))
+        let heading = try #require(submenu(L10n.Menu.heading, in: format))
+        #expect(heading.items.map(\.tag) == [0, 1, 2, 3, 4, 5, 6])
+        #expect(heading.items.last?.keyEquivalent == "6")
+        let table = try #require(submenu(L10n.Menu.table, in: format))
+        #expect(table.items.contains { $0.action == #selector(EditorTextView.addMarkdownTableColumn(_:)) })
+        #expect(submenu("File")?.items.contains { $0.action == #selector(EditorViewController.exportAsHTML(_:)) } == true)
+        #expect(submenu("Edit")?.items.contains { $0.action == #selector(EditorViewController.copyAsFormattedText(_:)) } == true)
     }
 
     @Test func listsAllEncodingsAndLanguages() throws {
@@ -264,7 +298,7 @@ struct WindowTests {
         let defaults = TestSupport.makeDefaults()
         defaults.set(2, forKey: SettingsWindowController.selectedPaneKey)
         let settings = SettingsWindowController(store: TestSupport.makeSettingsStore(), defaults: defaults)
-        #expect(settings.tabViewController.tabViewItems.map(\.label) == [L10n.Settings.general, L10n.Settings.editor, L10n.Settings.themes, L10n.Settings.files])
+        #expect(settings.tabViewController.tabViewItems.map(\.label) == [L10n.Settings.general, L10n.Settings.editor, L10n.Settings.themes, L10n.Settings.files, L10n.Settings.markdown])
         #expect(settings.tabViewController.selectedTabViewItemIndex == 2)
         settings.tabViewController.selectedTabViewItemIndex = 1
         #expect(defaults.integer(forKey: SettingsWindowController.selectedPaneKey) == 1)

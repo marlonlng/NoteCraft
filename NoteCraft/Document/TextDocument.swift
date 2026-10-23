@@ -106,8 +106,8 @@ final class TextDocument: NSDocument {
     private func fileURLDidChange() {
         if !attributes.isLanguageOverridden, let fileURL {
             attributes.language = Language.detect(fileName: fileURL.lastPathComponent, content: textStorage.string)
-            editor?.documentAttributesDidChange()
         }
+        editor?.documentAttributesDidChange()
         for case let controller as EditorWindowController in windowControllers {
             controller.updateSubtitle()
         }
@@ -336,6 +336,12 @@ final class TextDocument: NSDocument {
         info.isHorizontallyCentered = false
         info.isVerticallyCentered = false
         info.dictionary()[NSPrintInfo.AttributeKey.headerAndFooter] = true
+        if let operation = editor?.markdownPrintOperation(printInfo: info) {
+            operation.jobTitle = displayName
+            operation.showsPrintPanel = true
+            operation.showsProgressPanel = true
+            return operation
+        }
         let width = info.paperSize.width - info.leftMargin - info.rightMargin
         let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: width, height: 100))
         textView.isRichText = false

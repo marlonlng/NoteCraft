@@ -73,6 +73,23 @@ final class NoteCraftUITests: XCTestCase {
         sheet.buttons["Cancel"].click()
     }
 
+    func testMarkdownShowsPreviewAndFormatsText() {
+        newDocument(with: "Hello")
+        app.menuBars.menuBarItems["Text"].click()
+        app.menuBars.menuItems["Language"].click()
+        app.menuBars.menuItems["Markdown"].click()
+        let preview = app.webViews.firstMatch
+        XCTAssertTrue(preview.waitForExistence(timeout: 5))
+        editor.typeKey("a", modifierFlags: .command)
+        editor.typeKey("b", modifierFlags: .command)
+        XCTAssertEqual(editor.value as? String, "**Hello**")
+        XCTAssertTrue(preview.staticTexts["Hello"].waitForExistence(timeout: 5))
+        attachScreenshot("Markdown Preview")
+        app.typeKey("p", modifierFlags: [.command, .option])
+        let hidden = expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: preview)
+        wait(for: [hidden], timeout: 3)
+    }
+
     func testCommandPaletteRunsTransformation() {
         newDocument(with: "loud")
         app.typeKey("a", modifierFlags: .command)

@@ -53,6 +53,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         HelpWindowController.shared.showWindow(sender)
     }
 
+    @objc func showAcknowledgements(_ sender: Any?) {
+        AcknowledgementsWindowController.shared.showWindow(sender)
+    }
+
     @objc func openFolder(_ sender: Any?) {
         WorkspaceModel.shared.chooseFolder(for: nil)
         if NSDocumentController.shared.documents.isEmpty {

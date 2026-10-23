@@ -158,6 +158,11 @@ public enum MarkdownTableEditing {
         return TextEdit(range: replaced, replacement: leading + body + trailing, selectedRange: NSRange(location: firstCell, length: firstHeaderLength))
     }
 
+    /// Whether the line at `location` belongs to a table.
+    public static func containsTable(at location: Int, in text: NSString) -> Bool {
+        block(around: location, in: text) != nil
+    }
+
     /// Aligns the columns of the table around the caret.
     public static func format(in text: NSString, selection: NSRange) -> TextEdit? {
         guard let block = block(around: selection.location, in: text), let table = MarkdownTable.parse(block.lines) else { return nil }

@@ -96,6 +96,11 @@ extension EditorViewController: NSMenuItemValidation {
             menuItem.title = settings.showsInvisibleCharacters ? L10n.Menu.hideInvisibles : L10n.Menu.showInvisibles
         case #selector(toggleStatusBar(_:)):
             menuItem.title = showsStatusBar ? L10n.Menu.hideStatusBar : L10n.Menu.showStatusBar
+        case #selector(togglePreview(_:)):
+            menuItem.title = isPreviewVisible ? L10n.Menu.hidePreview : L10n.Menu.showPreview
+            return isMarkdownDocument
+        case #selector(exportAsHTML(_:)), #selector(copyAsFormattedText(_:)):
+            return isMarkdownDocument
         case #selector(toggleLineWrapping(_:)):
             menuItem.state = settings.wrapsLines ? .on : .off
         case #selector(toggleCurrentLineHighlight(_:)):
