@@ -78,6 +78,24 @@ public struct Language: Identifiable, Hashable, Sendable {
         LanguageCatalog.all.first { $0.id == id }
     }
 
+    /// Returns the language named by the info string of a fenced code block, e.g. `swift`, `js` or `bash`.
+    public static func language(forCodeFenceInfo info: String) -> Language? {
+        guard let word = info.split(whereSeparator: { $0 == " " || $0 == "{" || $0 == "," }).first?.lowercased(), !word.isEmpty else {
+            return nil
+        }
+        return LanguageCatalog.all.first { $0.isNamed(word) }
+    }
+
+    private func isNamed(_ word: String) -> Bool {
+        if id == word || name.lowercased() == word {
+            return true
+        }
+        if fileExtensions.contains(word) || interpreters.contains(word) {
+            return true
+        }
+        return fileNames.contains { $0.lowercased() == word }
+    }
+
     /// Picks the language for a file from its name, extension or shebang line.
     public static func detect(fileName: String?, content: String) -> Language {
         if let fileName {
