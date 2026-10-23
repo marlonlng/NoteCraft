@@ -9,8 +9,9 @@ A fast, native plain-text and source-code editor for macOS. NoteCraft takes the 
 - **Line endings:** LF, CRLF and CR detection, conversion and an indicator for mixed line endings.
 - **Search:** find bar with live match count, regular expressions with inline validation and a cheat sheet, replace with `$1` templates, and Find in Files across a folder with glob patterns.
 - **Editing:** syntax highlighting for 32 languages, line numbers, current-line and bracket highlighting, invisible characters, multiple cursors and column selection, select next/all occurrences, auto-indent, auto-closing pairs, comment toggling, line operations and text transformations (case, Base64, URL, HTML, order-preserving JSON).
+- **Markdown:** live preview next to the editor with GitHub Flavored Markdown, synchronized scrolling and theme colors; formatting commands, list continuation, task lists, tables, a table of contents, image drag and drop, HTML export, printing and copying as formatted text.
 - **Mac-native:** document-based AppKit app with native tabs, Liquid Glass toolbar and sidebar, command palette (⇧⌘A), Open Quickly (⇧⌘O), a Settings window, built-in help and light, dark and high-contrast themes.
-- **Private:** no accounts, no tracking, no network access. NoteCraft runs in the App Sandbox and only opens files and folders you choose. See the [privacy policy](PRIVACY.md).
+- **Private:** no accounts, no tracking, no network access – except for images from the internet in the Markdown preview, and only when you allow it. NoteCraft runs in the App Sandbox and only opens files and folders you choose. See the [privacy policy](PRIVACY.md).
 
 ## Requirements
 
@@ -48,8 +49,8 @@ English is the source language; German is a full translation. All interface text
 
 | Path | Content |
 | --- | --- |
-| `NoteCraftKit/` | Framework with the domain logic: encodings, line endings, line index, search, file search, text transformations, syntax highlighting, themes, settings |
-| `NoteCraft/` | AppKit and SwiftUI app: document, editor, find bar, status bar, sidebar, command palette, settings, help, menu bar |
+| `NoteCraftKit/` | Framework with the domain logic: encodings, line endings, line index, search, file search, text transformations, syntax highlighting, themes, settings, Markdown rendering and editing |
+| `NoteCraft/` | AppKit and SwiftUI app: document, editor, Markdown preview, find bar, status bar, sidebar, command palette, settings, help, menu bar |
 | `NoteCraftKitTests/`, `NoteCraftTests/` | Unit tests (Swift Testing) |
 | `NoteCraftUITests/` | End-to-end UI tests (XCTest) and screenshot capture |
 | `Config/` | Shared build settings and the template for local signing settings |
@@ -73,3 +74,5 @@ Bug reports, questions, translations and pull requests are welcome in the [issue
 NoteCraft is licensed under the [Apache License 2.0](LICENSE).
 
 The name “NoteCraft” and the NoteCraft app icon are not covered by this license.
+
+NoteCraft uses [Swift Markdown](https://github.com/swiftlang/swift-markdown) (Apache License 2.0) and [cmark-gfm](https://github.com/swiftlang/swift-cmark) (BSD-style licenses). Their license texts are included in the app under “Help › Acknowledgements”.
