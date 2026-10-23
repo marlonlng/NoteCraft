@@ -6,7 +6,7 @@ final class NoteCraftUITests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
         app = XCUIApplication()
-        app.launchArguments += ["-ApplePersistenceIgnoreState", "YES", "-NSQuitAlwaysKeepsWindows", "NO"]
+        app.launchArguments += ["-ApplePersistenceIgnoreState", "YES", "-NSQuitAlwaysKeepsWindows", "NO", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
     }
 
@@ -15,7 +15,7 @@ final class NoteCraftUITests: XCTestCase {
     }
 
     private var editor: XCUIElement {
-        app.windows.firstMatch.textViews["Texteditor"]
+        app.windows.firstMatch.textViews["Text Editor"]
     }
 
     private func newDocument(with text: String) {
@@ -35,65 +35,65 @@ final class NoteCraftUITests: XCTestCase {
     }
 
     func testTypingUpdatesStatusBar() {
-        newDocument(with: "Hallo\nWelt")
-        XCTAssertTrue(app.buttons["Zeile 2, Spalte 5"].waitForExistence(timeout: 3))
+        newDocument(with: "Hello\nWorld")
+        XCTAssertTrue(app.buttons["Line 2, Column 5"].waitForExistence(timeout: 3))
         XCTAssertTrue(app.staticTexts["UTF-8"].exists || app.buttons["UTF-8"].exists || app.menuButtons["UTF-8"].exists)
         attachScreenshot("Editor")
     }
 
     func testFindAndReplace() {
-        newDocument(with: "Apfel Birne Apfel")
+        newDocument(with: "apple pear apple")
         app.typeKey("f", modifierFlags: [.command, .option])
-        let searchField = app.textFields["Suchen"]
+        let searchField = app.textFields["Find"]
         XCTAssertTrue(searchField.waitForExistence(timeout: 3))
         searchField.typeKey("a", modifierFlags: .command)
-        searchField.typeText("Apfel")
-        XCTAssertTrue(app.staticTexts["2 Treffer"].waitForExistence(timeout: 3))
-        let replaceField = app.textFields["Ersetzen"]
+        searchField.typeText("apple")
+        XCTAssertTrue(app.staticTexts["2 matches"].waitForExistence(timeout: 3))
+        let replaceField = app.textFields["Replace"]
         replaceField.click()
-        replaceField.typeText("Kiwi")
-        attachScreenshot("Suchen und Ersetzen")
-        app.buttons["Alle ersetzen"].click()
-        XCTAssertTrue(app.staticTexts["2 Treffer ersetzt"].waitForExistence(timeout: 3))
-        XCTAssertEqual(editor.value as? String, "Kiwi Birne Kiwi")
+        replaceField.typeText("kiwi")
+        attachScreenshot("Find and Replace")
+        app.buttons["Replace All"].click()
+        XCTAssertTrue(app.staticTexts["Replaced 2 matches"].waitForExistence(timeout: 3))
+        XCTAssertEqual(editor.value as? String, "kiwi pear kiwi")
     }
 
     func testCommandPaletteRunsTransformation() {
-        newDocument(with: "laut")
+        newDocument(with: "loud")
         app.typeKey("a", modifierFlags: .command)
         app.typeKey("a", modifierFlags: [.command, .shift])
-        let field = app.textFields["Befehl suchen"]
+        let field = app.textFields["Search Commands"]
         XCTAssertTrue(field.waitForExistence(timeout: 3))
-        field.typeText("grossbuch")
-        attachScreenshot("Befehlspalette")
+        field.typeText("upperc")
+        attachScreenshot("Command Palette")
         field.typeKey(.return, modifierFlags: [])
-        let expectation = expectation(for: NSPredicate(format: "value == 'LAUT'"), evaluatedWith: editor)
+        let expectation = expectation(for: NSPredicate(format: "value == 'LOUD'"), evaluatedWith: editor)
         wait(for: [expectation], timeout: 3)
     }
 
     func testGoToLineValidatesInput() {
         newDocument(with: "a\nb\nc")
         app.typeKey("l", modifierFlags: .command)
-        let field = app.textFields["Zeile oder Zeile:Spalte"]
+        let field = app.textFields["Line or line:column"]
         XCTAssertTrue(field.waitForExistence(timeout: 3))
         field.typeText("9")
-        XCTAssertTrue(app.staticTexts["Gib eine Zeilennummer zwischen 1 und 3 ein."].waitForExistence(timeout: 3))
-        attachScreenshot("Gehe zu Zeile")
+        XCTAssertTrue(app.staticTexts["Enter a line number between 1 and 3."].waitForExistence(timeout: 3))
+        attachScreenshot("Go to Line")
         field.typeKey(.delete, modifierFlags: [])
         field.typeText("2")
         field.typeKey(.return, modifierFlags: [])
-        XCTAssertTrue(app.buttons["Zeile 2, Spalte 1"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.buttons["Line 2, Column 1"].waitForExistence(timeout: 3))
     }
 
     func testSettingsWindowShowsPanes() {
         app.typeKey(",", modifierFlags: .command)
-        let window = app.windows["Allgemein"].exists ? app.windows["Allgemein"] : app.windows.firstMatch
+        let window = app.windows["General"].exists ? app.windows["General"] : app.windows.firstMatch
         XCTAssertTrue(window.waitForExistence(timeout: 3))
-        for pane in ["Editor", "Farbschema", "Dateien", "Allgemein"] {
+        for pane in ["Editor", "Themes", "Files", "General"] {
             app.toolbars.buttons[pane].click()
             XCTAssertTrue(app.windows[pane].waitForExistence(timeout: 3))
             let attachment = XCTAttachment(screenshot: app.windows[pane].screenshot())
-            attachment.name = "Einstellungen \(pane)"
+            attachment.name = "Settings \(pane)"
             attachment.lifetime = .keepAlways
             add(attachment)
         }
@@ -102,14 +102,14 @@ final class NoteCraftUITests: XCTestCase {
     func testSidebarShowsFindInFiles() {
         newDocument(with: "Text")
         app.typeKey("f", modifierFlags: [.command, .shift])
-        XCTAssertTrue(app.staticTexts["Kein Ordner geöffnet"].waitForExistence(timeout: 3))
-        attachScreenshot("Seitenleiste")
+        XCTAssertTrue(app.staticTexts["No Folder Open"].waitForExistence(timeout: 3))
+        attachScreenshot("Sidebar")
     }
 
     func testHelpWindowListsShortcuts() {
-        app.menuBars.menuBarItems["Hilfe"].click()
-        app.menuItems["NoteCraft-Hilfe"].click()
-        XCTAssertTrue(app.windows["NoteCraft-Hilfe"].waitForExistence(timeout: 3))
-        XCTAssertTrue(app.staticTexts["Tastaturkurzbefehle"].exists)
+        app.menuBars.menuBarItems["Help"].click()
+        app.menuItems["NoteCraft Help"].click()
+        XCTAssertTrue(app.windows["NoteCraft Help"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.staticTexts["Keyboard Shortcuts"].exists)
     }
 }

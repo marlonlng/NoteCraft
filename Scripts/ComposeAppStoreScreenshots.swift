@@ -1,18 +1,10 @@
 import AppKit
 
-struct Slide {
+struct Slide: Decodable {
     let file: String
     let headline: String
     let subline: String
 }
-
-let slides = [
-    Slide(file: "01-Editor", headline: "Schnell. Nativ. Für den Mac.", subline: "Syntaxhervorhebung für über 30 Sprachen – ohne Ballast."),
-    Slide(file: "02-Suchen", headline: "Suchen wie ein Profi", subline: "Reguläre Ausdrücke, Trefferzähler und Ersetzen in einem Schritt."),
-    Slide(file: "03-Befehlspalette", headline: "Jeder Befehl in Reichweite", subline: "Die Befehlspalette (⇧⌘A) findet alles – auch Textumwandlungen."),
-    Slide(file: "04-Markdown", headline: "Notizen, Code und Daten", subline: "Markdown, JSON, YAML und mehr – hell oder dunkel."),
-    Slide(file: "05-Farbschema", headline: "Passt sich dir an", subline: "Farbschemata folgen automatisch dem Erscheinungsbild des Systems.")
-]
 
 /// Draws one App Store slide of 2880 × 1800 pixels with headline, subline and the window screenshot.
 func compose(_ slide: Slide, screenshot: NSImage) -> NSBitmapImageRep? {
@@ -69,8 +61,13 @@ func compose(_ slide: Slide, screenshot: NSImage) -> NSBitmapImageRep? {
 }
 
 let arguments = CommandLine.arguments
-let inputFolder = URL(fileURLWithPath: arguments.count > 1 ? arguments[1] : "build/screenshots")
-let outputFolder = URL(fileURLWithPath: arguments.count > 2 ? arguments[2] : "AppStore/Screenshots/de-DE")
+guard arguments.count == 4 else {
+    print("Usage: swift Scripts/ComposeAppStoreScreenshots.swift <screenshot folder> <output folder> <captions.json>")
+    exit(1)
+}
+let inputFolder = URL(fileURLWithPath: arguments[1])
+let outputFolder = URL(fileURLWithPath: arguments[2])
+let slides = try JSONDecoder().decode([Slide].self, from: Data(contentsOf: URL(fileURLWithPath: arguments[3])))
 try FileManager.default.createDirectory(at: outputFolder, withIntermediateDirectories: true)
 for slide in slides {
     let input = inputFolder.appendingPathComponent(slide.file + ".png")
