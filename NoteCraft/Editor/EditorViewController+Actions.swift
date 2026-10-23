@@ -2,6 +2,14 @@ import AppKit
 import NoteCraftKit
 import SwiftUI
 
+extension EditorViewController: NSToolbarItemValidation {
+    func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
+        guard item.action == #selector(togglePreview(_:)) else { return true }
+        item.toolTip = isPreviewVisible ? L10n.Menu.hidePreview : L10n.Menu.showPreview
+        return isMarkdownDocument
+    }
+}
+
 extension EditorViewController: NSMenuItemValidation {
     @objc func showFindBar(_ sender: Any?) {
         if textView.selectedRange().length > 0, !findBarModel.isVisible {

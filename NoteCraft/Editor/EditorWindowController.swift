@@ -9,6 +9,9 @@ extension NSToolbarItem.Identifier {
     static let find = NSToolbarItem.Identifier("NoteCraftFind")
     static let commandPalette = NSToolbarItem.Identifier("NoteCraftCommandPalette")
     static let share = NSToolbarItem.Identifier("NoteCraftShare")
+    static let preview = NSToolbarItem.Identifier("NoteCraftPreview")
+    static let format = NSToolbarItem.Identifier("NoteCraftFormat")
+    static let markdownItems: [NSToolbarItem.Identifier] = [.preview, .format]
 }
 
 final class EditorSplitViewController: NSSplitViewController {
@@ -87,12 +90,18 @@ final class EditorSplitViewController: NSSplitViewController {
 final class EditorWindowController: NSWindowController, NSWindowDelegate, NSToolbarDelegate, NSSharingServicePickerToolbarItemDelegate {
     static let tabbingIdentifier = "NoteCraftEditor"
     static let toolbarIdentifier = "NoteCraftEditorToolbar"
+    static let markdownToolbarItemsKey = "AddedMarkdownToolbarItems"
 
     let editorViewController: EditorViewController
     let splitController: EditorSplitViewController
     private var palettePanel: CommandPalettePanel?
 
-    init(document: TextDocument, workspace: WorkspaceModel = .shared, findPasteboard: FindPasteboard = FindPasteboard()) {
+    init(
+        document: TextDocument,
+        workspace: WorkspaceModel = .shared,
+        findPasteboard: FindPasteboard = FindPasteboard(),
+        defaults: UserDefaults = .standard
+    ) {
         editorViewController = EditorViewController(document: document, settingsStore: document.settingsStore, findPasteboard: findPasteboard)
         splitController = EditorSplitViewController(editor: editorViewController, workspace: workspace)
         let window = NSWindow(
@@ -112,8 +121,11 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
         window.setContentSize(NSSize(width: 980, height: 700))
         window.delegate = self
         shouldCascadeWindows = true
-        configureToolbar()
+        configureToolbar(defaults: defaults)
         updateSubtitle()
+        editorViewController.onDocumentAttributesChange = { [weak self] in
+            self?.updateMarkdownToolbarItems()
+        }
     }
 
     @available(*, unavailable)
@@ -189,21 +201,42 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
         panel.present(over: window)
     }
 
-    private func configureToolbar() {
+    private func configureToolbar(defaults: UserDefaults) {
         let toolbar = NSToolbar(identifier: Self.toolbarIdentifier)
         toolbar.delegate = self
         toolbar.displayMode = .iconOnly
         toolbar.allowsUserCustomization = true
         toolbar.autosavesConfiguration = true
         window?.toolbar = toolbar
+        Self.addMarkdownItems(to: toolbar, defaults: defaults)
+    }
+
+    /// Adds the Markdown items once to toolbars whose configuration was saved before the items existed.
+    static func addMarkdownItems(to toolbar: NSToolbar, defaults: UserDefaults) {
+        guard !defaults.bool(forKey: markdownToolbarItemsKey) else { return }
+        defaults.set(true, forKey: markdownToolbarItemsKey)
+        let identifiers = toolbar.items.map(\.itemIdentifier)
+        var index = identifiers.firstIndex(of: .commandPalette) ?? identifiers.count
+        for identifier in NSToolbarItem.Identifier.markdownItems where !identifiers.contains(identifier) {
+            toolbar.insertItem(withItemIdentifier: identifier, at: index)
+            index += 1
+        }
+    }
+
+    /// Shows the preview and format items only while the document is Markdown.
+    func updateMarkdownToolbarItems() {
+        let isHidden = !editorViewController.isMarkdownDocument
+        for item in window?.toolbar?.items ?? [] where NSToolbarItem.Identifier.markdownItems.contains(item.itemIdentifier) {
+            item.isHidden = isHidden
+        }
     }
 
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        [.toggleSidebar, .sidebarTrackingSeparator, .flexibleSpace, .commandPalette, .find, .share]
+        [.toggleSidebar, .sidebarTrackingSeparator, .flexibleSpace, .preview, .format, .commandPalette, .find, .share]
     }
 
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        [.toggleSidebar, .sidebarTrackingSeparator, .flexibleSpace, .space, .commandPalette, .find, .share, .print]
+        [.toggleSidebar, .sidebarTrackingSeparator, .flexibleSpace, .space, .preview, .format, .commandPalette, .find, .share, .print]
     }
 
     func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
@@ -216,6 +249,20 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
             let item = NSSharingServicePickerToolbarItem(itemIdentifier: itemIdentifier)
             item.label = L10n.Accessibility.toolbarShare
             item.delegate = self
+            return item
+        case .preview:
+            let item = makeItem(itemIdentifier, label: L10n.Accessibility.preview, symbol: "eye", action: #selector(EditorViewController.togglePreview(_:)))
+            item.isHidden = !editorViewController.isMarkdownDocument
+            return item
+        case .format:
+            let item = NSMenuToolbarItem(itemIdentifier: itemIdentifier)
+            item.label = L10n.Menu.format
+            item.paletteLabel = L10n.Menu.format
+            item.toolTip = L10n.Menu.format
+            item.image = NSImage(systemSymbolName: "textformat", accessibilityDescription: L10n.Menu.format)
+            item.menu = MainMenuBuilder(appDelegate: nil).makeFormatMenu(includesShortcuts: false)
+            item.showsIndicator = true
+            item.isHidden = !editorViewController.isMarkdownDocument
             return item
         default:
             return nil

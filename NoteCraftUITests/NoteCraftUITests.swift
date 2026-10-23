@@ -88,6 +88,9 @@ final class NoteCraftUITests: XCTestCase {
         app.typeKey("p", modifierFlags: [.command, .option])
         let hidden = expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: preview)
         wait(for: [hidden], timeout: 3)
+        app.toolbars.buttons["Preview"].click()
+        XCTAssertTrue(app.webViews.firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.toolbars.menuButtons["Format"].exists || app.toolbars.popUpButtons["Format"].exists || app.toolbars.buttons["Format"].exists)
     }
 
     func testCommandPaletteRunsTransformation() {

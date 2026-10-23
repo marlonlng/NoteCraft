@@ -29,6 +29,7 @@ final class EditorViewController: NSViewController {
     var previewUpdateTask: Task<Void, Never>?
     var ignoresEditorScrollUntil = Date.distantPast
     var ignoresPreviewScrollUntil = Date.distantPast
+    var onDocumentAttributesChange: (() -> Void)?
     private(set) var rulerView: LineNumberRulerView!
     private(set) var highlightController: SyntaxHighlightController!
     private(set) var lineIndex = LineIndex(text: "")
@@ -226,6 +227,7 @@ final class EditorViewController: NSViewController {
         textView.documentFolderURL = document.fileURL?.deletingLastPathComponent()
         applyTextAttributes()
         updatePreviewAvailability()
+        onDocumentAttributesChange?()
     }
 
     /// Applies the theme matching the current appearance.

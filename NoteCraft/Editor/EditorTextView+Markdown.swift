@@ -80,6 +80,17 @@ extension EditorTextView {
         return applyEdit(range: range, replacement: markdown, selectedRange: caret, actionName: L10n.Undo.insertImage)
     }
 
+    override func menu(for event: NSEvent) -> NSMenu? {
+        guard let menu = super.menu(for: event)?.copy() as? NSMenu else { return nil }
+        guard isMarkdown else { return menu }
+        let format = NSMenuItem(title: L10n.Menu.format, action: nil, keyEquivalent: "")
+        format.submenu = MainMenuBuilder(appDelegate: nil).makeFormatMenu(includesShortcuts: false)
+        let index = menu.items.firstIndex { $0.action == #selector(paste(_:)) }.map { $0 + 1 } ?? menu.items.count
+        menu.insertItem(.separator(), at: index)
+        menu.insertItem(format, at: index + 1)
+        return menu
+    }
+
     /// Enables the Markdown commands only for Markdown documents; returns `nil` for other actions.
     func validateMarkdownMenuItem(_ menuItem: NSMenuItem) -> Bool? {
         switch menuItem.action {

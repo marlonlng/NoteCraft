@@ -189,22 +189,26 @@ struct MainMenuBuilder {
         return menu
     }
 
-    private func makeFormatMenu() -> NSMenu {
+    /// Builds the Markdown commands for the menu bar, or without shortcuts for the toolbar and the context menu.
+    func makeFormatMenu(includesShortcuts: Bool = true) -> NSMenu {
+        func key(_ value: String) -> String {
+            includesShortcuts ? value : ""
+        }
         let menu = NSMenu(title: L10n.Menu.format)
-        menu.addItem(item(L10n.Menu.bold, #selector(EditorTextView.formatBold(_:)), key: "b"))
-        menu.addItem(item(L10n.Menu.italic, #selector(EditorTextView.formatItalic(_:)), key: "i"))
+        menu.addItem(item(L10n.Menu.bold, #selector(EditorTextView.formatBold(_:)), key: key("b")))
+        menu.addItem(item(L10n.Menu.italic, #selector(EditorTextView.formatItalic(_:)), key: key("i")))
         menu.addItem(item(L10n.Menu.strikethrough, #selector(EditorTextView.formatStrikethrough(_:))))
         menu.addItem(item(L10n.Menu.inlineCode, #selector(EditorTextView.formatInlineCode(_:))))
-        menu.addItem(item(L10n.Menu.link, #selector(EditorTextView.insertMarkdownLink(_:)), key: "k"))
+        menu.addItem(item(L10n.Menu.link, #selector(EditorTextView.insertMarkdownLink(_:)), key: key("k")))
         menu.addItem(.separator())
         let headingMenu = NSMenu(title: L10n.Menu.heading)
-        headingMenu.addItem(item(L10n.Menu.bodyText, #selector(EditorTextView.formatHeading(_:)), key: "0", modifiers: [.command, .option], tag: 0))
+        headingMenu.addItem(item(L10n.Menu.bodyText, #selector(EditorTextView.formatHeading(_:)), key: key("0"), modifiers: [.command, .option], tag: 0))
         for level in 1...6 {
-            headingMenu.addItem(item(L10n.Menu.headingLevel(level), #selector(EditorTextView.formatHeading(_:)), key: "\(level)", modifiers: [.command, .option], tag: level))
+            headingMenu.addItem(item(L10n.Menu.headingLevel(level), #selector(EditorTextView.formatHeading(_:)), key: key("\(level)"), modifiers: [.command, .option], tag: level))
         }
         menu.addItem(submenuItem(L10n.Menu.heading, headingMenu))
         menu.addItem(item(L10n.Menu.quote, #selector(EditorTextView.formatQuote(_:))))
-        menu.addItem(item(L10n.Menu.toggleTask, #selector(EditorTextView.toggleTask(_:)), key: "l", modifiers: [.command, .shift]))
+        menu.addItem(item(L10n.Menu.toggleTask, #selector(EditorTextView.toggleTask(_:)), key: key("l"), modifiers: [.command, .shift]))
         menu.addItem(.separator())
         let tableMenu = NSMenu(title: L10n.Menu.table)
         tableMenu.addItem(item(L10n.Menu.insertTable, #selector(EditorTextView.insertMarkdownTable(_:))))

@@ -46,7 +46,8 @@ enum TestSupport {
         let controller = EditorWindowController(
             document: document,
             workspace: workspace,
-            findPasteboard: FindPasteboard(pasteboard: makePasteboard())
+            findPasteboard: FindPasteboard(pasteboard: makePasteboard()),
+            defaults: makeDefaults()
         )
         document.addWindowController(controller)
         controller.window?.setFrame(NSRect(x: 0, y: 0, width: 900, height: 600), display: false)
