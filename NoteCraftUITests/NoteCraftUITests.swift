@@ -58,6 +58,21 @@ final class NoteCraftUITests: XCTestCase {
         XCTAssertEqual(editor.value as? String, "kiwi pear kiwi")
     }
 
+    func testSaveSuggestsExtensionOfLanguage() {
+        newDocument(with: "# Title")
+        app.menuBars.menuBarItems["Text"].click()
+        app.menuBars.menuItems["Language"].click()
+        app.menuBars.menuItems["Markdown"].click()
+        app.typeKey("s", modifierFlags: .command)
+        let sheet = app.sheets.firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 5))
+        let nameField = sheet.textFields.matching(NSPredicate(format: "value ENDSWITH '.md'")).firstMatch
+        XCTAssertTrue(nameField.waitForExistence(timeout: 5))
+        XCTAssertFalse(sheet.textFields.matching(NSPredicate(format: "value ENDSWITH '.txt'")).firstMatch.exists)
+        attachScreenshot("Save Markdown")
+        sheet.buttons["Cancel"].click()
+    }
+
     func testCommandPaletteRunsTransformation() {
         newDocument(with: "loud")
         app.typeKey("a", modifierFlags: .command)

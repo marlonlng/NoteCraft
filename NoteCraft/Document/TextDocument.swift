@@ -147,12 +147,23 @@ final class TextDocument: NSDocument {
         savePanel.allowedContentTypes = []
         savePanel.allowsOtherFileTypes = true
         savePanel.isExtensionHidden = false
+        if fileURL == nil {
+            savePanel.nameFieldStringValue = proposedFileName(from: savePanel.nameFieldStringValue)
+        }
         let options = SaveOptions(encoding: attributes.encoding, lineEnding: attributes.lineEnding)
         pendingSaveOptions = options
         let hostingView = NSHostingView(rootView: SavePanelAccessoryView(options: options))
         hostingView.frame.size = hostingView.fittingSize
         savePanel.accessoryView = hostingView
         return true
+    }
+
+    /// Returns the save panel name of an untitled document with the first file extension of its language.
+    private func proposedFileName(from name: String) -> String {
+        let baseName = (name as NSString).deletingPathExtension
+        let stem = baseName.isEmpty ? displayName ?? "" : baseName
+        let fileExtension = attributes.language.fileExtensions.first ?? "txt"
+        return "\(stem).\(fileExtension)"
     }
 
     private func applyPendingSaveOptions() {

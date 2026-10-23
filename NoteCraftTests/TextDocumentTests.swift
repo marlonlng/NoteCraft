@@ -244,6 +244,27 @@ struct TextDocumentTests {
         #expect(!document.shouldRunSavePanelWithAccessoryView)
     }
 
+    @Test func proposesSaveNameWithLanguageExtension() throws {
+        let document = try TestSupport.makeDocument("# Title", fileName: nil)
+        document.setLanguage(LanguageCatalog.markdown)
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "Untitled.txt"
+        #expect(document.prepareSavePanel(panel))
+        #expect(panel.nameFieldStringValue == "Untitled.md")
+        document.setLanguage(.plainText)
+        panel.nameFieldStringValue = ""
+        #expect(document.prepareSavePanel(panel))
+        #expect(panel.nameFieldStringValue == "\(document.displayName!).txt")
+
+        let saved = try TestSupport.makeDocument("x", fileName: "notes.txt")
+        saved.fileURL = URL(fileURLWithPath: "/tmp/notes.txt")
+        saved.setLanguage(LanguageCatalog.markdown)
+        let savedPanel = NSSavePanel()
+        savedPanel.nameFieldStringValue = "notes.txt"
+        #expect(saved.prepareSavePanel(savedPanel))
+        #expect(savedPanel.nameFieldStringValue == "notes.txt")
+    }
+
     @Test func restoresLanguageAndSelectionFromState() throws {
         let document = try TestSupport.makeDocument("hello world", fileName: "a.txt")
         document.setLanguage(LanguageCatalog.markdown)
