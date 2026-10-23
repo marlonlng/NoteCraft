@@ -21,7 +21,7 @@ A fast, native plain-text and source-code editor for macOS. NoteCraft takes the 
 ## Build and run
 
 ```bash
-git clone https://github.com/<owner>/NoteCraft.git
+git clone https://github.com/marlonlng/NoteCraft.git
 cd NoteCraft
 xcodegen generate
 open NoteCraft.xcodeproj
