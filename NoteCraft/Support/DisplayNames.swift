@@ -5,24 +5,24 @@ extension TextEncoding {
     var displayName: String {
         switch self {
         case .utf8: String(localized: "Unicode (UTF-8)")
-        case .utf8WithBOM: String(localized: "Unicode (UTF-8 mit BOM)")
+        case .utf8WithBOM: String(localized: "Unicode (UTF-8 with BOM)")
         case .utf16LittleEndian: String(localized: "Unicode (UTF-16 Little Endian)")
         case .utf16BigEndian: String(localized: "Unicode (UTF-16 Big Endian)")
-        case .windows1252: String(localized: "Westeuropäisch (Windows-1252)")
-        case .isoLatin1: String(localized: "Westeuropäisch (ISO 8859-1)")
-        case .isoLatin9: String(localized: "Westeuropäisch (ISO 8859-15)")
-        case .macRoman: String(localized: "Westeuropäisch (Mac OS Roman)")
-        case .windows1250: String(localized: "Mitteleuropäisch (Windows-1250)")
-        case .isoLatin2: String(localized: "Mitteleuropäisch (ISO 8859-2)")
-        case .windows1251: String(localized: "Kyrillisch (Windows-1251)")
-        case .koi8R: String(localized: "Kyrillisch (KOI8-R)")
-        case .windows1253: String(localized: "Griechisch (Windows-1253)")
-        case .windows1254: String(localized: "Türkisch (Windows-1254)")
-        case .shiftJIS: String(localized: "Japanisch (Shift JIS)")
-        case .eucJP: String(localized: "Japanisch (EUC-JP)")
-        case .gb18030: String(localized: "Chinesisch, vereinfacht (GB 18030)")
-        case .big5: String(localized: "Chinesisch, traditionell (Big 5)")
-        case .eucKR: String(localized: "Koreanisch (EUC-KR)")
+        case .windows1252: String(localized: "Western (Windows-1252)")
+        case .isoLatin1: String(localized: "Western (ISO 8859-1)")
+        case .isoLatin9: String(localized: "Western (ISO 8859-15)")
+        case .macRoman: String(localized: "Western (Mac OS Roman)")
+        case .windows1250: String(localized: "Central European (Windows-1250)")
+        case .isoLatin2: String(localized: "Central European (ISO 8859-2)")
+        case .windows1251: String(localized: "Cyrillic (Windows-1251)")
+        case .koi8R: String(localized: "Cyrillic (KOI8-R)")
+        case .windows1253: String(localized: "Greek (Windows-1253)")
+        case .windows1254: String(localized: "Turkish (Windows-1254)")
+        case .shiftJIS: String(localized: "Japanese (Shift JIS)")
+        case .eucJP: String(localized: "Japanese (EUC-JP)")
+        case .gb18030: String(localized: "Chinese, Simplified (GB 18030)")
+        case .big5: String(localized: "Chinese, Traditional (Big 5)")
+        case .eucKR: String(localized: "Korean (EUC-KR)")
         }
     }
 
@@ -63,9 +63,9 @@ extension TextEncoding {
 extension LineEnding {
     var displayName: String {
         switch self {
-        case .lf: String(localized: "LF – macOS und Linux")
+        case .lf: String(localized: "LF – macOS and Linux")
         case .crlf: String(localized: "CRLF – Windows")
-        case .cr: String(localized: "CR – klassisches Mac OS")
+        case .cr: String(localized: "CR – Classic Mac OS")
         }
     }
 
@@ -80,19 +80,19 @@ extension LineEnding {
 
 extension Language {
     var displayName: String {
-        id == Language.plainText.id ? String(localized: "Normaler Text") : name
+        id == Language.plainText.id ? String(localized: "Plain Text") : name
     }
 }
 
 extension Theme {
     var displayName: String {
         switch id {
-        case Theme.paper.id: String(localized: "Papier")
-        case Theme.sage.id: String(localized: "Salbei")
-        case Theme.highContrastLight.id: String(localized: "Kontrast hell")
-        case Theme.graphite.id: String(localized: "Graphit")
-        case Theme.midnight.id: String(localized: "Mitternacht")
-        case Theme.highContrastDark.id: String(localized: "Kontrast dunkel")
+        case Theme.paper.id: String(localized: "Paper")
+        case Theme.sage.id: String(localized: "Sage")
+        case Theme.highContrastLight.id: String(localized: "High Contrast Light")
+        case Theme.graphite.id: String(localized: "Graphite")
+        case Theme.midnight.id: String(localized: "Midnight")
+        case Theme.highContrastDark.id: String(localized: "High Contrast Dark")
         default: id
         }
     }

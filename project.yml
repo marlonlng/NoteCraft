@@ -2,7 +2,7 @@ name: NoteCraft
 options:
   deploymentTarget:
     macOS: "26.0"
-  developmentLanguage: de
+  developmentLanguage: en
   createIntermediateGroups: true
   groupSortPosition: top
   generateEmptyDirectories: false
@@ -61,7 +61,8 @@ targets:
       properties:
         CFBundleDisplayName: NoteCraft
         CFBundleName: NoteCraft
-        CFBundleDevelopmentRegion: de
+        CFBundleDevelopmentRegion: $(DEVELOPMENT_LANGUAGE)
+        CFBundleLocalizations: [en, de]
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSApplicationCategoryType: public.app-category.developer-tools
@@ -72,7 +73,7 @@ targets:
         NSSupportsSuddenTermination: false
         ITSAppUsesNonExemptEncryption: false
         CFBundleDocumentTypes:
-          - CFBundleTypeName: Textdokument
+          - CFBundleTypeName: Text Document
             CFBundleTypeRole: Editor
             LSHandlerRank: Alternate
             LSItemContentTypes:
@@ -88,7 +89,7 @@ targets:
               - public.yaml
               - net.daringfireball.markdown
             NSDocumentClass: $(PRODUCT_MODULE_NAME).TextDocument
-          - CFBundleTypeName: Datei
+          - CFBundleTypeName: File
             CFBundleTypeRole: Editor
             LSHandlerRank: None
             LSItemContentTypes:
@@ -158,6 +159,8 @@ schemes:
       config: Debug
     test:
       config: Debug
+      language: en
+      region: US
       gatherCoverageData: true
       coverageTargets:
         - NoteCraft
@@ -178,6 +181,8 @@ schemes:
         NoteCraftUITests: [test]
     test:
       config: Debug
+      language: en
+      region: US
       targets:
         - NoteCraftUITests
   NoteCraftKit:

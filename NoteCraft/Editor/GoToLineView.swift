@@ -89,7 +89,7 @@ struct StatisticsView: View {
                 .font(.headline)
             Grid(alignment: .trailing, horizontalSpacing: 24, verticalSpacing: 6) {
                 GridRow {
-                    Text("")
+                    Text(verbatim: "")
                     Text(L10n.Statistics.document).fontWeight(.semibold)
                     if selection != nil {
                         Text(L10n.Statistics.selection).fontWeight(.semibold)

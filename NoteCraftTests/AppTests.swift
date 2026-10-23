@@ -13,9 +13,9 @@ struct MainMenuBuilderTests {
     }
 
     @Test func followsStandardMenuOrder() {
-        #expect(menu.items.map(\.title) == ["NoteCraft", "Ablage", "Bearbeiten", "Text", "Darstellung", "Fenster", "Hilfe"])
-        #expect(submenu("Fenster")?.items.first?.action == #selector(NSWindow.performMiniaturize(_:)))
-        #expect(submenu("Hilfe")?.items.first?.keyEquivalent == "?")
+        #expect(menu.items.map(\.title) == ["NoteCraft", "File", "Edit", "Text", "View", "Window", "Help"])
+        #expect(submenu("Window")?.items.first?.action == #selector(NSWindow.performMiniaturize(_:)))
+        #expect(submenu("Help")?.items.first?.keyEquivalent == "?")
     }
 
     @Test func keepsStandardShortcuts() {
@@ -40,7 +40,7 @@ struct MainMenuBuilderTests {
     }
 
     @Test func listsAllEncodingsAndLanguages() throws {
-        let file = try #require(submenu("Ablage"))
+        let file = try #require(submenu("File"))
         let encoding = try #require(submenu(L10n.Menu.encoding, in: file))
         let convert = try #require(submenu(L10n.Menu.convertToEncoding, in: encoding))
         #expect(convert.items.filter { !$0.isSeparatorItem }.count == TextEncoding.allCases.count)
@@ -72,35 +72,35 @@ struct MainMenuBuilderTests {
                 }
             }
         }
-        #expect(titles.contains("Öffnen …"))
-        #expect(titles.contains("Gehe zu Zeile …"))
+        #expect(titles.contains("Open…"))
+        #expect(titles.contains("Go to Line…"))
         #expect(!titles.contains { $0.hasSuffix("...") })
     }
 }
 
 @MainActor
 struct DisplayNameTests {
-    @Test func namesEveryEncodingInGerman() {
+    @Test func namesEveryEncoding() {
         for encoding in TextEncoding.allCases {
             #expect(!encoding.displayName.isEmpty)
             #expect(!encoding.shortName.isEmpty)
         }
         #expect(TextEncoding.menuGroups.flatMap { $0 }.count == TextEncoding.allCases.count)
-        #expect(TextEncoding.windows1252.displayName == "Westeuropäisch (Windows-1252)")
+        #expect(TextEncoding.windows1252.displayName == "Western (Windows-1252)")
     }
 
     @Test func namesLineEndingsLanguagesAndThemes() {
         #expect(LineEnding.crlf.displayName == "CRLF – Windows")
         #expect(LineEnding.cr.shortName == "CR")
-        #expect(Language.plainText.displayName == "Normaler Text")
+        #expect(Language.plainText.displayName == "Plain Text")
         #expect(LanguageCatalog.swift.displayName == "Swift")
         #expect(Set(Theme.all.map(\.displayName)).count == Theme.all.count)
         #expect(Theme(id: "custom", isDark: false, background: "#FFFFFF", text: "#000000", selection: "#CCCCCC", currentLine: "#EEEEEE", lineNumber: "#777777", currentLineNumber: "#000000", invisibles: "#CCCCCC", matchHighlight: "#FFFF00", tokens: [:]).displayName == "custom")
     }
 
-    @Test func describesErrorsInGerman() {
+    @Test func describesErrors() {
         let lossy = TextEncodingError.unrepresentableCharacter(character: "€", line: 2, column: 5, encoding: .isoLatin1)
-        #expect(lossy.errorDescription == "Das Zeichen „€“ in Zeile 2, Spalte 5 kann in der Kodierung ISO 8859-1 nicht gesichert werden.")
+        #expect(lossy.errorDescription == "The character “€” in line 2, column 5 can’t be saved in the ISO 8859-1 encoding.")
         #expect(lossy.recoverySuggestion == L10n.Alert.unrepresentableRecovery)
         #expect(TextEncodingError.unrepresentableCharacter(character: nil, line: 1, column: 1, encoding: .macRoman).errorDescription?.contains("Mac OS Roman") == true)
         #expect(TextEncodingError.undecodable(encoding: .utf8).errorDescription == L10n.Alert.undecodable(encoding: "UTF-8"))
@@ -109,22 +109,22 @@ struct DisplayNameTests {
         #expect(TextEncodingError.binaryContent.recoverySuggestion == L10n.Alert.binaryFileMessage)
         #expect(TextTransformationError.invalidBase64.errorDescription == L10n.Alert.invalidBase64)
         #expect(TextTransformationError.invalidPercentEncoding.errorDescription == L10n.Alert.invalidPercentEncoding)
-        #expect(TextTransformationError.invalidJSON(line: 3, column: 4).errorDescription == "Ungültiges JSON in Zeile 3, Spalte 4.")
+        #expect(TextTransformationError.invalidJSON(line: 3, column: 4).errorDescription == "Invalid JSON in line 3, column 4.")
         #expect(SearchQueryError.emptyQuery.errorDescription == nil)
         #expect(SearchQueryError.invalidRegularExpression(pattern: "(").errorDescription == L10n.Find.invalidRegularExpression)
     }
 
-    @Test func formatsPluralsInGerman() {
-        #expect(L10n.Find.matchStatus(current: nil, total: 1) == "1 Treffer")
-        #expect(L10n.Find.matchStatus(current: 2, total: 5) == "2 von 5")
-        #expect(L10n.Find.replacedStatus(1) == "1 Treffer ersetzt")
-        #expect(L10n.FileSearch.summary(matches: 1, files: 1) == "1 Treffer in 1 Datei")
-        #expect(L10n.FileSearch.summary(matches: 4, files: 2) == "4 Treffer in 2 Dateien")
-        #expect(L10n.StatusBar.indentation(Indentation(usesTabs: true, width: 4)) == "Tabulatoren: 4")
+    @Test func formatsCountedTexts() {
+        #expect(L10n.Find.matchStatus(current: nil, total: 1) == "1 match")
+        #expect(L10n.Find.matchStatus(current: 2, total: 5) == "2 of 5")
+        #expect(L10n.Find.replacedStatus(1) == "Replaced 1 match")
+        #expect(L10n.FileSearch.summary(matches: 1, files: 1) == "1 match in 1 file")
+        #expect(L10n.FileSearch.summary(matches: 4, files: 2) == "4 matches in 2 files")
+        #expect(L10n.StatusBar.indentation(Indentation(usesTabs: true, width: 4)) == "Tabs: 4")
         #expect(L10n.Settings.megabytes(5) == "5 MB")
         #expect(L10n.Settings.points(13) == "13 pt")
-        #expect(L10n.GoToLine.hint(lineCount: 3) == "Das Dokument hat 3 Zeilen.")
-        #expect(L10n.FileSearch.lineLabel(7) == "Zeile 7")
+        #expect(L10n.GoToLine.hint(lineCount: 3) == "The document has 3 lines.")
+        #expect(L10n.FileSearch.lineLabel(7) == "Line 7")
         #expect(L10n.Transformation.title(for: .camelCase) == "camelCase")
     }
 }

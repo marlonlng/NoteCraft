@@ -120,19 +120,19 @@ struct FindBarView: View {
     private var optionToggles: some View {
         HStack(spacing: 2) {
             Toggle(isOn: $model.isCaseSensitive) {
-                Text("Aa").font(.system(.callout, design: .monospaced))
+                Text(verbatim: "Aa").font(.system(.callout, design: .monospaced))
             }
             .help(L10n.Find.caseSensitive)
             .accessibilityLabel(L10n.Find.caseSensitive)
 
             Toggle(isOn: $model.matchesWholeWord) {
-                Text("ab").font(.system(.callout, design: .monospaced)).underline()
+                Text(verbatim: "ab").font(.system(.callout, design: .monospaced)).underline()
             }
             .help(L10n.Find.wholeWord)
             .accessibilityLabel(L10n.Find.wholeWord)
 
             Toggle(isOn: $model.usesRegularExpression) {
-                Text(".*").font(.system(.callout, design: .monospaced))
+                Text(verbatim: ".*").font(.system(.callout, design: .monospaced))
             }
             .help(L10n.Find.regularExpression)
             .accessibilityLabel(L10n.Find.regularExpression)
@@ -150,23 +150,23 @@ struct FindBarView: View {
 
 struct RegexCheatSheetView: View {
     static let entries: [(pattern: String, meaning: String)] = [
-        (".", String(localized: "Ein beliebiges Zeichen außer Zeilenende")),
-        (#"\d  \w  \s"#, String(localized: "Ziffer, Wortzeichen, Leerraum")),
-        (#"\D  \W  \S"#, String(localized: "Alles außer Ziffer, Wortzeichen, Leerraum")),
-        (#"\b"#, String(localized: "Wortgrenze")),
-        ("^  $", String(localized: "Zeilenanfang, Zeilenende")),
-        ("*  +  ?", String(localized: "0 oder mehr, 1 oder mehr, 0 oder 1")),
-        ("{2,5}", String(localized: "2 bis 5 Wiederholungen")),
-        ("*?  +?", String(localized: "So wenig wie möglich")),
-        ("[abc]  [^abc]", String(localized: "Eines der Zeichen, keines der Zeichen")),
-        ("[a-z0-9]", String(localized: "Zeichenbereich")),
-        ("a|b", String(localized: "a oder b")),
-        ("( … )", String(localized: "Gruppe, in der Ersetzung als $1, $2 …")),
-        ("(?: … )", String(localized: "Gruppe ohne Rückverweis")),
-        ("(?= … )  (?! … )", String(localized: "Gefolgt von, nicht gefolgt von")),
-        (#"\n  \t"#, String(localized: "Zeilenende, Tabulator")),
-        (#"\.  \(  \\"#, String(localized: "Sonderzeichen wörtlich suchen")),
-        ("$0", String(localized: "Gesamter Treffer in der Ersetzung"))
+        (".", String(localized: "Any character except a line break")),
+        (#"\d  \w  \s"#, String(localized: "Digit, word character, whitespace")),
+        (#"\D  \W  \S"#, String(localized: "Anything but a digit, word character or whitespace")),
+        (#"\b"#, String(localized: "Word boundary")),
+        ("^  $", String(localized: "Start of line, end of line")),
+        ("*  +  ?", String(localized: "0 or more, 1 or more, 0 or 1")),
+        ("{2,5}", String(localized: "2 to 5 repetitions")),
+        ("*?  +?", String(localized: "As few as possible")),
+        ("[abc]  [^abc]", String(localized: "One of the characters, none of the characters")),
+        ("[a-z0-9]", String(localized: "Character range")),
+        ("a|b", String(localized: "a or b")),
+        ("( … )", String(localized: "Group, used in the replacement as $1, $2 …")),
+        ("(?: … )", String(localized: "Non-capturing group")),
+        ("(?= … )  (?! … )", String(localized: "Followed by, not followed by")),
+        (#"\n  \t"#, String(localized: "Line break, tab")),
+        (#"\.  \(  \\"#, String(localized: "Match special characters literally")),
+        ("$0", String(localized: "Whole match in the replacement"))
     ]
 
     var body: some View {

@@ -215,13 +215,13 @@ struct StatusBarModelTests {
     @Test func describesPositionAndSelection() {
         let model = StatusBarModel()
         model.position = TextPosition(line: 4, column: 9)
-        #expect(model.positionText == "Zeile 4, Spalte 9")
+        #expect(model.positionText == "Line 4, Column 9")
         #expect(model.selectionText == nil)
         model.selectedLength = 1
-        #expect(model.selectionText == "1 Zeichen ausgewählt")
+        #expect(model.selectionText == "1 character selected")
         model.selectedLength = 12
-        #expect(model.selectionText == "12 Zeichen ausgewählt")
+        #expect(model.selectionText == "12 characters selected")
         model.selectionCount = 3
-        #expect(model.selectionText == "3 Auswahlen")
+        #expect(model.selectionText == "3 selections")
     }
 }

@@ -150,17 +150,17 @@ struct FileSearchView: View {
                     .onSubmit(model.search)
                 HStack(spacing: 2) {
                     Toggle(isOn: $model.isCaseSensitive) {
-                        Text("Aa").font(.system(.callout, design: .monospaced))
+                        Text(verbatim: "Aa").font(.system(.callout, design: .monospaced))
                     }
                     .help(L10n.Find.caseSensitive)
                     .accessibilityLabel(L10n.Find.caseSensitive)
                     Toggle(isOn: $model.matchesWholeWord) {
-                        Text("ab").font(.system(.callout, design: .monospaced)).underline()
+                        Text(verbatim: "ab").font(.system(.callout, design: .monospaced)).underline()
                     }
                     .help(L10n.Find.wholeWord)
                     .accessibilityLabel(L10n.Find.wholeWord)
                     Toggle(isOn: $model.usesRegularExpression) {
-                        Text(".*").font(.system(.callout, design: .monospaced))
+                        Text(verbatim: ".*").font(.system(.callout, design: .monospaced))
                     }
                     .help(L10n.Find.regularExpression)
                     .accessibilityLabel(L10n.Find.regularExpression)

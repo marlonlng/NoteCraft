@@ -120,16 +120,16 @@ struct CommandPaletteTests {
     private func makeMenu() -> (NSMenu, ActionSink) {
         let sink = ActionSink()
         let menu = NSMenu(title: "Main")
-        let fileItem = NSMenuItem(title: "Ablage", action: nil, keyEquivalent: "")
-        let fileMenu = NSMenu(title: "Ablage")
-        let sort = NSMenuItem(title: "Aufsteigend sortieren", action: #selector(ActionSink.run(_:)), keyEquivalent: "s")
+        let fileItem = NSMenuItem(title: "File", action: nil, keyEquivalent: "")
+        let fileMenu = NSMenu(title: "File")
+        let sort = NSMenuItem(title: "Sort Ascending", action: #selector(ActionSink.run(_:)), keyEquivalent: "s")
         sort.keyEquivalentModifierMask = [.command, .option, .control]
         sort.target = sink
-        let duplicate = NSMenuItem(title: "Zeile duplizieren …", action: #selector(ActionSink.run(_:)), keyEquivalent: "D")
+        let duplicate = NSMenuItem(title: "Duplicate Line…", action: #selector(ActionSink.run(_:)), keyEquivalent: "D")
         duplicate.target = sink
-        let disabled = NSMenuItem(title: "Deaktiviert", action: #selector(ActionSink.disabled(_:)), keyEquivalent: "")
+        let disabled = NSMenuItem(title: "Disabled", action: #selector(ActionSink.disabled(_:)), keyEquivalent: "")
         disabled.target = sink
-        let hidden = NSMenuItem(title: "Versteckt", action: #selector(ActionSink.run(_:)), keyEquivalent: "")
+        let hidden = NSMenuItem(title: "Hidden", action: #selector(ActionSink.run(_:)), keyEquivalent: "")
         hidden.target = sink
         hidden.isHidden = true
         fileMenu.addItem(sort)
@@ -146,8 +146,8 @@ struct CommandPaletteTests {
         let (menu, sink) = makeMenu()
         defer { withExtendedLifetime(sink) {} }
         let commands = MenuCommandCatalog.commands(in: menu)
-        #expect(commands.map(\.item.title) == ["Aufsteigend sortieren", "Zeile duplizieren …"])
-        #expect(commands.first?.path == ["Ablage"])
+        #expect(commands.map(\.item.title) == ["Sort Ascending", "Duplicate Line…"])
+        #expect(commands.first?.path == ["File"])
     }
 
     @Test func formatsShortcuts() throws {
@@ -168,8 +168,8 @@ struct CommandPaletteTests {
         #expect(model.mode == .commands)
         #expect(model.placeholder == L10n.Palette.commandsPlaceholder)
         model.query = "dupl"
-        #expect(model.results.first?.title == "Zeile duplizieren")
-        #expect(model.results.first?.subtitle == "Ablage")
+        #expect(model.results.first?.title == "Duplicate Line")
+        #expect(model.results.first?.subtitle == "File")
         model.selectedItem?.perform()
         #expect(sink.count == 1)
         model.query = ""

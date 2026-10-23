@@ -103,7 +103,7 @@ final class CommandPaletteModel {
                 let menuItem = entry.item
                 items.append(PaletteItem(
                     id: "command-\(index)",
-                    title: menuItem.title.replacingOccurrences(of: " …", with: ""),
+                    title: menuItem.title.replacingOccurrences(of: #"\s*…$"#, with: "", options: .regularExpression),
                     subtitle: entry.path.joined(separator: " › "),
                     shortcut: MenuCommandCatalog.shortcut(for: menuItem),
                     symbolName: "command",

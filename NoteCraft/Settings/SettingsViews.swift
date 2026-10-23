@@ -125,7 +125,7 @@ struct ThemePreview: View {
             result.append(part)
         }
         append("// ", .comment)
-        append("Notiz für morgen\n", .comment)
+        append(L10n.ThemePreview.comment + "\n", .comment)
         append("let", .keyword)
         append(" count", nil)
         append(": ", nil)
@@ -135,7 +135,7 @@ struct ThemePreview: View {
         append("\n", nil)
         append("print", .function)
         append("(", nil)
-        append("\"Hallo NoteCraft\"", .string)
+        append("\"" + L10n.ThemePreview.greeting + "\"", .string)
         append(")", nil)
         return result
     }

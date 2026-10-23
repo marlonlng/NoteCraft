@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		064482CA0BD140F9C53B210D /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = CA50869186BF29FA0E57A40C /* InfoPlist.xcstrings */; };
 		0DF2281C9180423E3C51BFE5 /* HelpWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BECCBAC92E4D9BEEDBC8C84 /* HelpWindowController.swift */; };
 		114F5629F650C3CB9BCB78B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 165F3A86777573B71ED64B97 /* Assets.xcassets */; };
 		139CD4F1DB5B69C791F41819 /* LineOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E957634CF43D313B29FC04 /* LineOperationsTests.swift */; };
@@ -49,6 +50,7 @@
 		797FAD5844B28C1C3E3A59FA /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B2E4859D2443DD2C6F345F /* SearchTests.swift */; };
 		7C3DC8CC3C01EB6731DDF1B8 /* EncodingDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19C47200792B8B2A2DEB14A /* EncodingDetector.swift */; };
 		7DA6A88328C804CE4257F495 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D90130A82F0DD42561FE384 /* Language.swift */; };
+		82DD87B1C7B7BFFE9CB485C4 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 0D136268F7869F1B42605025 /* Localizable.xcstrings */; };
 		922A36FB2BC575B93C84BE76 /* DocumentAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37CCCBADA686F8956C71F63 /* DocumentAttributes.swift */; };
 		9855DF5DCF3D791AAAFD6900 /* AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D2AFEE95DC964ADA99C000 /* AppTests.swift */; };
 		9AF60375C81A93A1E4145455 /* EditorViewController+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5678F5515A9C96AF025B1C /* EditorViewController+Actions.swift */; };
@@ -85,6 +87,7 @@
 		F95D94296327CE0F1CDBE053 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7ABB6FCF5006AD2ADD233C /* SettingsStore.swift */; };
 		FA2FE65446FF9564B5D67DBA /* NoteCraftKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1C9940A3BA806A63CF6D6901 /* NoteCraftKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FC620429D03C632CC0CA8551 /* EditorViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BA8F8D3FCFB83534C5C6D2 /* EditorViewControllerTests.swift */; };
+		FF5BB40E73A289B8149AA3C0 /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D815DBA323D8DE2FFCEA88FB /* LocalizationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,6 +152,7 @@
 		07B5B32F328BBA4ED3D3D276 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		08674D7D3DA5344EE2B93E2F /* FuzzyMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuzzyMatcher.swift; sourceTree = "<group>"; };
 		0C7ABB6FCF5006AD2ADD233C /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		0D136268F7869F1B42605025 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		13BA8B9CEDC3313277173D95 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		13F4D36FF592085842FF6302 /* NoteCraftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NoteCraftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		157E94B041AAC1E2E6506F3D /* NoteCraft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NoteCraft.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,6 +212,7 @@
 		C727E1C96686D04081E6C61D /* FindBarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindBarModel.swift; sourceTree = "<group>"; };
 		C76380B4182DDD42C82059D0 /* TextTransformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTransformation.swift; sourceTree = "<group>"; };
 		C8A58615818792E49E8B18E3 /* CommandPaletteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandPaletteModel.swift; sourceTree = "<group>"; };
+		CA50869186BF29FA0E57A40C /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		CB5678F5515A9C96AF025B1C /* EditorViewController+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Actions.swift"; sourceTree = "<group>"; };
 		CECF5D09FD8CC3BA97BFD1B4 /* EditorTextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextViewTests.swift; sourceTree = "<group>"; };
 		CF529670A6D7BA374312EFDD /* FileSearcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSearcher.swift; sourceTree = "<group>"; };
@@ -216,6 +221,7 @@
 		D4FAB2809474F5F6010A36C2 /* LanguageCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageCatalog.swift; sourceTree = "<group>"; };
 		D67E56C32F43ED4EDB40D04B /* TextEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEdit.swift; sourceTree = "<group>"; };
 		D6D2AFEE95DC964ADA99C000 /* AppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTests.swift; sourceTree = "<group>"; };
+		D815DBA323D8DE2FFCEA88FB /* LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationTests.swift; sourceTree = "<group>"; };
 		DE7D68C6D3358AF5F9E98803 /* TextStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStatistics.swift; sourceTree = "<group>"; };
 		E6627B4D097D5AC6DC98BEBB /* FindBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindBarView.swift; sourceTree = "<group>"; };
 		E6F8E8E60B89728D8AD303FC /* EditorLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorLayoutManager.swift; sourceTree = "<group>"; };
@@ -308,6 +314,7 @@
 				CECF5D09FD8CC3BA97BFD1B4 /* EditorTextViewTests.swift */,
 				96BA8F8D3FCFB83534C5C6D2 /* EditorViewControllerTests.swift */,
 				620CE0F3D2F1EF16045B56AA /* FindBarModelTests.swift */,
+				D815DBA323D8DE2FFCEA88FB /* LocalizationTests.swift */,
 				58F00D5FF88B6F08E9DAA949 /* TestSupport.swift */,
 				C5D251295D195A823A517407 /* TextDocumentTests.swift */,
 				2BF08FCC4C962E828B3119B6 /* WorkspaceTests.swift */,
@@ -382,6 +389,8 @@
 			isa = PBXGroup;
 			children = (
 				165F3A86777573B71ED64B97 /* Assets.xcassets */,
+				CA50869186BF29FA0E57A40C /* InfoPlist.xcstrings */,
+				0D136268F7869F1B42605025 /* Localizable.xcstrings */,
 				4F35E61467BC0D78F534F5BA /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resources;
@@ -645,11 +654,12 @@
 				};
 			};
 			buildConfigurationList = 57F5354313E6ADCB303FAB82 /* Build configuration list for PBXProject "NoteCraft" */;
-			developmentRegion = de;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
 				de,
+				en,
 			);
 			mainGroup = A9B1C14E968552305FF1D27D;
 			minimizedProjectReferenceProxies = 1;
@@ -673,6 +683,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				114F5629F650C3CB9BCB78B5 /* Assets.xcassets in Resources */,
+				064482CA0BD140F9C53B210D /* InfoPlist.xcstrings in Resources */,
+				82DD87B1C7B7BFFE9CB485C4 /* Localizable.xcstrings in Resources */,
 				1C2B9B49223FA1C73736DC32 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -744,6 +756,7 @@
 				B42B1E8B80F62B3183C3649F /* EditorTextViewTests.swift in Sources */,
 				FC620429D03C632CC0CA8551 /* EditorViewControllerTests.swift in Sources */,
 				3CB81DA80D2457F3CFFD4185 /* FindBarModelTests.swift in Sources */,
+				FF5BB40E73A289B8149AA3C0 /* LocalizationTests.swift in Sources */,
 				9DCEF3D02DB6BC9F1F84133A /* TestSupport.swift in Sources */,
 				3E082B0882AA98BE803883BC /* TextDocumentTests.swift in Sources */,
 				B43F2119AE719F98EB78EAF9 /* WorkspaceTests.swift in Sources */,
