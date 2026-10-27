@@ -1,6 +1,24 @@
 # NoteCraft
 
-A fast, native plain-text and source-code editor for macOS. NoteCraft takes the strengths of Notepad++ and rethinks them as an independent Mac app. The interface is available in English and German.
+**The free Mac text editor that never forgets.** Unsaved tabs survive every quit, encodings and line endings stay intact, and Markdown gets a live preview. It's native and open source, with no subscription and no data collection.
+
+![NoteCraft with a Markdown document and its live preview](docs/images/notecraft.png)
+
+## Why NoteCraft
+
+Many people who move from Windows to the Mac miss Notepad++: one quick place for everything that is text, where nothing is lost when you close it. NoteCraft brings those habits to the Mac as an independent, native app. TextEdit defaults to rich text and smart quotes, and a full IDE is too heavy for a log file. NoteCraft sits in between: it starts instantly, never changes your code and keeps every unsaved tab.
+
+NoteCraft is an independent project and is not affiliated with Notepad++.
+
+## What it doesn't do
+
+- No plug-ins or macros
+- No autocompletion, language servers, Git integration or terminal
+- No side-by-side editing of two files and no diff
+- No iCloud sync and no iPhone or iPad app
+- Requires macOS 26 or later
+
+The interface is available in English and German.
 
 ## Highlights
 
