@@ -304,6 +304,73 @@ struct EditorTextViewTests {
         _ = textView.validateMenuItem(copy)
     }
 
+    private func center(ofCaretAt location: Int, in textView: EditorTextView) throws -> NSPoint {
+        let container = try #require(textView.textContainer)
+        textView.layoutManager?.ensureLayout(for: container)
+        let rect = try #require(textView.caretRect(at: location))
+        return NSPoint(x: rect.midX, y: rect.midY)
+    }
+
+    private func middleButtonEvent(_ type: CGEventType, at point: NSPoint, in textView: EditorTextView, button: CGMouseButton = .center) throws -> NSEvent {
+        let window = try #require(textView.window)
+        let onScreen = window.convertPoint(toScreen: textView.convert(point, to: nil))
+        let screenHeight = NSScreen.screens.first?.frame.height ?? 0
+        let event = try #require(CGEvent(
+            mouseEventSource: nil,
+            mouseType: type,
+            mouseCursorPosition: CGPoint(x: onScreen.x, y: screenHeight - onScreen.y),
+            mouseButton: button
+        ))
+        return try #require(NSEvent(cgEvent: event))
+    }
+
+    @Test func selectsRectangleWithMiddleMouseButton() throws {
+        let fixture = try TestSupport.makeEditor("alpha\nbe\ngamma\ndelta")
+        defer { fixture.close() }
+        let textView = fixture.textView
+        let anchor = try center(ofCaretAt: 1, in: textView)
+        let point = try center(ofCaretAt: 18, in: textView)
+        #expect(textView.columnRanges(from: point, to: anchor) == [
+            NSRange(location: 1, length: 2), NSRange(location: 7, length: 1), NSRange(location: 10, length: 2), NSRange(location: 16, length: 2)
+        ])
+        textView.selectColumn(from: anchor, to: point)
+        #expect(textView.selectedRanges.count == 4)
+        textView.insertText("X", replacementRange: NSRange(location: NSNotFound, length: 0))
+        #expect(fixture.text == "aXha\nbX\ngXma\ndXta")
+    }
+
+    @Test func placesCaretOnEveryLineForVerticalMiddleDrag() throws {
+        let fixture = try TestSupport.makeEditor("one\nx\nthree\n")
+        defer { fixture.close() }
+        let textView = fixture.textView
+        let anchor = try center(ofCaretAt: 2, in: textView)
+        let bottom = try #require(textView.lineRect(forCharacterAt: 12))
+        textView.selectColumn(from: anchor, to: NSPoint(x: anchor.x, y: bottom.midY))
+        #expect(textView.insertionLocations == [2, 5, 8, 12])
+        textView.insertText("-", replacementRange: NSRange(location: NSNotFound, length: 0))
+        #expect(fixture.text == "on-e\nx-\nth-ree\n-")
+        textView.selectColumn(from: anchor, to: anchor)
+        #expect(textView.insertionLocations.isEmpty)
+        #expect(textView.selectedRange() == NSRange(location: 2, length: 0))
+    }
+
+    @Test func tracksMiddleMouseDrag() throws {
+        let fixture = try TestSupport.makeEditor("abc\nabc\nabc")
+        defer { fixture.close() }
+        let textView = fixture.textView
+        textView.otherMouseDown(with: try middleButtonEvent(.otherMouseDown, at: try center(ofCaretAt: 1, in: textView), in: textView))
+        #expect(textView.selectedRange() == NSRange(location: 1, length: 0))
+        textView.otherMouseDragged(with: try middleButtonEvent(.otherMouseDragged, at: try center(ofCaretAt: 9, in: textView), in: textView))
+        #expect(textView.insertionLocations == [1, 5, 9])
+        textView.otherMouseUp(with: try middleButtonEvent(.otherMouseUp, at: try center(ofCaretAt: 9, in: textView), in: textView))
+        textView.otherMouseDragged(with: try middleButtonEvent(.otherMouseDragged, at: try center(ofCaretAt: 3, in: textView), in: textView))
+        #expect(textView.insertionLocations == [1, 5, 9])
+        let back = try #require(CGMouseButton(rawValue: 3))
+        textView.otherMouseDown(with: try middleButtonEvent(.otherMouseDown, at: try center(ofCaretAt: 2, in: textView), in: textView, button: back))
+        textView.otherMouseUp(with: try middleButtonEvent(.otherMouseUp, at: try center(ofCaretAt: 2, in: textView), in: textView, button: back))
+        #expect(textView.insertionLocations == [1, 5, 9])
+    }
+
     @Test func forwardsEscapeToFindBar() throws {
         let fixture = try TestSupport.makeEditor("x")
         defer { fixture.close() }

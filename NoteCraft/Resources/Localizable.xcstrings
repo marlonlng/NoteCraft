@@ -1511,12 +1511,12 @@
         }
       }
     },
-    "Hold down Option and drag to make a rectangular selection. Then type to edit all lines at once." : {
+    "Hold down Option and drag, or drag with the middle mouse button, to make a rectangular selection. Then type to edit all lines at once." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Halte die Wahltaste gedrückt und ziehe, um eine rechteckige Auswahl zu erstellen. Tippe anschließend, um alle Zeilen gleichzeitig zu bearbeiten."
+            "value" : "Halte die Wahltaste gedrückt und ziehe oder ziehe mit gedrückter mittlerer Maustaste, um eine rechteckige Auswahl zu erstellen. Tippe anschließend, um alle Zeilen gleichzeitig zu bearbeiten."
           }
         }
       }

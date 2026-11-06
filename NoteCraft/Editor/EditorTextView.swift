@@ -32,6 +32,7 @@ final class EditorTextView: NSTextView {
 
     private(set) var insertionLocations: [Int] = []
     private var isChangingSelectionInternally = false
+    private var columnSelectionAnchor: NSPoint?
 
     /// Builds a TextKit 1 editor sharing `textStorage` inside a scroll view.
     static func makeScrollableEditor(textStorage: NSTextStorage) -> (scrollView: NSScrollView, textView: EditorTextView) {
@@ -367,6 +368,82 @@ final class EditorTextView: NSTextView {
             return true
         }
         return super.performDragOperation(sender)
+    }
+
+    override func otherMouseDown(with event: NSEvent) {
+        guard event.buttonNumber == 2 else {
+            super.otherMouseDown(with: event)
+            return
+        }
+        window?.makeFirstResponder(self)
+        let point = viewPoint(for: event)
+        columnSelectionAnchor = point
+        selectColumn(from: point, to: point)
+    }
+
+    override func otherMouseDragged(with event: NSEvent) {
+        guard event.buttonNumber == 2, let anchor = columnSelectionAnchor else {
+            super.otherMouseDragged(with: event)
+            return
+        }
+        autoscroll(with: event)
+        selectColumn(from: anchor, to: viewPoint(for: event))
+    }
+
+    override func otherMouseUp(with event: NSEvent) {
+        guard event.buttonNumber == 2, columnSelectionAnchor != nil else {
+            super.otherMouseUp(with: event)
+            return
+        }
+        columnSelectionAnchor = nil
+    }
+
+    private func viewPoint(for event: NSEvent) -> NSPoint {
+        let windowPoint = event.window == nil ? window?.convertPoint(fromScreen: event.locationInWindow) ?? event.locationInWindow : event.locationInWindow
+        return convert(windowPoint, from: nil)
+    }
+
+    /// Selects the rectangle between `anchor` and `point` line by line, like dragging with Option held down.
+    ///
+    /// A rectangle without width places one caret on every line instead.
+    func selectColumn(from anchor: NSPoint, to point: NSPoint) {
+        let ranges = columnRanges(from: anchor, to: point)
+        guard !ranges.isEmpty else { return }
+        let selections = ranges.filter { $0.length > 0 }
+        if selections.isEmpty {
+            setInsertionLocations(ranges.map(\.location))
+        } else {
+            setSelectedRanges(selections.map { NSValue(range: $0) }, affinity: .downstream, stillSelecting: false)
+        }
+    }
+
+    /// The range of every line fragment between the vertical positions of `anchor` and `point`, cut to their horizontal span.
+    func columnRanges(from anchor: NSPoint, to point: NSPoint) -> [NSRange] {
+        guard let layoutManager, let textContainer else { return [] }
+        let origin = textContainerOrigin
+        let top = min(anchor.y, point.y) - origin.y
+        let bottom = max(anchor.y, point.y) - origin.y
+        let left = min(anchor.x, point.x)
+        let right = max(anchor.x, point.x)
+        let area = NSRect(x: 0, y: top, width: textContainer.size.width, height: max(bottom - top, 1))
+        var ranges: [NSRange] = []
+        func addRange(atLineMidY lineMidY: CGFloat) {
+            let start = characterIndexForInsertion(at: NSPoint(x: left, y: lineMidY))
+            let end = characterIndexForInsertion(at: NSPoint(x: right, y: lineMidY))
+            ranges.append(NSRange(location: min(start, end), length: abs(end - start)))
+        }
+        if nsString.length > 0 {
+            layoutManager.ensureLayout(forBoundingRect: area, in: textContainer)
+            let glyphRange = layoutManager.glyphRange(forBoundingRect: area, in: textContainer)
+            layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { fragment, _, _, _, _ in
+                addRange(atLineMidY: fragment.midY + origin.y)
+            }
+        }
+        let extra = layoutManager.extraLineFragmentRect
+        if extra.height > 0, extra.intersects(area) {
+            ranges.append(NSRange(location: nsString.length, length: 0))
+        }
+        return ranges
     }
 
     override func drawBackground(in rect: NSRect) {

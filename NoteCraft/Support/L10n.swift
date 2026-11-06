@@ -452,7 +452,7 @@ enum L10n {
         static let viewSection = String(localized: "View")
         static let tipsTitle = String(localized: "Tips")
         static let tipSession = String(localized: "Unsaved documents are kept when you quit and restored at the next launch.")
-        static let tipColumns = String(localized: "Hold down Option and drag to make a rectangular selection. Then type to edit all lines at once.")
+        static let tipColumns = String(localized: "Hold down Option and drag, or drag with the middle mouse button, to make a rectangular selection. Then type to edit all lines at once.")
         static let tipEncoding = String(localized: "Click encoding, line ending or indentation in the status bar to change it.")
         static let tipVersions = String(localized: "Use “File › Revert To › Browse All Versions” to bring back earlier versions.")
         static let markdownSection = String(localized: "Markdown")
