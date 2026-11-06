@@ -16,6 +16,10 @@ final class EditorTextView: NSTextView {
         didSet { needsDisplay = true }
     }
 
+    override var insertionPointColor: NSColor? {
+        didSet { updateCaretIndicators() }
+    }
+
     var currentLineColor: NSColor = .clear {
         didSet { needsDisplay = true }
     }
@@ -30,9 +34,17 @@ final class EditorTextView: NSTextView {
         }
     }
 
-    private(set) var insertionLocations: [Int] = []
+    private(set) var cursors: [TextCursor] = []
+    var caretIndicators: [NSTextInsertionIndicator] = []
+    var windowObservers: [NSObjectProtocol] = []
     private var isChangingSelectionInternally = false
     private var columnSelectionAnchor: NSPoint?
+
+    isolated deinit {
+        for observer in windowObservers {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
 
     /// Builds a TextKit 1 editor sharing `textStorage` inside a scroll view.
     static func makeScrollableEditor(textStorage: NSTextStorage) -> (scrollView: NSScrollView, textView: EditorTextView) {
@@ -158,17 +170,41 @@ final class EditorTextView: NSTextView {
 
     /// Places one caret at every location; two or more locations enable multi-caret editing.
     func setInsertionLocations(_ locations: [Int]) {
-        let unique = Array(Set(locations)).sorted()
-        insertionLocations = unique.count > 1 ? unique : []
+        setCursors(locations.map(TextCursor.init(caret:)))
+    }
+
+    /// Shows every cursor at once after merging overlapping ones; a single cursor becomes the normal selection.
+    func setCursors(_ newCursors: [TextCursor]) {
+        let length = nsString.length
+        let merged = TextCursor.merged(newCursors.map {
+            TextCursor(anchor: min(max($0.anchor, 0), length), head: min(max($0.head, 0), length), goalX: $0.goalX)
+        })
         isChangingSelectionInternally = true
-        setSelectedRange(NSRange(location: unique.first ?? 0, length: 0))
+        if merged.count > 1 {
+            cursors = merged
+            let selections = merged.filter { !$0.isEmpty }.map { NSValue(range: $0.range) }
+            if selections.isEmpty {
+                setSelectedRange(NSRange(location: merged[0].head, length: 0))
+            } else {
+                setSelectedRanges(selections, affinity: .downstream, stillSelecting: false)
+            }
+        } else {
+            cursors = []
+            setSelectedRange(merged.first?.range ?? NSRange(location: 0, length: 0))
+        }
         isChangingSelectionInternally = false
+        updateCaretIndicators()
         needsDisplay = true
     }
 
+    /// The carets of the cursors without a selection while several cursors are active.
+    var insertionLocations: [Int] {
+        cursors.filter(\.isEmpty).map(\.head)
+    }
+
     var editingRanges: [NSRange]? {
-        if insertionLocations.count > 1 {
-            return insertionLocations.map { NSRange(location: $0, length: 0) }
+        if cursors.count > 1 {
+            return cursors.map(\.range)
         }
         let ranges = selectedRanges.map(\.rangeValue)
         return ranges.count > 1 ? ranges : nil
@@ -176,8 +212,9 @@ final class EditorTextView: NSTextView {
 
     override func setSelectedRanges(_ ranges: [NSValue], affinity: NSSelectionAffinity, stillSelecting: Bool) {
         super.setSelectedRanges(ranges, affinity: affinity, stillSelecting: stillSelecting)
-        if !isChangingSelectionInternally, !insertionLocations.isEmpty {
-            insertionLocations = []
+        if !isChangingSelectionInternally, !cursors.isEmpty {
+            cursors = []
+            updateCaretIndicators()
             needsDisplay = true
         }
         if !stillSelecting {
@@ -316,8 +353,8 @@ final class EditorTextView: NSTextView {
     }
 
     override func cancelOperation(_ sender: Any?) {
-        if insertionLocations.count > 1 {
-            setInsertionLocations([insertionLocations[0]])
+        if let first = cursors.first {
+            setCursors([first])
             return
         }
         if selectedRanges.count > 1 {
@@ -410,11 +447,7 @@ final class EditorTextView: NSTextView {
         let ranges = columnRanges(from: anchor, to: point)
         guard !ranges.isEmpty else { return }
         let selections = ranges.filter { $0.length > 0 }
-        if selections.isEmpty {
-            setInsertionLocations(ranges.map(\.location))
-        } else {
-            setSelectedRanges(selections.map { NSValue(range: $0) }, affinity: .downstream, stillSelecting: false)
-        }
+        setCursors(selections.isEmpty ? ranges.map { TextCursor(caret: $0.location) } : selections.map(TextCursor.init(range:)))
     }
 
     /// The range of every line fragment between the vertical positions of `anchor` and `point`, cut to their horizontal span.
@@ -448,7 +481,7 @@ final class EditorTextView: NSTextView {
 
     override func drawBackground(in rect: NSRect) {
         super.drawBackground(in: rect)
-        if highlightsCurrentLine, insertionLocations.isEmpty, selectedRanges.count == 1, selectedRange().length == 0,
+        if highlightsCurrentLine, cursors.isEmpty, selectedRanges.count == 1, selectedRange().length == 0,
            let lineRect = lineRect(forCharacterAt: selectedRange().location) {
             currentLineColor.setFill()
             NSRect(x: rect.minX, y: lineRect.minY, width: rect.width, height: lineRect.height).fill()
@@ -461,17 +494,6 @@ final class EditorTextView: NSTextView {
             bounds.origin.x += textContainerOrigin.x
             bounds.origin.y += textContainerOrigin.y
             NSBezierPath(roundedRect: bounds.insetBy(dx: -1, dy: 0), xRadius: 3, yRadius: 3).fill()
-        }
-    }
-
-    override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-        guard insertionLocations.count > 1 else { return }
-        insertionPointColor.setFill()
-        for location in insertionLocations.dropFirst() {
-            if let rect = caretRect(at: location), rect.intersects(dirtyRect) {
-                rect.fill()
-            }
         }
     }
 
