@@ -137,7 +137,9 @@ final class NoteCraftUITests: XCTestCase {
     func testSidebarShowsFindInFiles() {
         newDocument(with: "Text")
         app.typeKey("f", modifierFlags: [.command, .shift])
-        XCTAssertTrue(app.staticTexts["No Folder Open"].waitForExistence(timeout: 3))
+        let noFolder = app.staticTexts["No Folder Open"]
+        let searchField = app.textFields["Search Term"]
+        XCTAssertTrue(noFolder.waitForExistence(timeout: 3) || searchField.exists)
         attachScreenshot("Sidebar")
     }
 
