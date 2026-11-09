@@ -289,6 +289,25 @@ struct EditorTextViewTests {
         #expect(textView.textContainer?.widthTracksTextView == true)
     }
 
+    @Test func keepsLegacyVerticalScrollerWhileWrapping() throws {
+        let fixture = try TestSupport.makeEditor("short")
+        defer { fixture.close() }
+        let textView = fixture.textView
+        let scrollView = try #require(textView.enclosingScrollView)
+        scrollView.scrollerStyle = .legacy
+        textView.setWrapsLines(true)
+        scrollView.tile()
+        #expect(!scrollView.autohidesScrollers)
+        #expect(scrollView.verticalScroller?.isHidden == false)
+        let width = scrollView.contentView.frame.width
+        textView.string = String(repeating: "word ", count: 2000)
+        textView.layoutManager?.ensureLayout(for: try #require(textView.textContainer))
+        scrollView.tile()
+        #expect(scrollView.contentView.frame.width == width)
+        textView.setWrapsLines(false)
+        #expect(scrollView.autohidesScrollers)
+    }
+
     @Test func validatesTextCommands() throws {
         let fixture = try TestSupport.makeEditor("x", fileName: "plain.txt")
         defer { fixture.close() }

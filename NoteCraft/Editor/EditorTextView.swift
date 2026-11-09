@@ -68,7 +68,7 @@ final class EditorTextView: NSTextView {
         scrollView.documentView = textView
         scrollView.hasVerticalScroller = true
         scrollView.hasHorizontalScroller = false
-        scrollView.autohidesScrollers = true
+        scrollView.autohidesScrollers = false
         scrollView.borderType = .noBorder
         scrollView.drawsBackground = true
         return (scrollView, textView)
@@ -100,8 +100,12 @@ final class EditorTextView: NSTextView {
     }
 
     /// Switches between soft wrapping at the window edge and horizontal scrolling.
+    ///
+    /// While wrapping, a legacy vertical scroller stays visible: hiding it whenever the text fits widens the text,
+    /// which can shorten the text enough to hide the scroller and then lengthen it again, without end.
     func setWrapsLines(_ wraps: Bool) {
         guard let container = textContainer, let scrollView = enclosingScrollView else { return }
+        scrollView.autohidesScrollers = !wraps
         if wraps {
             scrollView.hasHorizontalScroller = false
             isHorizontallyResizable = false
