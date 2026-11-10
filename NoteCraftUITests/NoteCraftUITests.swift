@@ -90,7 +90,10 @@ final class NoteCraftUITests: XCTestCase {
         wait(for: [hidden], timeout: 3)
         app.toolbars.buttons["Preview"].click()
         XCTAssertTrue(app.webViews.firstMatch.waitForExistence(timeout: 5))
-        XCTAssertTrue(app.toolbars.menuButtons["Format"].exists || app.toolbars.popUpButtons["Format"].exists || app.toolbars.buttons["Format"].exists)
+        let bold = app.toolbars.buttons["Bold"]
+        XCTAssertTrue(bold.waitForExistence(timeout: 3))
+        bold.click()
+        XCTAssertEqual(editor.value as? String, "Hello")
     }
 
     func testCommandPaletteRunsTransformation() {
