@@ -94,6 +94,11 @@ final class NoteCraftUITests: XCTestCase {
         XCTAssertTrue(bold.waitForExistence(timeout: 3))
         bold.click()
         XCTAssertEqual(editor.value as? String, "Hello")
+        app.toolbars.buttons["Heading"].click()
+        let heading = app.popovers.buttons["Heading 2"]
+        XCTAssertTrue(heading.waitForExistence(timeout: 3))
+        heading.click()
+        XCTAssertEqual(editor.value as? String, "## Hello")
     }
 
     func testCommandPaletteRunsTransformation() {

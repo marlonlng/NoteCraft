@@ -1391,16 +1391,6 @@
         }
       }
     },
-    "Headings" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Überschriften"
-          }
-        }
-      }
-    },
     "Hello NoteCraft" : {
       "localizations" : {
         "de" : {
@@ -1637,16 +1627,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einrücken mit"
-          }
-        }
-      }
-    },
-    "Indentation" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einrückung"
           }
         }
       }
@@ -2001,16 +1981,6 @@
         }
       }
     },
-    "Link and Image" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Link und Bild"
-          }
-        }
-      }
-    },
     "Link…" : {
       "localizations" : {
         "de" : {
@@ -2031,16 +2001,6 @@
         }
       }
     },
-    "Lists" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Listen"
-          }
-        }
-      }
-    },
     "Load External Content" : {
       "localizations" : {
         "de" : {
@@ -2057,6 +2017,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Markdown"
+          }
+        }
+      }
+    },
+    "Markdown Tools" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown-Werkzeuge"
           }
         }
       }
@@ -2497,16 +2467,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zitat"
-          }
-        }
-      }
-    },
-    "Quote and Code" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zitat und Code"
           }
         }
       }
@@ -3327,16 +3287,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Texteditor"
-          }
-        }
-      }
-    },
-    "Text Style" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Textstil"
           }
         }
       }

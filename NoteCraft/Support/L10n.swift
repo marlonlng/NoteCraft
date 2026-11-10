@@ -154,12 +154,7 @@ enum L10n {
     }
 
     enum MarkdownToolbar {
-        static let indentation = String(localized: "Indentation")
-        static let textStyle = String(localized: "Text Style")
-        static let headings = String(localized: "Headings")
-        static let lists = String(localized: "Lists")
-        static let quoteAndCode = String(localized: "Quote and Code")
-        static let linkAndImage = String(localized: "Link and Image")
+        static let tools = String(localized: "Markdown Tools")
         static let moreFormats = String(localized: "More Formats")
         static let link = String(localized: "Link")
         static let image = String(localized: "Image")

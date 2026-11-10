@@ -1,8 +1,13 @@
 import AppKit
 import NoteCraftKit
+import SwiftUI
 import UniformTypeIdentifiers
 
-extension EditorTextView: NSToolbarItemValidation {
+extension EditorTextView: NSToolbarItemValidation, NSPopoverDelegate {
+    private static var headingPopoverClosingClick: Int?
+    /// The heading styles popover while it is open.
+    static var headingPopover: NSPopover?
+
     /// Enables the Markdown tools of the toolbar while the editor shows an editable Markdown document.
     func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
         isEditable && isMarkdown
@@ -37,8 +42,67 @@ extension EditorTextView: NSToolbarItemValidation {
         apply(MarkdownEditing.insertLink(in: nsString, selection: selectedRange(), suggestedAddress: suggestedAddress), actionName: L10n.Undo.link)
     }
 
+    /// Opens the heading styles in a popover below the clicked toolbar button, or below the caret without a click.
+    ///
+    /// A click on the button that closes the open popover does not open it again.
+    @objc func showHeadingStyles(_ sender: Any?) {
+        let event = NSApp.currentEvent
+        let click = event?.type == .leftMouseUp ? event : nil
+        if let click, click.eventNumber == Self.headingPopoverClosingClick {
+            Self.headingPopoverClosingClick = nil
+            return
+        }
+        let popover = NSPopover()
+        popover.behavior = .transient
+        popover.delegate = self
+        let content = NSHostingController(rootView: HeadingStylesView(currentLevel: markdownFormatState.headingLevel) { [weak self, weak popover] level in
+            popover?.performClose(nil)
+            self?.applyHeading(level: level)
+        })
+        content.sizingOptions = .preferredContentSize
+        popover.contentViewController = content
+        if let click, let root = click.window?.contentView?.superview, let button = Self.innermostButton(at: click.locationInWindow, in: root) {
+            popover.show(relativeTo: button.bounds, of: button, preferredEdge: button.isFlipped ? .maxY : .minY)
+        } else {
+            popover.show(relativeTo: caretRect, of: self, preferredEdge: .maxY)
+        }
+        Self.headingPopover = popover
+    }
+
+    /// Remembers the click that closes the heading styles, so that a click on their button only closes them.
+    func popoverWillClose(_ notification: Notification) {
+        let event = NSApp.currentEvent
+        Self.headingPopoverClosingClick = event?.type == .leftMouseDown ? event?.eventNumber : nil
+    }
+
+    func popoverDidClose(_ notification: Notification) {
+        Self.headingPopover = nil
+    }
+
+    private var caretRect: NSRect {
+        guard let window else { return bounds }
+        let rect = convert(window.convertFromScreen(firstRect(forCharacterRange: selectedRange(), actualRange: nil)), from: nil)
+        return rect.insetBy(dx: -1, dy: 0)
+    }
+
+    /// Finds the innermost visible button under `location`, given in window coordinates, by walking down from `root`.
+    ///
+    /// Hit testing the toolbar returns the whole item group, so the tools are found by their frames instead.
+    static func innermostButton(at location: NSPoint, in root: NSView) -> NSButton? {
+        var view: NSView? = root
+        var button: NSButton?
+        while let current = view {
+            if let found = current as? NSButton {
+                button = found
+            }
+            let point = current.convert(location, from: nil)
+            view = current.subviews.last { !$0.isHidden && $0.frame.contains(point) }
+        }
+        return button
+    }
+
     @objc func formatHeading(_ sender: Any?) {
-        applyHeading(level: (sender as? NSMenuItem)?.tag ?? (sender as? NSToolbarItem)?.tag ?? 0)
+        applyHeading(level: (sender as? NSMenuItem)?.tag ?? 0)
     }
 
     /// Turns the selected lines into headings of `level`, or into body text when they already have that level.

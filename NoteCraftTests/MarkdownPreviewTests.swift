@@ -518,35 +518,39 @@ struct MarkdownToolbarTests {
         defer { fixture.close() }
         let controller = fixture.windowController
         let toolbar = try #require(controller.window?.toolbar)
-        let tools = NSToolbarItem.Identifier.markdownTools
+        let items = NSToolbarItem.Identifier.markdownToolItems
         let defaults = controller.toolbarDefaultItemIdentifiers(toolbar)
-        #expect(Array(defaults.drop { $0 != tools[0] }.prefix(tools.count)) == tools)
+        #expect(Array(defaults.drop { $0 != items[0] }.prefix(items.count)) == items)
         #expect(defaults.contains(.preview) && !defaults.contains(.format))
         #expect(!controller.toolbarAllowedItemIdentifiers(toolbar).contains(.format))
-        #expect(toolbar.centeredItemIdentifiers == Set(tools))
+        #expect(toolbar.centeredItemIdentifiers == Set(items))
         #expect(toolbar.items.first { $0.itemIdentifier == .preview }?.visibilityPriority == .high)
         #expect(toolbar.items.first { $0.itemIdentifier == .share }?.visibilityPriority == .high)
         #expect(toolbar.items.first { $0.itemIdentifier == .markdownMore }?.visibilityPriority == .low)
-        #expect(toolbar.items.first { $0.itemIdentifier == .markdownTextStyle }?.visibilityPriority == .standard)
-        for identifier in tools {
+        #expect(toolbar.items.first { $0.itemIdentifier == .markdownTools }?.visibilityPriority == .standard)
+        for identifier in items {
             let item = try #require(controller.toolbar(toolbar, itemForItemIdentifier: identifier, willBeInsertedIntoToolbar: true))
             #expect(!item.label.isEmpty)
         }
-        let style = try #require(controller.makeMarkdownTool(.markdownTextStyle) as? NSToolbarItemGroup)
-        #expect(style.label == L10n.MarkdownToolbar.textStyle)
-        #expect(style.controlRepresentation == .expanded)
-        #expect(style.subitems.map(\.toolTip) == [L10n.Menu.bold, L10n.Menu.italic, L10n.Menu.strikethrough])
-        #expect(style.subitems.map(\.action) == [#selector(EditorTextView.formatBold(_:)), #selector(EditorTextView.formatItalic(_:)), #selector(EditorTextView.formatStrikethrough(_:))])
-        #expect(style.subitems.allSatisfy { $0.image != nil && $0.target == nil })
-        let headings = try #require(controller.makeMarkdownTool(.markdownHeadings) as? NSToolbarItemGroup)
-        #expect(headings.subitems.map(\.toolTip) == (1...3).map(L10n.Menu.headingLevel))
-        #expect(headings.subitems.map(\.tag) == [1, 2, 3])
-        #expect(headings.subitems.allSatisfy { $0.image?.isTemplate == true && $0.image?.size.width ?? 0 > 0 })
-        for (identifier, tools) in EditorWindowController.markdownToolsByGroup {
-            #expect(tools.allSatisfy { $0.image !== $0.activeImage }, "\(identifier.rawValue)")
-        }
+        let tools = try #require(controller.makeMarkdownTool(.markdownTools) as? NSToolbarItemGroup)
+        #expect(tools.label == L10n.MarkdownToolbar.tools)
+        #expect(tools.controlRepresentation == .expanded)
+        #expect(tools.subitems.map(\.toolTip) == [
+            L10n.Menu.bold, L10n.Menu.italic, L10n.Menu.strikethrough, L10n.Menu.heading, L10n.Menu.bulletedList,
+            L10n.Menu.numberedList, L10n.Menu.quote, L10n.Menu.code, L10n.MarkdownToolbar.link, L10n.MarkdownToolbar.image
+        ])
+        #expect(tools.subitems.map(\.action) == EditorWindowController.markdownTools.map(\.action))
+        #expect(tools.subitems.allSatisfy { $0.image != nil && $0.target == nil })
+        #expect(EditorWindowController.markdownTools.allSatisfy { $0.image !== $0.activeImage })
+        let heading = tools.subitems[3]
+        #expect(heading.action == #selector(EditorTextView.showHeadingStyles(_:)))
+        let levels = try #require(heading.menuFormRepresentation?.submenu)
+        #expect(levels.items.map(\.tag) == Array(0...6))
+        #expect(levels.items.allSatisfy { $0.action == #selector(EditorTextView.formatHeading(_:)) && $0.keyEquivalent.isEmpty })
+        #expect(tools.subitems.filter { $0.menuFormRepresentation?.submenu != nil }.count == 1)
         let more = try #require(controller.makeMarkdownTool(.markdownMore) as? NSMenuToolbarItem)
-        #expect(more.menu.items.first?.action == #selector(EditorTextView.toggleTask(_:)))
+        #expect(more.menu.items.prefix(2).map(\.action) == [#selector(EditorTextView.shiftRight(_:)), #selector(EditorTextView.shiftLeft(_:))])
+        #expect(more.menu.items.contains { $0.action == #selector(EditorTextView.toggleTask(_:)) })
         #expect(more.menu.items.last?.action == #selector(EditorTextView.updateTableOfContents(_:)))
         #expect(controller.makeMarkdownTool(.find) == nil)
         let preview = try #require(controller.toolbar(toolbar, itemForItemIdentifier: .preview, willBeInsertedIntoToolbar: true))
@@ -556,9 +560,9 @@ struct MarkdownToolbarTests {
         #expect(preview.toolTip == L10n.Menu.hidePreview)
         let find = try #require(controller.toolbar(toolbar, itemForItemIdentifier: .find, willBeInsertedIntoToolbar: true))
         #expect(fixture.editor.validateToolbarItem(find))
-        #expect(fixture.textView.validateToolbarItem(style.subitems[0]))
+        #expect(fixture.textView.validateToolbarItem(tools.subitems[0]))
         fixture.textView.isEditable = false
-        #expect(!fixture.textView.validateToolbarItem(style.subitems[0]))
+        #expect(!fixture.textView.validateToolbarItem(tools.subitems[0]))
     }
 
     @Test func runsToolsAndHighlightsFormats() throws {
@@ -568,51 +572,54 @@ struct MarkdownToolbarTests {
         let toolbar = try #require(controller.window?.toolbar)
         let textView = fixture.textView
         fixture.windowController.window?.makeFirstResponder(textView)
-        func click(_ identifier: NSToolbarItem.Identifier, _ index: Int) throws {
-            let subitem = try group(identifier, in: toolbar).subitems[index]
-            #expect(NSApp.sendAction(try #require(subitem.action), to: textView, from: subitem))
+        func tool(_ label: String) throws -> (NSToolbarItem, MarkdownTool) {
+            let index = try #require(EditorWindowController.markdownTools.firstIndex { $0.label == label })
+            return (try group(.markdownTools, in: toolbar).subitems[index], EditorWindowController.markdownTools[index])
         }
-        func isActive(_ identifier: NSToolbarItem.Identifier, _ index: Int) throws -> Bool {
-            let subitem = try group(identifier, in: toolbar).subitems[index]
-            let tool = try #require(EditorWindowController.markdownToolsByGroup[identifier]?[index])
+        func send(_ item: NSToolbarItem) throws {
+            #expect(NSApp.sendAction(try #require(item.action), to: textView, from: item))
+        }
+        func isActive(_ label: String) throws -> Bool {
+            let (subitem, tool) = try tool(label)
             #expect(subitem.image === tool.activeImage || subitem.image === tool.image)
             return subitem.image === tool.activeImage
         }
         textView.setSelectedRange(NSRange(location: 0, length: 4))
-        try click(.markdownTextStyle, 0)
+        try send(try tool(L10n.Menu.bold).0)
         #expect(fixture.text == "**word**")
-        #expect(try isActive(.markdownTextStyle, 0))
-        #expect(try !isActive(.markdownTextStyle, 1))
-        try click(.markdownTextStyle, 0)
+        #expect(try isActive(L10n.Menu.bold))
+        #expect(try !isActive(L10n.Menu.italic))
+        try send(try tool(L10n.Menu.bold).0)
         #expect(fixture.text == "word")
-        #expect(try !isActive(.markdownTextStyle, 0))
-        try click(.markdownHeadings, 1)
+        #expect(try !isActive(L10n.Menu.bold))
+        textView.applyHeading(level: 2)
         #expect(fixture.text == "## word")
-        #expect(try isActive(.markdownHeadings, 1))
-        #expect(controller.markdownToolStates[.markdownHeadings] == [false, true, false])
-        try click(.markdownHeadings, 1)
-        try click(.markdownLists, 1)
+        #expect(controller.markdownToolStates == EditorWindowController.markdownTools.map { $0.label == L10n.Menu.heading })
+        textView.applyHeading(level: 2)
+        #expect(try !isActive(L10n.Menu.heading))
+        try send(try tool(L10n.Menu.numberedList).0)
         #expect(fixture.text == "1. word")
-        #expect(try isActive(.markdownLists, 1))
-        try click(.markdownLists, 0)
+        #expect(try isActive(L10n.Menu.numberedList))
+        try send(try tool(L10n.Menu.bulletedList).0)
         #expect(fixture.text == "- word")
-        try click(.markdownIndentation, 1)
+        let more = try #require(toolbar.items.first { $0.itemIdentifier == .markdownMore } as? NSMenuToolbarItem)
+        #expect(NSApp.sendAction(try #require(more.menu.items[0].action), to: textView, from: more.menu.items[0]))
         #expect(fixture.text.hasPrefix(" ") || fixture.text.hasPrefix("\t"))
-        try click(.markdownIndentation, 0)
+        #expect(NSApp.sendAction(try #require(more.menu.items[1].action), to: textView, from: more.menu.items[1]))
         #expect(fixture.text == "- word")
-        try click(.markdownLists, 0)
-        try click(.markdownQuoteAndCode, 0)
+        try send(try tool(L10n.Menu.bulletedList).0)
+        try send(try tool(L10n.Menu.quote).0)
         #expect(fixture.text == "> word")
-        #expect(try isActive(.markdownQuoteAndCode, 0))
-        try click(.markdownQuoteAndCode, 0)
-        try click(.markdownQuoteAndCode, 1)
+        #expect(try isActive(L10n.Menu.quote))
+        try send(try tool(L10n.Menu.quote).0)
+        try send(try tool(L10n.Menu.code).0)
         #expect(fixture.text == "`word`")
-        #expect(try isActive(.markdownQuoteAndCode, 1))
+        #expect(try isActive(L10n.Menu.code))
         textView.string = "a **b** c"
         textView.setSelectedRange(NSRange(location: 5, length: 0))
-        #expect(try isActive(.markdownTextStyle, 0))
+        #expect(try isActive(L10n.Menu.bold))
         textView.setSelectedRange(NSRange(location: 0, length: 0))
-        #expect(try !isActive(.markdownTextStyle, 0))
+        #expect(try !isActive(L10n.Menu.bold))
     }
 
     @Test func hidesMarkdownItemsForOtherLanguages() throws {
@@ -622,19 +629,63 @@ struct MarkdownToolbarTests {
         #expect(markdownItems(of: toolbar).count == NSToolbarItem.Identifier.markdownItems.count)
         #expect(markdownItems(of: toolbar).allSatisfy { !$0.isHidden })
         fixture.textView.setSelectedRange(NSRange(location: 2, length: 0))
-        #expect(fixture.windowController.markdownToolStates[.markdownTextStyle]?.first == true)
+        #expect(fixture.windowController.markdownToolStates == EditorWindowController.markdownTools.map { $0.label == L10n.Menu.bold })
         fixture.document.setLanguage(LanguageCatalog.swift)
         #expect(markdownItems(of: toolbar).allSatisfy { $0.isHidden })
-        #expect(fixture.windowController.markdownToolStates[.markdownTextStyle]?.first == false)
+        #expect(!fixture.windowController.markdownToolStates.contains(true))
         let preview = try #require(markdownItems(of: toolbar).first { $0.itemIdentifier == .preview })
         #expect(!fixture.editor.validateToolbarItem(preview))
-        #expect(!fixture.textView.validateToolbarItem(try group(.markdownLists, in: toolbar).subitems[0]))
+        #expect(!fixture.textView.validateToolbarItem(try group(.markdownTools, in: toolbar).subitems[4]))
         fixture.document.setLanguage(LanguageCatalog.markdown)
         #expect(markdownItems(of: toolbar).allSatisfy { !$0.isHidden })
         let plain = try TestSupport.makeEditor("x")
         defer { plain.close() }
         let plainToolbar = try #require(plain.windowController.window?.toolbar)
-        #expect(plain.windowController.toolbar(plainToolbar, itemForItemIdentifier: .markdownLists, willBeInsertedIntoToolbar: true)?.isHidden == true)
+        #expect(plain.windowController.toolbar(plainToolbar, itemForItemIdentifier: .markdownTools, willBeInsertedIntoToolbar: true)?.isHidden == true)
+    }
+
+    @Test func choosesHeadingStylesInPopover() throws {
+        let fixture = try TestSupport.makeEditor("## word", fileName: "a.md")
+        defer { fixture.close() }
+        let textView = fixture.textView
+        textView.setSelectedRange(NSRange(location: 4, length: 0))
+        textView.showHeadingStyles(nil)
+        let popover = try #require(EditorTextView.headingPopover)
+        let content = try #require(popover.contentViewController as? NSHostingController<HeadingStylesView>)
+        #expect(content.rootView.currentLevel == 2)
+        content.rootView.choose(1)
+        #expect(fixture.text == "# word")
+        #expect(textView.undoManager?.undoActionName == L10n.Undo.formatting)
+        textView.popoverWillClose(Notification(name: NSPopover.willCloseNotification))
+        textView.popoverDidClose(Notification(name: NSPopover.didCloseNotification))
+        #expect(EditorTextView.headingPopover == nil)
+        var chosen: [Int] = []
+        let view = HeadingStylesView(currentLevel: 0) { chosen.append($0) }
+        #expect(TestSupport.render(view, size: NSSize(width: 220, height: 260)) != nil)
+        view.choose(6)
+        #expect(chosen == [6])
+    }
+
+    @Test func findsTheClickedToolbarButton() throws {
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 300, height: 100), styleMask: [.titled], backing: .buffered, defer: true)
+        let root = try #require(window.contentView)
+        let group = NSView(frame: NSRect(x: 50, y: 10, width: 200, height: 40))
+        let first = NSButton(frame: NSRect(x: 0, y: 0, width: 40, height: 40))
+        let second = NSButton(frame: NSRect(x: 40, y: 0, width: 40, height: 40))
+        let image = NSImageView(frame: NSRect(x: 10, y: 10, width: 20, height: 20))
+        second.addSubview(image)
+        let hidden = NSButton(frame: NSRect(x: 80, y: 0, width: 40, height: 40))
+        hidden.isHidden = true
+        [first, second, hidden].forEach(group.addSubview)
+        root.addSubview(group)
+        let origin = root.convert(NSPoint.zero, to: nil)
+        func point(_ x: CGFloat, _ y: CGFloat) -> NSPoint {
+            NSPoint(x: origin.x + x, y: origin.y + y)
+        }
+        #expect(EditorTextView.innermostButton(at: point(70, 20), in: root) === first)
+        #expect(EditorTextView.innermostButton(at: point(110, 30), in: root) === second)
+        #expect(EditorTextView.innermostButton(at: point(150, 20), in: root) == nil)
+        #expect(EditorTextView.innermostButton(at: point(10, 20), in: root) == nil)
     }
 
     @Test func addsMarkdownItemsOnceToSavedToolbars() throws {
@@ -660,17 +711,25 @@ struct MarkdownToolbarTests {
         let identifiers = toolbar.items.map(\.itemIdentifier)
         #expect(markdownItems(of: toolbar).count == NSToolbarItem.Identifier.markdownItems.count)
         #expect(identifiers.firstIndex(of: .preview).map { $0 + 1 } == identifiers.firstIndex(of: .commandPalette))
-        let first = try #require(identifiers.firstIndex(of: .markdownIndentation))
+        let first = try #require(identifiers.firstIndex(of: .markdownTools))
         #expect(identifiers[first - 1] == .flexibleSpace)
-        #expect(Array(identifiers[first..<first + 7]) == NSToolbarItem.Identifier.markdownTools)
-        #expect(identifiers[first + 7] == .flexibleSpace)
+        #expect(Array(identifiers[first..<first + 2]) == NSToolbarItem.Identifier.markdownToolItems)
+        #expect(identifiers[first + 2] == .flexibleSpace)
         removeMarkdownItems()
         EditorWindowController.addMarkdownItems(to: toolbar, defaults: defaults)
         #expect(markdownItems(of: toolbar).isEmpty)
         let upgraded = TestSupport.makeDefaults()
         upgraded.set(true, forKey: EditorWindowController.markdownToolbarItemsKey)
         EditorWindowController.addMarkdownItems(to: toolbar, defaults: upgraded)
-        #expect(markdownItems(of: toolbar).count == NSToolbarItem.Identifier.markdownTools.count)
+        #expect(markdownItems(of: toolbar).count == NSToolbarItem.Identifier.markdownToolItems.count)
+        toolbar.removeItem(at: try #require(toolbar.items.firstIndex { $0.itemIdentifier == .markdownTools }))
+        let spaces = toolbar.items.filter { $0.itemIdentifier == .flexibleSpace }.count
+        let earlier = TestSupport.makeDefaults()
+        earlier.set(true, forKey: EditorWindowController.markdownToolbarItemsKey)
+        EditorWindowController.addMarkdownItems(to: toolbar, defaults: earlier)
+        let restored = toolbar.items.map(\.itemIdentifier)
+        #expect(restored.firstIndex(of: .markdownTools).map { $0 + 1 } == restored.firstIndex(of: .markdownMore))
+        #expect(restored.filter { $0 == .flexibleSpace }.count == spaces)
     }
 
     @Test func addsFormatSubmenuToContextMenu() throws {

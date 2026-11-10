@@ -11,17 +11,10 @@ extension NSToolbarItem.Identifier {
     static let share = NSToolbarItem.Identifier("NoteCraftShare")
     static let preview = NSToolbarItem.Identifier("NoteCraftPreview")
     static let format = NSToolbarItem.Identifier("NoteCraftFormat")
-    static let markdownIndentation = NSToolbarItem.Identifier("NoteCraftMarkdownIndentation")
-    static let markdownTextStyle = NSToolbarItem.Identifier("NoteCraftMarkdownTextStyle")
-    static let markdownHeadings = NSToolbarItem.Identifier("NoteCraftMarkdownHeadings")
-    static let markdownLists = NSToolbarItem.Identifier("NoteCraftMarkdownLists")
-    static let markdownQuoteAndCode = NSToolbarItem.Identifier("NoteCraftMarkdownQuoteAndCode")
-    static let markdownLinkAndImage = NSToolbarItem.Identifier("NoteCraftMarkdownLinkAndImage")
+    static let markdownTools = NSToolbarItem.Identifier("NoteCraftMarkdownTools")
     static let markdownMore = NSToolbarItem.Identifier("NoteCraftMarkdownMore")
-    static let markdownTools: [NSToolbarItem.Identifier] = [
-        .markdownIndentation, .markdownTextStyle, .markdownHeadings, .markdownLists, .markdownQuoteAndCode, .markdownLinkAndImage, .markdownMore
-    ]
-    static let markdownItems: [NSToolbarItem.Identifier] = markdownTools + [.preview]
+    static let markdownToolItems: [NSToolbarItem.Identifier] = [.markdownTools, .markdownMore]
+    static let markdownItems: [NSToolbarItem.Identifier] = markdownToolItems + [.preview]
 }
 
 final class EditorSplitViewController: NSSplitViewController {
@@ -101,12 +94,12 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     static let tabbingIdentifier = "NoteCraftEditor"
     static let toolbarIdentifier = "NoteCraftEditorToolbar"
     static let markdownToolbarItemsKey = "AddedMarkdownToolbarItems"
-    static let markdownToolsKey = "AddedMarkdownToolbarTools"
+    static let markdownToolsKey = "AddedMarkdownToolCapsule"
 
     let editorViewController: EditorViewController
     let splitController: EditorSplitViewController
     private var palettePanel: CommandPalettePanel?
-    var markdownToolStates: [NSToolbarItem.Identifier: [Bool]] = [:]
+    var markdownToolStates: [Bool] = []
 
     init(
         document: TextDocument,
@@ -223,7 +216,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
         toolbar.displayMode = .iconOnly
         toolbar.allowsUserCustomization = true
         toolbar.autosavesConfiguration = true
-        toolbar.centeredItemIdentifiers = Set(NSToolbarItem.Identifier.markdownTools)
+        toolbar.centeredItemIdentifiers = Set(NSToolbarItem.Identifier.markdownToolItems)
         window?.toolbar = toolbar
         Self.addMarkdownItems(to: toolbar, defaults: defaults)
     }
@@ -231,7 +224,8 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     /// Updates toolbars whose configuration was saved before the Markdown items existed, once per item set.
     ///
     /// The preview item goes in front of the command palette. The Markdown tools replace the former format menu
-    /// and sit between two flexible spaces after the sidebar items.
+    /// and sit with the remaining formats between two flexible spaces after the sidebar items; where the toolbar
+    /// already has the remaining formats, the tools go right in front of them.
     static func addMarkdownItems(to toolbar: NSToolbar, defaults: UserDefaults) {
         if !defaults.bool(forKey: markdownToolbarItemsKey) {
             defaults.set(true, forKey: markdownToolbarItemsKey)
@@ -246,13 +240,15 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
             toolbar.removeItem(at: index)
         }
         let identifiers = toolbar.items.map(\.itemIdentifier)
-        guard !NSToolbarItem.Identifier.markdownTools.contains(where: identifiers.contains) else { return }
-        var index = (identifiers.firstIndex(of: .flexibleSpace) ?? identifiers.firstIndex(of: .sidebarTrackingSeparator) ?? -1) + 1
-        for identifier in NSToolbarItem.Identifier.markdownTools {
-            toolbar.insertItem(withItemIdentifier: identifier, at: index)
-            index += 1
+        guard !identifiers.contains(.markdownTools) else { return }
+        if let index = identifiers.firstIndex(of: .markdownMore) {
+            toolbar.insertItem(withItemIdentifier: .markdownTools, at: index)
+            return
         }
-        toolbar.insertItem(withItemIdentifier: .flexibleSpace, at: index)
+        let index = (identifiers.firstIndex(of: .flexibleSpace) ?? identifiers.firstIndex(of: .sidebarTrackingSeparator) ?? -1) + 1
+        for (offset, identifier) in (NSToolbarItem.Identifier.markdownToolItems + [.flexibleSpace]).enumerated() {
+            toolbar.insertItem(withItemIdentifier: identifier, at: index + offset)
+        }
     }
 
     /// Shows the Markdown tools and the preview item only while the document is Markdown.
@@ -266,13 +262,13 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
 
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         [.toggleSidebar, .sidebarTrackingSeparator, .flexibleSpace]
-            + NSToolbarItem.Identifier.markdownTools
+            + NSToolbarItem.Identifier.markdownToolItems
             + [.flexibleSpace, .preview, .commandPalette, .find, .share]
     }
 
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         [.toggleSidebar, .sidebarTrackingSeparator, .flexibleSpace, .space]
-            + NSToolbarItem.Identifier.markdownTools
+            + NSToolbarItem.Identifier.markdownToolItems
             + [.preview, .commandPalette, .find, .share, .print]
     }
 
@@ -316,11 +312,11 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     }
 
     /// Which items stay visible in narrow windows: the preview and the general commands before the Markdown tools,
-    /// and indentation, link and image and the remaining formats go to the overflow menu first.
+    /// and the remaining formats go to the overflow menu first.
     static func visibilityPriority(of identifier: NSToolbarItem.Identifier) -> NSToolbarItem.VisibilityPriority {
         switch identifier {
         case .preview, .commandPalette, .find, .share: .high
-        case .markdownIndentation, .markdownLinkAndImage, .markdownMore: .low
+        case .markdownMore: .low
         default: .standard
         }
     }

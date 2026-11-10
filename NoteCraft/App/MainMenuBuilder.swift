@@ -202,12 +202,7 @@ struct MainMenuBuilder {
         menu.addItem(item(L10n.Menu.link, #selector(EditorTextView.insertMarkdownLink(_:)), key: key("k")))
         menu.addItem(item(L10n.Menu.insertImage, #selector(EditorTextView.insertMarkdownImage(_:))))
         menu.addItem(.separator())
-        let headingMenu = NSMenu(title: L10n.Menu.heading)
-        headingMenu.addItem(item(L10n.Menu.bodyText, #selector(EditorTextView.formatHeading(_:)), key: key("0"), modifiers: [.command, .option], tag: 0))
-        for level in 1...6 {
-            headingMenu.addItem(item(L10n.Menu.headingLevel(level), #selector(EditorTextView.formatHeading(_:)), key: key("\(level)"), modifiers: [.command, .option], tag: level))
-        }
-        menu.addItem(submenuItem(L10n.Menu.heading, headingMenu))
+        menu.addItem(submenuItem(L10n.Menu.heading, makeHeadingMenu(includesShortcuts: includesShortcuts)))
         menu.addItem(item(L10n.Menu.quote, #selector(EditorTextView.formatQuote(_:))))
         menu.addItem(item(L10n.Menu.bulletedList, #selector(EditorTextView.toggleBulletedList(_:)), key: key("7"), modifiers: [.command, .shift]))
         menu.addItem(item(L10n.Menu.numberedList, #selector(EditorTextView.toggleNumberedList(_:)), key: key("9"), modifiers: [.command, .shift]))
@@ -217,9 +212,27 @@ struct MainMenuBuilder {
         return menu
     }
 
-    /// The Format commands that the Markdown toolbar has no button for: tasks, tables and the table of contents.
+    /// Builds the body text and heading levels 1 to 6, with or without their shortcuts.
+    func makeHeadingMenu(includesShortcuts: Bool = true) -> NSMenu {
+        let menu = NSMenu(title: L10n.Menu.heading)
+        for level in 0...6 {
+            menu.addItem(item(
+                level == 0 ? L10n.Menu.bodyText : L10n.Menu.headingLevel(level),
+                #selector(EditorTextView.formatHeading(_:)),
+                key: includesShortcuts ? "\(level)" : "",
+                modifiers: [.command, .option],
+                tag: level
+            ))
+        }
+        return menu
+    }
+
+    /// The commands that the Markdown tools have no button for: indentation, tasks, tables and the table of contents.
     func makeMoreFormatsMenu() -> NSMenu {
         let menu = NSMenu(title: L10n.MarkdownToolbar.moreFormats)
+        menu.addItem(item(L10n.Menu.shiftRight, #selector(EditorTextView.shiftRight(_:))))
+        menu.addItem(item(L10n.Menu.shiftLeft, #selector(EditorTextView.shiftLeft(_:))))
+        menu.addItem(.separator())
         menu.addItem(item(L10n.Menu.toggleTask, #selector(EditorTextView.toggleTask(_:))))
         addTableItems(to: menu)
         return menu
