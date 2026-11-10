@@ -33,13 +33,18 @@ final class EditorSplitViewController: NSSplitViewController {
         sidebarItem.minimumThickness = 200
         sidebarItem.maximumThickness = 420
         sidebarItem.canCollapse = true
-        let storedVisibility = UserDefaults.standard.object(forKey: Self.sidebarVisibilityKey) as? Bool
-        sidebarItem.isCollapsed = !(storedVisibility ?? (workspace.folderURL != nil))
+        sidebarItem.isCollapsed = !Self.showsSidebar(in: .standard, hasFolder: workspace.folderURL != nil)
         super.init(nibName: nil, bundle: nil)
         let contentItem = NSSplitViewItem(viewController: editor)
         contentItem.minimumThickness = 320
         addSplitViewItem(sidebarItem)
         addSplitViewItem(contentItem)
+    }
+
+    /// Whether new windows show the sidebar: the stored choice, which a launch argument such as `-ShowsSidebar NO`
+    /// gives as text, or else whether a folder is open.
+    static func showsSidebar(in defaults: UserDefaults, hasFolder: Bool) -> Bool {
+        defaults.object(forKey: sidebarVisibilityKey) == nil ? hasFolder : defaults.bool(forKey: sidebarVisibilityKey)
     }
 
     @available(*, unavailable)

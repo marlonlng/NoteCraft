@@ -263,6 +263,19 @@ struct WindowTests {
         UserDefaults.standard.set(wasVisible, forKey: EditorSplitViewController.sidebarVisibilityKey)
     }
 
+    @Test func readsSidebarVisibilityFromLaunchArguments() {
+        let defaults = TestSupport.makeDefaults()
+        let key = EditorSplitViewController.sidebarVisibilityKey
+        #expect(EditorSplitViewController.showsSidebar(in: defaults, hasFolder: true))
+        #expect(!EditorSplitViewController.showsSidebar(in: defaults, hasFolder: false))
+        defaults.set("NO", forKey: key)
+        #expect(!EditorSplitViewController.showsSidebar(in: defaults, hasFolder: true))
+        defaults.set("YES", forKey: key)
+        #expect(EditorSplitViewController.showsSidebar(in: defaults, hasFolder: false))
+        defaults.set(false, forKey: key)
+        #expect(!EditorSplitViewController.showsSidebar(in: defaults, hasFolder: true))
+    }
+
     @Test func prefillsFileSearchFromSelection() throws {
         let fixture = try TestSupport.makeEditor("needle in haystack")
         defer { fixture.close() }
