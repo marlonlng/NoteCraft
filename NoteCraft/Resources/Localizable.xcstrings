@@ -331,6 +331,16 @@
         }
       }
     },
+    "Bulleted List" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufzählung"
+          }
+        }
+      }
+    },
     "CR – Classic Mac OS" : {
       "localizations" : {
         "de" : {
@@ -587,6 +597,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Klammern und Anführungszeichen automatisch schließen"
+          }
+        }
+      }
+    },
+    "Code" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code"
           }
         }
       }
@@ -1371,6 +1391,16 @@
         }
       }
     },
+    "Headings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überschriften"
+          }
+        }
+      }
+    },
     "Hello NoteCraft" : {
       "localizations" : {
         "de" : {
@@ -1521,6 +1551,16 @@
         }
       }
     },
+    "Image" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild"
+          }
+        }
+      }
+    },
     "Images from the internet load only when you allow it. NoteCraft makes no other connections to the internet." : {
       "localizations" : {
         "de" : {
@@ -1531,12 +1571,12 @@
         }
       }
     },
-    "In Markdown documents, ⌥⌘P shows the preview. While it is open, “Print” prints the rendered document." : {
+    "In Markdown documents, ⌥⌘P shows the preview and the toolbar formats text, headings, lists and code. While the preview is open, “Print” prints the rendered document." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In Markdown-Dokumenten blendet ⌥⌘P die Vorschau ein. Ist sie offen, druckt „Drucken“ das gerenderte Dokument."
+            "value" : "In Markdown-Dokumenten blendet ⌥⌘P die Vorschau ein, und die Symbolleiste formatiert Text, Überschriften, Listen und Code. Ist die Vorschau offen, druckt „Drucken“ das gerenderte Dokument."
           }
         }
       }
@@ -1621,12 +1661,12 @@
         }
       }
     },
-    "Inline Code" : {
+    "Insert" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inline-Code"
+            "value" : "Einfügen"
           }
         }
       }
@@ -1637,6 +1677,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bild einfügen"
+          }
+        }
+      }
+    },
+    "Insert Image…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild einfügen …"
           }
         }
       }
@@ -1951,12 +2001,42 @@
         }
       }
     },
+    "Link and Image" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link und Bild"
+          }
+        }
+      }
+    },
     "Link…" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Link …"
+          }
+        }
+      }
+    },
+    "List" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste"
+          }
+        }
+      }
+    },
+    "Lists" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listen"
           }
         }
       }
@@ -2037,6 +2117,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gemischte Zeilenenden"
+          }
+        }
+      }
+    },
+    "More Formats" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere Formate"
           }
         }
       }
@@ -2177,6 +2267,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "NoteCraft wechselt automatisch mit dem Erscheinungsbild des Systems."
+          }
+        }
+      }
+    },
+    "Numbered List" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nummerierte Liste"
           }
         }
       }
@@ -2397,6 +2497,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zitat"
+          }
+        }
+      }
+    },
+    "Quote and Code" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zitat und Code"
           }
         }
       }
@@ -3217,6 +3327,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Texteditor"
+          }
+        }
+      }
+    },
+    "Text Style" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Textstil"
           }
         }
       }

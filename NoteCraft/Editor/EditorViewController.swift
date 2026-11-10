@@ -30,6 +30,7 @@ final class EditorViewController: NSViewController {
     var ignoresEditorScrollUntil = Date.distantPast
     var ignoresPreviewScrollUntil = Date.distantPast
     var onDocumentAttributesChange: (() -> Void)?
+    var onEditingStateChange: (() -> Void)?
     private(set) var rulerView: LineNumberRulerView!
     private(set) var highlightController: SyntaxHighlightController!
     private(set) var lineIndex = LineIndex(text: "")
@@ -346,11 +347,13 @@ extension EditorViewController: NSTextStorageDelegate, NSTextViewDelegate {
             scheduleFindRefresh()
             schedulePreviewUpdate()
             updateStatus()
+            onEditingStateChange?()
         }
     }
 
     func textViewDidChangeSelection(_ notification: Notification) {
         updateStatus()
+        onEditingStateChange?()
         rulerView.needsDisplay = true
         findBarModel.updateCurrentMatch()
         document.invalidateRestorableState()

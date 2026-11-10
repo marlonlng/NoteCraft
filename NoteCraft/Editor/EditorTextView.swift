@@ -401,7 +401,7 @@ final class EditorTextView: NSTextView {
         if let urls = sender.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: options) as? [URL],
            isMarkdown, !urls.isEmpty, urls.allSatisfy(Self.isImageFile) {
             let location = characterIndexForInsertion(at: convert(sender.draggingLocation, from: nil))
-            return insertImages(urls, at: location)
+            return insertImages(urls, replacing: NSRange(location: location, length: 0))
         }
         if let urls = sender.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: options) as? [URL],
            !urls.isEmpty, let onOpenFiles {

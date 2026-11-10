@@ -52,6 +52,8 @@ struct HelpView: View {
             ShortcutEntry(keys: "⌘I", title: L10n.Menu.italic),
             ShortcutEntry(keys: "⌘K", title: L10n.Menu.link),
             ShortcutEntry(keys: "⌥⌘1–6", title: L10n.Menu.heading),
+            ShortcutEntry(keys: "⇧⌘7", title: L10n.Menu.bulletedList),
+            ShortcutEntry(keys: "⇧⌘9", title: L10n.Menu.numberedList),
             ShortcutEntry(keys: "⇧⌘L", title: L10n.Menu.toggleTask)
         ])
     ]

@@ -127,11 +127,15 @@ enum L10n {
         static let bold = String(localized: "Bold")
         static let italic = String(localized: "Italic")
         static let strikethrough = String(localized: "Strikethrough")
-        static let inlineCode = String(localized: "Inline Code")
+        static let code = String(localized: "Code")
         static let link = String(localized: "Link…")
+        static let insertImage = String(localized: "Insert Image…")
+        static let insertImagePrompt = String(localized: "Insert")
         static let heading = String(localized: "Heading")
         static let bodyText = String(localized: "Body Text")
         static let quote = String(localized: "Quote")
+        static let bulletedList = String(localized: "Bulleted List")
+        static let numberedList = String(localized: "Numbered List")
         static let toggleTask = String(localized: "Toggle Task")
         static let table = String(localized: "Table")
         static let insertTable = String(localized: "Insert Table")
@@ -147,6 +151,18 @@ enum L10n {
         static func headingLevel(_ level: Int) -> String {
             String(localized: "Heading \(level)")
         }
+    }
+
+    enum MarkdownToolbar {
+        static let indentation = String(localized: "Indentation")
+        static let textStyle = String(localized: "Text Style")
+        static let headings = String(localized: "Headings")
+        static let lists = String(localized: "Lists")
+        static let quoteAndCode = String(localized: "Quote and Code")
+        static let linkAndImage = String(localized: "Link and Image")
+        static let moreFormats = String(localized: "More Formats")
+        static let link = String(localized: "Link")
+        static let image = String(localized: "Image")
     }
 
     enum Markdown {
@@ -456,7 +472,7 @@ enum L10n {
         static let tipEncoding = String(localized: "Click encoding, line ending or indentation in the status bar to change it.")
         static let tipVersions = String(localized: "Use “File › Revert To › Browse All Versions” to bring back earlier versions.")
         static let markdownSection = String(localized: "Markdown")
-        static let tipMarkdown = String(localized: "In Markdown documents, ⌥⌘P shows the preview. While it is open, “Print” prints the rendered document.")
+        static let tipMarkdown = String(localized: "In Markdown documents, ⌥⌘P shows the preview and the toolbar formats text, headings, lists and code. While the preview is open, “Print” prints the rendered document.")
     }
 
     enum Accessibility {
@@ -484,6 +500,7 @@ enum L10n {
         static let formatting = String(localized: "Formatting")
         static let link = String(localized: "Link")
         static let task = String(localized: "Task")
+        static let list = String(localized: "List")
         static let table = String(localized: "Table")
         static let tableOfContents = String(localized: "Table of Contents")
         static let insertImage = String(localized: "Insert Image")

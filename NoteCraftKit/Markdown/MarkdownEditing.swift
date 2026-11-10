@@ -64,7 +64,12 @@ public enum MarkdownEditing {
     private static let quoteExpression = try? NSRegularExpression(pattern: #"^[ \t]*(?:>[ \t]?)+"#)
 
     /// Wraps the selection in the marker of `style`, or removes the marker when it is already there.
+    ///
+    /// When the selection or caret lies inside a span of `style`, the markers of that span are removed.
     public static func toggle(_ style: MarkdownInlineStyle, in text: NSString, selection: NSRange) -> TextEdit {
+        if let span = enclosingSpan(style, of: selection, in: text) {
+            return removingSpan(span, in: text, selection: selection)
+        }
         let marker = style.marker
         let markerLength = (marker as NSString).length
         if selection.length == 0 {
