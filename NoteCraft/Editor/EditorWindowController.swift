@@ -95,6 +95,8 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     static let toolbarIdentifier = "NoteCraftEditorToolbar"
     static let markdownToolbarItemsKey = "AddedMarkdownToolbarItems"
     static let markdownToolsKey = "AddedMarkdownToolCapsule"
+    /// The size of new windows, wide enough for the Markdown tools next to the sidebar.
+    static let defaultContentSize = NSSize(width: 1100, height: 700)
 
     let editorViewController: EditorViewController
     let splitController: EditorSplitViewController
@@ -110,7 +112,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
         editorViewController = EditorViewController(document: document, settingsStore: document.settingsStore, findPasteboard: findPasteboard)
         splitController = EditorSplitViewController(editor: editorViewController, workspace: workspace)
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 980, height: 700),
+            contentRect: NSRect(origin: .zero, size: Self.defaultContentSize),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered,
             defer: true
@@ -123,7 +125,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
         window.titleVisibility = .visible
         super.init(window: window)
         window.contentViewController = splitController
-        window.setContentSize(NSSize(width: 980, height: 700))
+        window.setContentSize(Self.defaultContentSize)
         window.delegate = self
         shouldCascadeWindows = true
         configureToolbar(defaults: defaults)
