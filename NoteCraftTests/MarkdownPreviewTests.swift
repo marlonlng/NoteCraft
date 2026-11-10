@@ -678,6 +678,7 @@ struct MarkdownToolbarTests {
         hidden.isHidden = true
         [first, second, hidden].forEach(group.addSubview)
         root.addSubview(group)
+        root.addSubview(NSView(frame: group.frame))
         let origin = root.convert(NSPoint.zero, to: nil)
         func point(_ x: CGFloat, _ y: CGFloat) -> NSPoint {
             NSPoint(x: origin.x + x, y: origin.y + y)

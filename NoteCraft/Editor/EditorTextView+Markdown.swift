@@ -85,19 +85,20 @@ extension EditorTextView: NSToolbarItemValidation, NSPopoverDelegate {
         return rect.insetBy(dx: -1, dy: 0)
     }
 
-    /// Finds the innermost visible button under `location`, given in window coordinates, by walking down from `root`.
+    /// Finds the innermost visible button under `location`, given in window coordinates, among `root` and its subviews.
     ///
-    /// Hit testing the toolbar returns the whole item group, so the tools are found by their frames instead.
+    /// Hit testing the toolbar returns the whole item group, and the glass of a capsule lies in a sibling above its
+    /// buttons, so every view under the location is searched.
     static func innermostButton(at location: NSPoint, in root: NSView) -> NSButton? {
-        var view: NSView? = root
         var button: NSButton?
-        while let current = view {
-            if let found = current as? NSButton {
+        func search(_ view: NSView) {
+            guard !view.isHidden, view.bounds.contains(view.convert(location, from: nil)) else { return }
+            if let found = view as? NSButton {
                 button = found
             }
-            let point = current.convert(location, from: nil)
-            view = current.subviews.last { !$0.isHidden && $0.frame.contains(point) }
+            view.subviews.forEach(search)
         }
+        search(root)
         return button
     }
 
